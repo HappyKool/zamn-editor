@@ -14,7 +14,12 @@ Public Class Shrd
     End Function
 
     Public Shared Sub GoToPointer(ByVal s As IO.Stream)
-        s.Seek(ReadFileAddr(s), IO.SeekOrigin.Begin)
+        Dim addr As Integer = ReadFileAddr(s)
+        If addr = -1 Then
+            ErrorLog.Report()
+        Else
+            s.Seek(addr, IO.SeekOrigin.Begin)
+        End If
     End Sub
 
     Public Shared Function ReadRelativeFileAddr(ByVal s As IO.Stream, ByVal bank As Byte) As Integer
@@ -26,8 +31,22 @@ Public Class Shrd
     End Function
 
     Public Shared Sub GoToRelativePointer(ByVal s As IO.Stream, ByVal bank As Byte)
-        s.Seek(ReadRelativeFileAddr(s, bank), IO.SeekOrigin.Begin)
+        Dim addr As Integer = ReadRelativeFileAddr(s, bank)
+        If addr = -1 Then
+            ErrorLog.Report()
+        Else
+            s.Seek(addr, IO.SeekOrigin.Begin)
+        End If
     End Sub
+
+    Public Shared Function ConvertAddr(ByVal address As Integer) As Byte()
+        If address = 0 Or address = -1 Then
+            Return New Byte() {0, 0, 0, 0}
+        End If
+        Dim bank As Integer = address \ &H8000
+        Dim part2 As Integer = address - bank * &H8000 + &H7E00
+        Return New Byte() {part2 Mod &H100, part2 \ &H100, bank + &H80, 0}
+    End Function
 
     Public Shared Function RGBtoSNESLo(ByVal RGB As Color) As Byte
         Return (RGB.B \ 8 * &H400 + RGB.G \ 8 * &H20 + RGB.R \ 8) Mod &H100
@@ -75,7 +94,7 @@ Public Class Shrd
         Return result
     End Function
 
-    Public Shared Sub DrawTile(ByVal bmp As Bitmap, ByVal x As Integer, ByVal y As Integer, ByVal gfx As Byte(), ByVal gfxindex As Integer, ByVal pallette As Color(), ByVal palIndex As Integer, ByVal xFlip As Boolean, ByVal yFlip As Boolean)
+    Public Shared Sub DrawTile(ByVal bmp As Bitmap, ByVal x As Integer, ByVal y As Integer, ByVal gfx As Byte(), ByVal gfxindex As Integer, ByVal palette As Color(), ByVal palIndex As Integer, ByVal xFlip As Boolean, ByVal yFlip As Boolean)
         Dim tile As Byte(,) = PlanarToLinear(gfx, gfxindex)
         Dim xStep As Integer = 1, yStep As Integer = 1
         If xFlip Then
@@ -89,8 +108,8 @@ Public Class Shrd
         End If
         For l As Integer = 0 To 7
             For m As Integer = 0 To 7
-                If pallette(palIndex + tile(l, m)).A > 0 Then
-                    bmp.SetPixel(x, y, pallette(palIndex + tile(l, m)))
+                If palette(palIndex + tile(l, m)).A > 0 Then
+                    bmp.SetPixel(x, y, palette(palIndex + tile(l, m)))
                 End If
                 x += xStep
             Next
@@ -99,10 +118,10 @@ Public Class Shrd
         Next
     End Sub
 
-    Public Shared Sub DrawTile(ByVal bmp As Bitmap, ByVal x As Integer, ByVal y As Integer, ByVal s As IO.Stream, ByVal pallette As Color(), ByVal palIndex As Integer, ByVal xFlip As Boolean, ByVal yFlip As Boolean)
+    Public Shared Sub DrawTile(ByVal bmp As Bitmap, ByVal x As Integer, ByVal y As Integer, ByVal s As IO.Stream, ByVal palette As Color(), ByVal palIndex As Integer, ByVal xFlip As Boolean, ByVal yFlip As Boolean)
         Dim gfx(31) As Byte
         s.Read(gfx, 0, 32)
-        DrawTile(bmp, x, y, gfx, 0, pallette, palIndex, xFlip, yFlip)
+        DrawTile(bmp, x, y, gfx, 0, palette, palIndex, xFlip, yFlip)
     End Sub
 
     Public Shared Sub DrawTile(ByVal bmp As BitmapData, ByVal x As Integer, ByVal y As Integer, ByVal tile As Byte(,), ByVal palIndex As Byte, ByVal xFlip As Boolean, ByVal yFlip As Boolean)
@@ -154,4 +173,15 @@ Public Class Shrd
             Return str
         End If
     End Function
+
+    Public Shared Sub InsertBytes(ByVal s As IO.Stream, ByVal byteCount As Integer)
+        If byteCount < 0 Then
+            s.Seek(-byteCount, IO.SeekOrigin.Current)
+        End If
+        Dim rest(s.Length - s.Position) As Byte
+        Dim start As Long = s.Position
+        s.Read(rest, 0, s.Length - s.Position)
+        s.Seek(start + byteCount, IO.SeekOrigin.Begin)
+        s.Write(rest, 0, rest.Length)
+    End Sub
 End Class

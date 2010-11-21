@@ -22,14 +22,14 @@ Partial Class LoadingLevel
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.Progress = New System.Windows.Forms.ProgressBar
-        Me.Cancel = New System.Windows.Forms.Button
-        Me.LoadText = New System.Windows.Forms.Label
-        Me.Loader = New System.ComponentModel.BackgroundWorker
-        Me.FailedPanel = New System.Windows.Forms.Panel
-        Me.OK = New System.Windows.Forms.Button
-        Me.FailedText = New System.Windows.Forms.Label
-        Me.FailedList = New System.Windows.Forms.ListBox
+        Me.Progress = New System.Windows.Forms.ProgressBar()
+        Me.Cancel = New System.Windows.Forms.Button()
+        Me.LoadText = New System.Windows.Forms.Label()
+        Me.Loader = New System.ComponentModel.BackgroundWorker()
+        Me.FailedPanel = New System.Windows.Forms.Panel()
+        Me.OK = New System.Windows.Forms.Button()
+        Me.FailedText = New System.Windows.Forms.Label()
+        Me.FailedList = New System.Windows.Forms.ListBox()
         Me.FailedPanel.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -95,6 +95,7 @@ Partial Class LoadingLevel
         'FailedList
         '
         Me.FailedList.FormattingEnabled = True
+        Me.FailedList.HorizontalScrollbar = True
         Me.FailedList.Location = New System.Drawing.Point(11, 11)
         Me.FailedList.Name = "FailedList"
         Me.FailedList.Size = New System.Drawing.Size(348, 173)
@@ -104,7 +105,7 @@ Partial Class LoadingLevel
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(363, 220)
+        Me.ClientSize = New System.Drawing.Size(359, 216)
         Me.ControlBox = False
         Me.Controls.Add(Me.FailedPanel)
         Me.Controls.Add(Me.LoadText)

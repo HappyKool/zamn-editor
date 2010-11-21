@@ -28,8 +28,8 @@
                 If Loader.CancellationPending Then
                     Exit For
                 End If
-            Catch
-                Loader.ReportProgress(2, args.names(l))
+            Catch ex As Exception
+                Loader.ReportProgress(2, args.names(l) & ": " & ex.Message)
             End Try
         Next
         e.Result = lvls

@@ -23,10 +23,10 @@
         s.Seek(&HF1176, IO.SeekOrigin.Begin)
         Dim plt As Color() = Shrd.ReadPalette(s, 256, True)
         ItemImages.Clear()
-        For l As Integer = 0 To My.Resources.ItemPallettes.Length - 1
+        For l As Integer = 0 To My.Resources.ItemPalettes.Length - 1
             Dim bmp As New Bitmap(16, 16)
             Dim gfxIndex As Integer = My.Resources.ItemIndexes(l) * &H20
-            Dim pltIndex As Integer = My.Resources.ItemPallettes(l) * &H10
+            Dim pltIndex As Integer = My.Resources.ItemPalettes(l) * &H10
             Shrd.DrawTile(bmp, 0, 0, gfx, gfxIndex, plt, pltIndex, False, False)
             Shrd.DrawTile(bmp, 8, 0, gfx, gfxIndex + &H20, plt, pltIndex, False, False)
             Shrd.DrawTile(bmp, 0, 8, gfx, gfxIndex + &H40, plt, pltIndex, False, False)
@@ -48,7 +48,7 @@
                             If s2.ReadByte = p Then
                                 s.Seek(indx, IO.SeekOrigin.Begin)
                                 Shrd.DrawTile(img, x * 8 + s2.ReadSByte, y * 8 + s2.ReadSByte, s, plt, s2.ReadByte * 16, s2.ReadByte > 0, s2.ReadByte > 0)
-                                'Hardcoded override for army guys face pallette
+                                'Hardcoded override for army guys face palette
                                 If VictimImages.Count = 7 And y = 1 And (x = 0 Or x = 1) Then
                                     DrawArmyOverride(s, plt)
                                     If x = 1 Then ApplyOverride(img)
@@ -72,16 +72,16 @@
 
     Private Shared OverrideNum As Integer = 0
     Private Shared OverrideBmp As Bitmap = New Bitmap(16, 8)
-    Private Shared NewPallette As Color()
+    Private Shared NewPalette As Color()
 
     Private Shared Sub DrawArmyOverride(ByVal s As IO.FileStream, ByVal plt As Color())
         If OverrideNum = 0 Then
-            NewPallette = plt.Clone()
-            NewPallette(20) = plt(4)
-            NewPallette(22) = plt(6)
+            NewPalette = plt.Clone()
+            NewPalette(20) = plt(4)
+            NewPalette(22) = plt(6)
         End If
         s.Seek(-&H20, IO.SeekOrigin.Current)
-        Shrd.DrawTile(OverrideBmp, OverrideNum * 8, 0, s, NewPallette, 16, False, False)
+        Shrd.DrawTile(OverrideBmp, OverrideNum * 8, 0, s, NewPalette, 16, False, False)
         OverrideNum += 1
     End Sub
 

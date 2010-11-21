@@ -80,6 +80,10 @@
         End If
     End Sub
 
+    Private Sub FileSave_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles FileSave.Click, SaveTool.Click
+        r.SaveLevel(EdControl.lvl)
+    End Sub
+
     Private Sub FileExit_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles FileExit.Click
         Me.Close()
     End Sub
@@ -173,7 +177,9 @@
             item2.Checked = True
             SetTool(t)
         End If
-        EdControl.Focus()
+        If EdControl IsNot Nothing Then
+            EdControl.Focus()
+        End If
     End Sub
 
     Public Sub SetTool(ByVal t As Tool)

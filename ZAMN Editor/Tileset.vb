@@ -5,38 +5,50 @@ Public Class Tileset
     Public images(&HFF) As Bitmap
     Public priorityImages(&HFF) As Bitmap
     Public address As Integer
-    Public pallette As Integer
+    Public collisionAddr As Integer
+    Public paletteAddr As Integer
+    Public gfxAddr As Integer
+    Public pltAnimAddr As Integer
 
     Public Sub New(ByVal s As IO.Stream)
-        Dim sw As New Stopwatch
-        sw.Start()
         Dim levelStartPos As Long = s.Position
         'Load palette
         s.Seek(16, IO.SeekOrigin.Current)
         Shrd.GoToPointer(s)
-        pallette = s.Position
+        ErrorLog.CheckError("Level has invalid palette pointer.")
+        paletteAddr = s.Position
         Dim plt As Color() = Shrd.ReadPalette(s, &H80, False)
         'Load graphics data
         s.Seek(levelStartPos + 12, IO.SeekOrigin.Begin)
         Shrd.GoToPointer(s)
+        ErrorLog.CheckError("Level has invalid graphics pointer.")
+        gfxAddr = s.Position
         Dim gfx(&H3FFF) As Byte
         s.Read(gfx, 0, &H4000)
         'Load map16 data
         s.Seek(levelStartPos, IO.SeekOrigin.Begin)
         Shrd.GoToPointer(s)
+        ErrorLog.CheckError("Level has invalid Map16 pointer.")
         address = s.Position
         Dim map16 As Byte() = DecompressMap16(s)
         'Load collision data
         s.Seek(levelStartPos + 8, IO.SeekOrigin.Begin)
         Shrd.GoToPointer(s)
+        ErrorLog.CheckError("Level has inavlid tileset collision pointer.")
+        collisionAddr = s.Position
         Dim collision(&H3FF) As Byte
         s.Read(collision, 0, &H400)
+        'Palette animation (currently not used)
+        s.Seek(levelStartPos + &H18, IO.SeekOrigin.Begin)
+        pltAnimAddr = Shrd.ReadFileAddr(s)
+        If pltAnimAddr > 0 Then
+            'Shrd.GoToPointer(s)
+        End If
         'Convert GFX to linear format
         Dim LinGFX(511)(,) As Byte
         For l As Integer = 0 To &H1FF
             LinGFX(l) = Shrd.PlanarToLinear(gfx, l * &H20)
         Next
-        Debug.WriteLine(sw.ElapsedMilliseconds)
         'Copy to bitmaps
         For i As Integer = 0 To &HFF
             Dim CurBmp As New Bitmap(64, 64, PixelFormat.Format8bppIndexed), CurPrBmp As New Bitmap(64, 64, PixelFormat.Format8bppIndexed)
@@ -68,7 +80,6 @@ Public Class Tileset
             priorityImages(i) = CurPrBmp
         Next
         s.Seek(levelStartPos, IO.SeekOrigin.Begin)
-        Debug.WriteLine(sw.ElapsedMilliseconds)
     End Sub
 
     Public Shared Function DecompressMap16(ByVal s As IO.Stream) As Byte()
