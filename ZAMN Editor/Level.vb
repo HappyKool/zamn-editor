@@ -158,7 +158,7 @@
         For Each i As Item In items
             x = i.x + 8
             y = i.y + 8
-            file.AddRange(New Byte() {i.x Mod &H100, i.x \ &H100, i.y Mod &H100, i.y \ &H100, i.type * 2})
+            file.AddRange(New Byte() {x Mod &H100, x \ &H100, y Mod &H100, y \ &H100, i.type * 2})
         Next
         file.AddRange(New Byte() {0, 0})
         'Level titles

@@ -77,7 +77,6 @@
                 If MonsterPicker.SelectedIndex > -1 Then
                     Dim m As New Monster(100, e.X - LevelGFX.VictimImages(MonsterPicker.SelectedIndex).Width / 2, _
                                          e.Y - LevelGFX.VictimImages(MonsterPicker.SelectedIndex).Height / 2, 100, LevelGFX.ptrs(MonsterPicker.SelectedIndex))
-
                     selectedMonsters.Clear()
                     selectedMonsters.Add(m)
                     selectedMonster = m

@@ -104,7 +104,18 @@ Public Class ROM
             fs.Seek(-2, SeekOrigin.Current)
             fs.WriteByte(NewPtr Mod &H100)
             fs.WriteByte(NewPtr \ &H100)
+            NewPtr += &HF0200
+            fs.Seek(NewPtr, SeekOrigin.Begin)
+            Dim NewPtr2 As Integer
+            For m As Integer = 0 To 5 'Update pointers within level files
+                fs.Seek(NewPtr + offsetPos(m), SeekOrigin.Begin)
+                NewPtr2 = fs.ReadByte + fs.ReadByte * &H100 + lenDiff
+                fs.Seek(-2, SeekOrigin.Current)
+                fs.WriteByte(NewPtr2 Mod &H100)
+                fs.WriteByte(NewPtr2 \ &H100)
+            Next
         Next
+        fs.SetLength(&H100200)
         fs.Close()
     End Sub
 End Class
