@@ -43,8 +43,9 @@ Public Class Shrd
         If address = 0 Or address = -1 Then
             Return New Byte() {0, 0, 0, 0}
         End If
+        address -= &H200 'don't include header
         Dim bank As Integer = address \ &H8000
-        Dim part2 As Integer = address - bank * &H8000 + &H7E00
+        Dim part2 As Integer = address - bank * &H8000 + &H8000
         Return New Byte() {part2 Mod &H100, part2 \ &H100, bank + &H80, 0}
     End Function
 

@@ -14,10 +14,12 @@
     Public music As Integer
     Public unknown As Integer
     Public unknown2 As Integer
+    Public unknown3 As Integer
     Public page1 As TitlePage
     Public page2 As TitlePage
     Public bonuses As New List(Of Integer)
     Public boss As Integer
+    Public spritePal As Integer
 
     Public Sub New(ByVal s As IO.Stream, ByVal name As String, ByVal num As Integer)
         Me.name = name
@@ -28,11 +30,14 @@
         Width = s.ReadByte() + s.ReadByte() * &H100
         Height = s.ReadByte() + s.ReadByte() * &H100
         ReDim Tiles(Width - 1, Height - 1)
-        unknown2 = s.ReadByte + s.ReadByte * &H100
+        unknown = s.ReadByte + s.ReadByte * &H100
+        unknown3 = s.ReadByte + s.ReadByte * &H100
         p1Start = New Point(s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100)
         p2Start = New Point(s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100)
-        music = s.ReadByte * &H100 + s.ReadByte
-        unknown = s.ReadByte * &H100 + s.ReadByte
+        music = s.ReadByte + s.ReadByte * &H100
+        unknown2 = s.ReadByte * &H100 + s.ReadByte
+        s.Seek(startAddr + &H14, IO.SeekOrigin.Begin)
+        spritePal = Shrd.ReadFileAddr(s)
         s.Seek(startAddr + &H20, IO.SeekOrigin.Begin)
         Shrd.GoToRelativePointer(s, &H9F)
         If Not ErrorLog.HasError Then
@@ -117,12 +122,12 @@
         file.AddRange(New Byte() {0, 0, 0, 0, 0, 0, _
                                   Width Mod &H100, Width \ &H100, _
                                   Height Mod &H100, Height \ &H100, _
-                                  unknown2 Mod &H100, unknown2 \ &H100, _
-                                  &HFF, 1, _
-                                  p1Start.Y Mod &H100, p1Start.Y \ &H100, p1Start.X Mod &H100, p1Start.X \ &H100, _
+                                  unknown Mod &H100, unknown \ &H100, _
+                                  unknown3 Mod &H100, unknown3 \ &H100, _
+                                  p1Start.X Mod &H100, p1Start.X \ &H100, p1Start.Y Mod &H100, p1Start.Y \ &H100, _
                                   p2Start.X Mod &H100, p2Start.X \ &H100, p2Start.Y Mod &H100, p2Start.Y \ &H100, _
                                   music Mod &H100, music \ &H100, _
-                                  unknown Mod &H100, unknown \ &H100, _
+                                  unknown2 Mod &H100, unknown2 \ &H100, _
                                   0, 0, 0, 0, 0, 0})
         file.AddRange(Shrd.ConvertAddr(boss))
         Dim x As Integer, y As Integer

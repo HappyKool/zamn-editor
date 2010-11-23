@@ -23,70 +23,72 @@ Partial Class Editor
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Editor))
-        Me.TSContainer = New System.Windows.Forms.ToolStripContainer
-        Me.Tabs = New ZAMNEditor.Tabs
-        Me.MainMenu = New System.Windows.Forms.MenuStrip
-        Me.FileMenu = New System.Windows.Forms.ToolStripMenuItem
-        Me.FileOpen = New System.Windows.Forms.ToolStripMenuItem
-        Me.RecentROMs = New ZAMNEditor.RecentFilesList
-        Me.FileOpenLevel = New System.Windows.Forms.ToolStripMenuItem
-        Me.toolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
-        Me.FileSave = New System.Windows.Forms.ToolStripMenuItem
-        Me.toolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator
-        Me.FileExit = New System.Windows.Forms.ToolStripMenuItem
-        Me.EditMenu = New System.Windows.Forms.ToolStripMenuItem
-        Me.EditUndo = New System.Windows.Forms.ToolStripMenuItem
-        Me.EditRedo = New System.Windows.Forms.ToolStripMenuItem
-        Me.toolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator
-        Me.EditCut = New System.Windows.Forms.ToolStripMenuItem
-        Me.EditCopy = New System.Windows.Forms.ToolStripMenuItem
-        Me.EditPaste = New System.Windows.Forms.ToolStripMenuItem
-        Me.toolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator
-        Me.EditSelectAll = New System.Windows.Forms.ToolStripMenuItem
-        Me.EditSelectNone = New System.Windows.Forms.ToolStripMenuItem
-        Me.ViewMenu = New System.Windows.Forms.ToolStripMenuItem
-        Me.ViewGrid = New System.Windows.Forms.ToolStripMenuItem
-        Me.ViewPriority = New System.Windows.Forms.ToolStripMenuItem
-        Me.toolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator
-        Me.View100P = New System.Windows.Forms.ToolStripMenuItem
-        Me.View75P = New System.Windows.Forms.ToolStripMenuItem
-        Me.View50P = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolsMenu = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolsDropper = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolsTileSuggest = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolsRectangleSelect = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolsPencilSelect = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolsTileSelect = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolsItem = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolsVictims = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolsNRMonsters = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolsMonsters = New System.Windows.Forms.ToolStripMenuItem
-        Me.Tools = New System.Windows.Forms.ToolStrip
-        Me.OpenTool = New System.Windows.Forms.ToolStripButton
-        Me.OpenLevelTool = New System.Windows.Forms.ToolStripButton
-        Me.SaveTool = New System.Windows.Forms.ToolStripButton
-        Me.toolStripSeparator = New System.Windows.Forms.ToolStripSeparator
-        Me.CutTool = New System.Windows.Forms.ToolStripButton
-        Me.CopyTool = New System.Windows.Forms.ToolStripButton
-        Me.PasteTool = New System.Windows.Forms.ToolStripButton
-        Me.toolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
-        Me.Zoom = New System.Windows.Forms.ToolStripDropDownButton
-        Me.Zoom100Tool = New System.Windows.Forms.ToolStripMenuItem
-        Me.Zoom75Tool = New System.Windows.Forms.ToolStripMenuItem
-        Me.Zoom50Tool = New System.Windows.Forms.ToolStripMenuItem
-        Me.toolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator
-        Me.BrushTool = New System.Windows.Forms.ToolStripButton
-        Me.DropperTool = New System.Windows.Forms.ToolStripButton
-        Me.TileSgstTool = New System.Windows.Forms.ToolStripButton
-        Me.RectangleTool = New System.Windows.Forms.ToolStripButton
-        Me.PencilTool = New System.Windows.Forms.ToolStripButton
-        Me.TileSlctTool = New System.Windows.Forms.ToolStripButton
-        Me.ItemTool = New System.Windows.Forms.ToolStripButton
-        Me.VictimTool = New System.Windows.Forms.ToolStripButton
-        Me.NRMTool = New System.Windows.Forms.ToolStripButton
-        Me.MonTool = New System.Windows.Forms.ToolStripButton
-        Me.OpenROM = New System.Windows.Forms.OpenFileDialog
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem
+        Me.TSContainer = New System.Windows.Forms.ToolStripContainer()
+        Me.Tabs = New ZAMNEditor.Tabs()
+        Me.MainMenu = New System.Windows.Forms.MenuStrip()
+        Me.FileMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FileOpen = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentROMs = New ZAMNEditor.RecentFilesList()
+        Me.FileOpenLevel = New System.Windows.Forms.ToolStripMenuItem()
+        Me.toolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.FileSave = New System.Windows.Forms.ToolStripMenuItem()
+        Me.toolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.FileExit = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditUndo = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditRedo = New System.Windows.Forms.ToolStripMenuItem()
+        Me.toolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EditCut = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditCopy = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditPaste = New System.Windows.Forms.ToolStripMenuItem()
+        Me.toolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EditSelectAll = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditSelectNone = New System.Windows.Forms.ToolStripMenuItem()
+        Me.toolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EditLevelSettings = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ViewMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ViewGrid = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ViewPriority = New System.Windows.Forms.ToolStripMenuItem()
+        Me.toolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
+        Me.View100P = New System.Windows.Forms.ToolStripMenuItem()
+        Me.View75P = New System.Windows.Forms.ToolStripMenuItem()
+        Me.View50P = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsDropper = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsTileSuggest = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsRectangleSelect = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsPencilSelect = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsTileSelect = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsVictims = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsNRMonsters = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsMonsters = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tools = New System.Windows.Forms.ToolStrip()
+        Me.OpenTool = New System.Windows.Forms.ToolStripButton()
+        Me.OpenLevelTool = New System.Windows.Forms.ToolStripButton()
+        Me.SaveTool = New System.Windows.Forms.ToolStripButton()
+        Me.toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
+        Me.CutTool = New System.Windows.Forms.ToolStripButton()
+        Me.CopyTool = New System.Windows.Forms.ToolStripButton()
+        Me.PasteTool = New System.Windows.Forms.ToolStripButton()
+        Me.toolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Zoom = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.Zoom100Tool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Zoom75Tool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Zoom50Tool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.toolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BrushTool = New System.Windows.Forms.ToolStripButton()
+        Me.DropperTool = New System.Windows.Forms.ToolStripButton()
+        Me.TileSgstTool = New System.Windows.Forms.ToolStripButton()
+        Me.RectangleTool = New System.Windows.Forms.ToolStripButton()
+        Me.PencilTool = New System.Windows.Forms.ToolStripButton()
+        Me.TileSlctTool = New System.Windows.Forms.ToolStripButton()
+        Me.ItemTool = New System.Windows.Forms.ToolStripButton()
+        Me.VictimTool = New System.Windows.Forms.ToolStripButton()
+        Me.NRMTool = New System.Windows.Forms.ToolStripButton()
+        Me.MonTool = New System.Windows.Forms.ToolStripButton()
+        Me.OpenROM = New System.Windows.Forms.OpenFileDialog()
         Me.TSContainer.ContentPanel.SuspendLayout()
         Me.TSContainer.TopToolStripPanel.SuspendLayout()
         Me.TSContainer.SuspendLayout()
@@ -212,7 +214,7 @@ Partial Class Editor
         '
         'EditMenu
         '
-        Me.EditMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditUndo, Me.EditRedo, Me.toolStripSeparator5, Me.EditCut, Me.EditCopy, Me.EditPaste, Me.toolStripSeparator6, Me.EditSelectAll, Me.EditSelectNone})
+        Me.EditMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditUndo, Me.EditRedo, Me.toolStripSeparator5, Me.EditCut, Me.EditCopy, Me.EditPaste, Me.toolStripSeparator6, Me.EditSelectAll, Me.EditSelectNone, Me.toolStripSeparator9, Me.EditLevelSettings})
         Me.EditMenu.Name = "EditMenu"
         Me.EditMenu.Size = New System.Drawing.Size(39, 20)
         Me.EditMenu.Text = "&Edit"
@@ -288,6 +290,18 @@ Partial Class Editor
         Me.EditSelectNone.Size = New System.Drawing.Size(164, 22)
         Me.EditSelectNone.Text = "Select &None"
         '
+        'toolStripSeparator9
+        '
+        Me.toolStripSeparator9.Name = "toolStripSeparator9"
+        Me.toolStripSeparator9.Size = New System.Drawing.Size(161, 6)
+        '
+        'EditLevelSettings
+        '
+        Me.EditLevelSettings.Enabled = False
+        Me.EditLevelSettings.Name = "EditLevelSettings"
+        Me.EditLevelSettings.Size = New System.Drawing.Size(164, 22)
+        Me.EditLevelSettings.Text = "Level Settings"
+        '
         'ViewMenu
         '
         Me.ViewMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewGrid, Me.ViewPriority, Me.toolStripSeparator7, Me.View100P, Me.View75P, Me.View50P})
@@ -340,6 +354,13 @@ Partial Class Editor
         Me.ToolsMenu.Name = "ToolsMenu"
         Me.ToolsMenu.Size = New System.Drawing.Size(48, 20)
         Me.ToolsMenu.Text = "&Tools"
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Image = Global.ZAMNEditor.My.Resources.Resources.Brush
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(218, 22)
+        Me.ToolStripMenuItem2.Text = "Paint Brush"
         '
         'ToolsDropper
         '
@@ -609,13 +630,6 @@ Partial Class Editor
         Me.OpenROM.DefaultExt = "smc"
         Me.OpenROM.Filter = "SNES ROM Files (*.smc)|*.smc|All Files (*.*)|*.*"
         '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.Image = Global.ZAMNEditor.My.Resources.Resources.Brush
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(218, 22)
-        Me.ToolStripMenuItem2.Text = "Paint Brush"
-        '
         'Editor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -700,5 +714,7 @@ Partial Class Editor
     Friend WithEvents ToolsMonsters As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MonTool As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripMenuItem2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents toolStripSeparator9 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents EditLevelSettings As System.Windows.Forms.ToolStripMenuItem
 
 End Class

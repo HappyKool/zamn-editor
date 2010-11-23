@@ -70,6 +70,12 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressUpDown.Designer.vb">
+      <DependentUpon>AddressUpDown.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AddressUpDown.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ByteArrayStream.vb" />
     <Compile Include="DList.vb" />
     <Compile Include="ErrorLog.vb" />
@@ -81,6 +87,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="LevelGFX.vb" />
+    <Compile Include="LevelSettings.Designer.vb">
+      <DependentUpon>LevelSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="LevelSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="LevelWriteData.vb" />
     <Compile Include="LoadingLevel.Designer.vb">
       <DependentUpon>LoadingLevel.vb</DependentUpon>
@@ -184,8 +196,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AddressUpDown.resx">
+      <DependentUpon>AddressUpDown.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ItemBrowser.resx">
       <DependentUpon>ItemBrowser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LevelSettings.resx">
+      <DependentUpon>LevelSettings.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoadingLevel.resx">
       <DependentUpon>LoadingLevel.vb</DependentUpon>

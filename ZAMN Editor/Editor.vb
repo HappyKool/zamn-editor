@@ -18,7 +18,7 @@
         End If
         EditingTools = New Tool() {New PaintbrushTool(Me), New DropperTool(Me), New TileSuggestTool(Me), New RectangleSelectTool(Me), New PencilSelectTool(Me), _
                                    New TileSelectTool(Me), New ItemTool(Me), New VictimTool(Me), New NRMonsterTool(Me), New MonsterTool(Me)}
-        LevelItems = New ToolStripItem() {FileSave, SaveTool, EditPaste, PasteTool, EditSelectAll, EditSelectNone, ViewGrid, ViewPriority}
+        LevelItems = New ToolStripItem() {FileSave, SaveTool, EditPaste, PasteTool, EditSelectAll, EditSelectNone, ViewGrid, ViewPriority, EditLevelSettings}
         TileSuggestList.LoadAll()
         If My.Settings.RecentROMs <> "" Then
             RecentROMs.Items = StringToList(My.Settings.RecentROMs)
@@ -124,6 +124,10 @@
         End If
         SetCopy(False)
         EdControl.Repaint()
+    End Sub
+
+    Private Sub EditLevelSettings_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditLevelSettings.Click
+        LevelSettings.ShowDialog(EdControl.lvl)
     End Sub
 
     Private Sub SelectAll(ByVal selected As Boolean)
