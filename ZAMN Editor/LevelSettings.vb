@@ -1,12 +1,16 @@
 ﻿Public Class LevelSettings
 
+    Public lvl As Level
+    Public ed As Editor
+    Public reloadTileset As Boolean
+
     Public tilesets As Integer() = {&HD8200, &HE38EF, &HD4200, &HE0200, &HDBEB5}
     Public palettes As Integer() = {&HF1076, &HF1276, &HF1376, &HF1476, 0, _
                                     &HF1E76, &HF1F76, 0, 0, 0, _
                                     &HF1A76, &HF1B76, &HF1C76, &HF1D76, 0, _
                                     &HF2076, &HF2176, &HF2276, &HF2376, &HF2476, _
                                     &HF1676, &HF1776, &HF1876, &HF1976, 0}
-    Public palNames As String() = {"Summer", "Fall", "Winter", "Night", "", _
+    Public palNames As String() = {"Standard", "Fall", "Winter", "Night", "", _
                                    "Standard", "Alternate", "", "", "", _
                                    "Standard", "Night", "Bright", "Dark", "", _
                                    "Office", "Dark Cave", "Light Office", "Dark Office", "Cave", _
@@ -14,10 +18,13 @@
     Public graphics As Integer() = {&HC0200, &HCC200, &HC8200, &HD0200, &HC4200}
     Public collision As Integer() = {&HDF6D1, &HE70AB, &HE6CAB, &HE74AB, &HDFAD1}
     Public unknown As Integer() = {&H70, &H69, &H70, &H57, &H59}
-    Public pltAnim As Integer() = {-1, &H22AD, &H22EF, &H2337, &H2422}
+    Public pltAnim As Integer() = {-1, &H22AD, &H22EF, &H2337, &H2422, &H2464}
     Public boss As Integer() = {-1, &H1092C, &H11769, &H12ABB, &H12AC3, &H12D95, &H159CF, &H1AF33}
 
-    Public Overloads Sub ShowDialog(ByVal lvl As Level)
+    Public Overloads Function ShowDialog(ByVal ed As Editor) As DialogResult
+        Me.lvl = ed.EdControl.lvl
+        Me.ed = ed
+        reloadTileset = False
         'Tiles
         addrTiles.Value = lvl.tileset.address
         cboTiles.SelectedIndex = Array.IndexOf(tilesets, lvl.tileset.address)
@@ -54,7 +61,7 @@
         End If
         'Unknown
         nudUnk.Value = lvl.unknown
-        If Array.IndexOf(unknown, lvl.unknown) = cboTiles.SelectedIndex Then
+        If Array.IndexOf(unknown, lvl.unknown) = cboTiles.SelectedIndex Or Array.LastIndexOf(unknown, lvl.unknown) = cboTiles.SelectedIndex Then
             radUnkAuto.Checked = True
         Else
             radUnkMan.Checked = True
@@ -84,14 +91,6 @@
         Else
             radMusicMan.Checked = True
         End If
-        'Boss
-        addrBoss.Value = lvl.boss
-        cboBoss.SelectedIndex = Array.IndexOf(boss, lvl.boss)
-        If cboBoss.SelectedIndex <> -1 Then
-            radBossAuto.Checked = True
-        Else
-            radBossMan.Checked = True
-        End If
         'Unknown2
         nudUnk2.Value = lvl.unknown2
         radUnk2Man.Checked = True
@@ -102,8 +101,8 @@
         Else
             radUnk3Man.Checked = True
         End If
-        Me.ShowDialog()
-    End Sub
+        Return Me.ShowDialog()
+    End Function
 
     Private Sub UpdatePals()
         cboPal.Items.Clear()
@@ -114,5 +113,92 @@
                 cboPal.Items.Add(palNames(l))
             End If
         Next
+    End Sub
+
+    Private Sub radAuto_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles radColAuto.CheckedChanged, _
+      radGFXAuto.CheckedChanged, radMusicAuto.CheckedChanged, radPalAuto.CheckedChanged, radSPalAuto.CheckedChanged, radPAnimAuto.CheckedChanged, _
+      radTilesAuto.CheckedChanged, radUnk2Auto.CheckedChanged, radUnk3Auto.CheckedChanged, radUnkAuto.CheckedChanged
+        Dim rad As Control = sender
+        For Each ctrl As Control In rad.Parent.Controls
+            If ctrl.GetType.Equals(GetType(AddressUpDown)) Or ctrl.GetType.Equals(GetType(NumericUpDown)) Then
+                ctrl.Enabled = False
+            End If
+            If ctrl.GetType.Equals(GetType(ComboBox)) Then
+                ctrl.Enabled = True
+            End If
+        Next
+    End Sub
+
+    Private Sub radMan_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles radColMan.CheckedChanged, _
+      radGFXMan.CheckedChanged, radMusicMan.CheckedChanged, radPalMan.CheckedChanged, radPAnimMan.CheckedChanged, radSPalMan.CheckedChanged, _
+      radTilesMan.CheckedChanged, radUnk2Man.CheckedChanged, radUnk3Man.CheckedChanged, radUnkMan.CheckedChanged
+        Dim rad As Control = sender
+        For Each ctrl As Control In rad.Parent.Controls
+            If ctrl.GetType.Equals(GetType(ComboBox)) Then
+                ctrl.Enabled = False
+            End If
+            If ctrl.GetType.Equals(GetType(AddressUpDown)) Or ctrl.GetType.Equals(GetType(NumericUpDown)) Then
+                ctrl.Enabled = True
+            End If
+        Next
+    End Sub
+
+    Private Sub cboMusic_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cboMusic.SelectedIndexChanged
+        If cboMusic.SelectedIndex = -1 Then Return
+        nudMusic.Value = cboMusic.SelectedIndex + 2
+    End Sub
+
+    Private Sub cboPal_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cboPal.SelectedIndexChanged
+        If cboPal.SelectedIndex = -1 Then Return
+        addrPal.Value = palettes(cboTiles.SelectedIndex * 5 + cboPal.SelectedIndex)
+    End Sub
+
+    Private Sub cboPltAnim_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cboPltAnim.SelectedIndexChanged
+        If cboPltAnim.SelectedIndex = -1 Then Return
+        addrPAnim.Value = pltAnim(cboPltAnim.SelectedIndex)
+    End Sub
+
+    Private Sub cboTiles_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cboTiles.SelectedIndexChanged
+        If cboTiles.SelectedIndex = -1 Then Return
+        If radGFXAuto.Checked Then addrGFX.Value = graphics(cboTiles.SelectedIndex)
+        If radColAuto.Checked Then addrCol.Value = collision(cboTiles.SelectedIndex)
+        If radUnkAuto.Checked Then nudUnk.Value = unknown(cboTiles.SelectedIndex)
+        If radPalMan.Checked = True Then Return
+        UpdatePals()
+        cboPal.SelectedIndex = 0
+        addrTiles.Value = tilesets(cboTiles.SelectedIndex)
+    End Sub
+
+    Private Sub tileset_ValueChanged(ByVal sender As Object, ByVal e As EventArgs) Handles addrCol.ValueChanged, addrGFX.ValueChanged, addrPal.ValueChanged, addrTiles.ValueChanged
+        reloadTileset = True
+    End Sub
+
+    Private Sub btnCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCancel.Click
+        Me.Close()
+    End Sub
+
+    Private Sub btnApply_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnApply.Click
+        lvl.tileset.address = addrTiles.Value
+        lvl.tileset.paletteAddr = addrPal.Value
+        lvl.tileset.gfxAddr = addrGFX.Value
+        lvl.tileset.collisionAddr = addrCol.Value
+        lvl.unknown = nudUnk.Value
+        lvl.spritePal = addrSPal.Value
+        lvl.tileset.pltAnimAddr = addrPAnim.Value
+        If cboPltAnim.SelectedIndex = 0 Then lvl.tileset.pltAnimAddr = -1
+        lvl.music = nudMusic.Value
+        lvl.unknown2 = nudUnk2.Value
+        lvl.unknown3 = nudUnk3.Value
+        If reloadTileset Then
+            Dim s As New IO.FileStream(ed.r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read)
+            ed.EdControl.lvl.tileset.Reload(s)
+            s.Close()
+            ed.EdControl.Invalidate(True)
+        End If
+    End Sub
+
+    Private Sub btnOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOK.Click
+        btnApply_Click(sender, e)
+        Me.Close()
     End Sub
 End Class

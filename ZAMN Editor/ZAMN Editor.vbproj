@@ -76,6 +76,7 @@
     <Compile Include="AddressUpDown.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="BossMonster.vb" />
     <Compile Include="ByteArrayStream.vb" />
     <Compile Include="DList.vb" />
     <Compile Include="ErrorLog.vb" />
@@ -153,6 +154,13 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TitlePage.vb" />
+    <Compile Include="BMonsterBrowser.Designer.vb">
+      <DependentUpon>BMonsterBrowser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="BMonsterBrowser.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\BossMonsterTool.vb" />
     <Compile Include="Tools\MonsterTool.vb" />
     <Compile Include="Tools\NRMonsterTool.vb" />
     <Compile Include="OpenLevel.Designer.vb">
@@ -198,6 +206,9 @@
   <ItemGroup>
     <EmbeddedResource Include="AddressUpDown.resx">
       <DependentUpon>AddressUpDown.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BMonsterBrowser.resx">
+      <DependentUpon>BMonsterBrowser.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ItemBrowser.resx">
       <DependentUpon>ItemBrowser.vb</DependentUpon>

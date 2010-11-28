@@ -17,7 +17,7 @@
             End If
         End If
         EditingTools = New Tool() {New PaintbrushTool(Me), New DropperTool(Me), New TileSuggestTool(Me), New RectangleSelectTool(Me), New PencilSelectTool(Me), _
-                                   New TileSelectTool(Me), New ItemTool(Me), New VictimTool(Me), New NRMonsterTool(Me), New MonsterTool(Me)}
+                                   New TileSelectTool(Me), New ItemTool(Me), New VictimTool(Me), New NRMonsterTool(Me), New MonsterTool(Me), New BossMonsterTool(Me)}
         LevelItems = New ToolStripItem() {FileSave, SaveTool, EditPaste, PasteTool, EditSelectAll, EditSelectNone, ViewGrid, ViewPriority, EditLevelSettings}
         TileSuggestList.LoadAll()
         If My.Settings.RecentROMs <> "" Then
@@ -127,7 +127,7 @@
     End Sub
 
     Private Sub EditLevelSettings_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditLevelSettings.Click
-        LevelSettings.ShowDialog(EdControl.lvl)
+        LevelSettings.ShowDialog(Me)
     End Sub
 
     Private Sub SelectAll(ByVal selected As Boolean)
@@ -205,6 +205,9 @@
             Case SideContentType.Monsters
                 t.MonsterPicker = EdControl.MonsterPicker
                 EdControl.SetSidePanel(EdControl.MonsterPicker)
+            Case SideContentType.BossMonsters
+                t.BMonsterPicker = EdControl.BMonsterPicker
+                EdControl.SetSidePanel(EdControl.BMonsterPicker)
         End Select
         CurTool = t
         EdControl.t = t

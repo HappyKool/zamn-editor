@@ -6,6 +6,7 @@
     Public VictimPicker As New VictimBrowser
     Public NRMPicker As New NRMBrowser
     Public MonsterPicker As New MonsterBrowser
+    Public BMonsterPicker As New BMonsterBrowser
 
     Public Grid As Boolean
     Public priority As Boolean
@@ -109,6 +110,12 @@
             If m.index = 0 Then
                 e.Graphics.DrawRectangle(Pens.Blue, m.GetRect)
             End If
+        Next
+        For Each m As BossMonster In lvl.bossMonsters
+            Dim rect As Rectangle = m.GetRect
+            e.Graphics.FillRectangle(Brushes.White, rect)
+            e.Graphics.DrawRectangle(Pens.Black, rect)
+            e.Graphics.DrawString(m.name, BossMonster.dispfont, Brushes.Black, rect.Location)
         Next
         For Each i As Item In lvl.items
             If i.type < LevelGFX.ItemImages.Count Then

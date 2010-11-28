@@ -30,36 +30,32 @@ Partial Class LevelSettings
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.radColAuto = New System.Windows.Forms.RadioButton()
         Me.radColMan = New System.Windows.Forms.RadioButton()
-        Me.addrCol = New ZAMNEditor.AddressUpDown()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.radGFXAuto = New System.Windows.Forms.RadioButton()
         Me.radGFXMan = New System.Windows.Forms.RadioButton()
-        Me.addrGFX = New ZAMNEditor.AddressUpDown()
         Me.pnlPal = New System.Windows.Forms.Panel()
         Me.radPalAuto = New System.Windows.Forms.RadioButton()
         Me.cboPal = New System.Windows.Forms.ComboBox()
         Me.radPalMan = New System.Windows.Forms.RadioButton()
-        Me.addrPal = New ZAMNEditor.AddressUpDown()
         Me.pnlTiles = New System.Windows.Forms.Panel()
         Me.cboTiles = New System.Windows.Forms.ComboBox()
         Me.radTilesAuto = New System.Windows.Forms.RadioButton()
         Me.radTilesMan = New System.Windows.Forms.RadioButton()
-        Me.addrTiles = New ZAMNEditor.AddressUpDown()
         Me.lblUnknown = New System.Windows.Forms.Label()
         Me.lblCollision = New System.Windows.Forms.Label()
         Me.lblGraphics = New System.Windows.Forms.Label()
         Me.lblPalette = New System.Windows.Forms.Label()
         Me.lblTiles = New System.Windows.Forms.Label()
         Me.grpOther = New System.Windows.Forms.GroupBox()
+        Me.Panel9 = New System.Windows.Forms.Panel()
+        Me.nudUnk2 = New System.Windows.Forms.NumericUpDown()
+        Me.radUnk2Auto = New System.Windows.Forms.RadioButton()
+        Me.radUnk2Man = New System.Windows.Forms.RadioButton()
+        Me.lblUnknown2 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.nudUnk3 = New System.Windows.Forms.NumericUpDown()
         Me.radUnk3Auto = New System.Windows.Forms.RadioButton()
         Me.radUnk3Man = New System.Windows.Forms.RadioButton()
-        Me.Panel8 = New System.Windows.Forms.Panel()
-        Me.radBossAuto = New System.Windows.Forms.RadioButton()
-        Me.cboBoss = New System.Windows.Forms.ComboBox()
-        Me.radBossMan = New System.Windows.Forms.RadioButton()
-        Me.addrBoss = New ZAMNEditor.AddressUpDown()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.cboMusic = New System.Windows.Forms.ComboBox()
         Me.radMusicMan = New System.Windows.Forms.RadioButton()
@@ -69,21 +65,22 @@ Partial Class LevelSettings
         Me.cboPltAnim = New System.Windows.Forms.ComboBox()
         Me.radPAnimAuto = New System.Windows.Forms.RadioButton()
         Me.radPAnimMan = New System.Windows.Forms.RadioButton()
-        Me.addrPAnim = New ZAMNEditor.AddressUpDown()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.radSPalAuto = New System.Windows.Forms.RadioButton()
         Me.radSPalMan = New System.Windows.Forms.RadioButton()
-        Me.addrSPal = New ZAMNEditor.AddressUpDown()
-        Me.lblBoss = New System.Windows.Forms.Label()
         Me.lblMusic = New System.Windows.Forms.Label()
         Me.lblUnknown3 = New System.Windows.Forms.Label()
         Me.lblPalAnim = New System.Windows.Forms.Label()
         Me.lblSpritePal = New System.Windows.Forms.Label()
-        Me.Panel9 = New System.Windows.Forms.Panel()
-        Me.nudUnk2 = New System.Windows.Forms.NumericUpDown()
-        Me.radUnk2Auto = New System.Windows.Forms.RadioButton()
-        Me.radUnk2Man = New System.Windows.Forms.RadioButton()
-        Me.lblUnknown2 = New System.Windows.Forms.Label()
+        Me.btnCancel = New System.Windows.Forms.Button()
+        Me.btnOK = New System.Windows.Forms.Button()
+        Me.btnApply = New System.Windows.Forms.Button()
+        Me.addrPAnim = New ZAMNEditor.AddressUpDown()
+        Me.addrSPal = New ZAMNEditor.AddressUpDown()
+        Me.addrCol = New ZAMNEditor.AddressUpDown()
+        Me.addrGFX = New ZAMNEditor.AddressUpDown()
+        Me.addrPal = New ZAMNEditor.AddressUpDown()
+        Me.addrTiles = New ZAMNEditor.AddressUpDown()
         Me.grpTileset.SuspendLayout()
         Me.Panel4.SuspendLayout()
         CType(Me.nudUnk, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -92,15 +89,14 @@ Partial Class LevelSettings
         Me.pnlPal.SuspendLayout()
         Me.pnlTiles.SuspendLayout()
         Me.grpOther.SuspendLayout()
+        Me.Panel9.SuspendLayout()
+        CType(Me.nudUnk2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         CType(Me.nudUnk3, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel8.SuspendLayout()
         Me.Panel7.SuspendLayout()
         CType(Me.nudMusic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel6.SuspendLayout()
         Me.Panel5.SuspendLayout()
-        Me.Panel9.SuspendLayout()
-        CType(Me.nudUnk2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'grpTileset
@@ -193,14 +189,6 @@ Partial Class LevelSettings
         Me.radColMan.TabStop = True
         Me.radColMan.UseVisualStyleBackColor = True
         '
-        'addrCol
-        '
-        Me.addrCol.Location = New System.Drawing.Point(162, 0)
-        Me.addrCol.Name = "addrCol"
-        Me.addrCol.Size = New System.Drawing.Size(147, 20)
-        Me.addrCol.TabIndex = 17
-        Me.addrCol.Value = 512
-        '
         'Panel2
         '
         Me.Panel2.Controls.Add(Me.radGFXAuto)
@@ -231,14 +219,6 @@ Partial Class LevelSettings
         Me.radGFXMan.TabIndex = 12
         Me.radGFXMan.TabStop = True
         Me.radGFXMan.UseVisualStyleBackColor = True
-        '
-        'addrGFX
-        '
-        Me.addrGFX.Location = New System.Drawing.Point(162, 0)
-        Me.addrGFX.Name = "addrGFX"
-        Me.addrGFX.Size = New System.Drawing.Size(147, 20)
-        Me.addrGFX.TabIndex = 13
-        Me.addrGFX.Value = 512
         '
         'pnlPal
         '
@@ -280,14 +260,6 @@ Partial Class LevelSettings
         Me.radPalMan.TabStop = True
         Me.radPalMan.UseVisualStyleBackColor = True
         '
-        'addrPal
-        '
-        Me.addrPal.Location = New System.Drawing.Point(162, 0)
-        Me.addrPal.Name = "addrPal"
-        Me.addrPal.Size = New System.Drawing.Size(147, 20)
-        Me.addrPal.TabIndex = 8
-        Me.addrPal.Value = 512
-        '
         'pnlTiles
         '
         Me.pnlTiles.Controls.Add(Me.cboTiles)
@@ -328,14 +300,6 @@ Partial Class LevelSettings
         Me.radTilesMan.TabIndex = 3
         Me.radTilesMan.TabStop = True
         Me.radTilesMan.UseVisualStyleBackColor = True
-        '
-        'addrTiles
-        '
-        Me.addrTiles.Location = New System.Drawing.Point(162, 0)
-        Me.addrTiles.Name = "addrTiles"
-        Me.addrTiles.Size = New System.Drawing.Size(147, 20)
-        Me.addrTiles.TabIndex = 1
-        Me.addrTiles.Value = 512
         '
         'lblUnknown
         '
@@ -387,28 +351,75 @@ Partial Class LevelSettings
         Me.grpOther.Controls.Add(Me.Panel9)
         Me.grpOther.Controls.Add(Me.lblUnknown2)
         Me.grpOther.Controls.Add(Me.Panel1)
-        Me.grpOther.Controls.Add(Me.Panel8)
         Me.grpOther.Controls.Add(Me.Panel7)
         Me.grpOther.Controls.Add(Me.Panel6)
         Me.grpOther.Controls.Add(Me.Panel5)
-        Me.grpOther.Controls.Add(Me.lblBoss)
         Me.grpOther.Controls.Add(Me.lblMusic)
         Me.grpOther.Controls.Add(Me.lblUnknown3)
         Me.grpOther.Controls.Add(Me.lblPalAnim)
         Me.grpOther.Controls.Add(Me.lblSpritePal)
         Me.grpOther.Location = New System.Drawing.Point(12, 183)
         Me.grpOther.Name = "grpOther"
-        Me.grpOther.Size = New System.Drawing.Size(378, 210)
+        Me.grpOther.Size = New System.Drawing.Size(378, 184)
         Me.grpOther.TabIndex = 1
         Me.grpOther.TabStop = False
         Me.grpOther.Text = "Other"
+        '
+        'Panel9
+        '
+        Me.Panel9.Controls.Add(Me.nudUnk2)
+        Me.Panel9.Controls.Add(Me.radUnk2Auto)
+        Me.Panel9.Controls.Add(Me.radUnk2Man)
+        Me.Panel9.Location = New System.Drawing.Point(65, 126)
+        Me.Panel9.Name = "Panel9"
+        Me.Panel9.Size = New System.Drawing.Size(307, 21)
+        Me.Panel9.TabIndex = 37
+        '
+        'nudUnk2
+        '
+        Me.nudUnk2.Hexadecimal = True
+        Me.nudUnk2.Location = New System.Drawing.Point(184, 0)
+        Me.nudUnk2.Maximum = New Decimal(New Integer() {65535, 0, 0, 0})
+        Me.nudUnk2.Name = "nudUnk2"
+        Me.nudUnk2.Size = New System.Drawing.Size(77, 20)
+        Me.nudUnk2.TabIndex = 36
+        '
+        'radUnk2Auto
+        '
+        Me.radUnk2Auto.AutoSize = True
+        Me.radUnk2Auto.Location = New System.Drawing.Point(3, 3)
+        Me.radUnk2Auto.Name = "radUnk2Auto"
+        Me.radUnk2Auto.Size = New System.Drawing.Size(72, 17)
+        Me.radUnk2Auto.TabIndex = 27
+        Me.radUnk2Auto.TabStop = True
+        Me.radUnk2Auto.Text = "Automatic"
+        Me.radUnk2Auto.UseVisualStyleBackColor = True
+        '
+        'radUnk2Man
+        '
+        Me.radUnk2Man.AutoSize = True
+        Me.radUnk2Man.Location = New System.Drawing.Point(142, 3)
+        Me.radUnk2Man.Name = "radUnk2Man"
+        Me.radUnk2Man.Size = New System.Drawing.Size(14, 13)
+        Me.radUnk2Man.TabIndex = 28
+        Me.radUnk2Man.TabStop = True
+        Me.radUnk2Man.UseVisualStyleBackColor = True
+        '
+        'lblUnknown2
+        '
+        Me.lblUnknown2.AutoSize = True
+        Me.lblUnknown2.Location = New System.Drawing.Point(6, 131)
+        Me.lblUnknown2.Name = "lblUnknown2"
+        Me.lblUnknown2.Size = New System.Drawing.Size(56, 13)
+        Me.lblUnknown2.TabIndex = 38
+        Me.lblUnknown2.Text = "Unknown:"
         '
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.nudUnk3)
         Me.Panel1.Controls.Add(Me.radUnk3Auto)
         Me.Panel1.Controls.Add(Me.radUnk3Man)
-        Me.Panel1.Location = New System.Drawing.Point(65, 180)
+        Me.Panel1.Location = New System.Drawing.Point(65, 153)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(307, 21)
         Me.Panel1.TabIndex = 4
@@ -442,55 +453,6 @@ Partial Class LevelSettings
         Me.radUnk3Man.TabIndex = 28
         Me.radUnk3Man.TabStop = True
         Me.radUnk3Man.UseVisualStyleBackColor = True
-        '
-        'Panel8
-        '
-        Me.Panel8.Controls.Add(Me.radBossAuto)
-        Me.Panel8.Controls.Add(Me.cboBoss)
-        Me.Panel8.Controls.Add(Me.radBossMan)
-        Me.Panel8.Controls.Add(Me.addrBoss)
-        Me.Panel8.Location = New System.Drawing.Point(65, 126)
-        Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(307, 21)
-        Me.Panel8.TabIndex = 5
-        '
-        'radBossAuto
-        '
-        Me.radBossAuto.AutoSize = True
-        Me.radBossAuto.Location = New System.Drawing.Point(3, 3)
-        Me.radBossAuto.Name = "radBossAuto"
-        Me.radBossAuto.Size = New System.Drawing.Size(14, 13)
-        Me.radBossAuto.TabIndex = 23
-        Me.radBossAuto.TabStop = True
-        Me.radBossAuto.UseVisualStyleBackColor = True
-        '
-        'cboBoss
-        '
-        Me.cboBoss.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboBoss.FormattingEnabled = True
-        Me.cboBoss.Items.AddRange(New Object() {"Nothing", "UFO", "Giant Baby", "Desert Snakeoid", "Grass Snakeoid", "Gets Dark", "Unknown", "Giant Spider"})
-        Me.cboBoss.Location = New System.Drawing.Point(23, 0)
-        Me.cboBoss.Name = "cboBoss"
-        Me.cboBoss.Size = New System.Drawing.Size(103, 21)
-        Me.cboBoss.TabIndex = 25
-        '
-        'radBossMan
-        '
-        Me.radBossMan.AutoSize = True
-        Me.radBossMan.Location = New System.Drawing.Point(142, 3)
-        Me.radBossMan.Name = "radBossMan"
-        Me.radBossMan.Size = New System.Drawing.Size(14, 13)
-        Me.radBossMan.TabIndex = 26
-        Me.radBossMan.TabStop = True
-        Me.radBossMan.UseVisualStyleBackColor = True
-        '
-        'addrBoss
-        '
-        Me.addrBoss.Location = New System.Drawing.Point(162, 0)
-        Me.addrBoss.Name = "addrBoss"
-        Me.addrBoss.Size = New System.Drawing.Size(147, 20)
-        Me.addrBoss.TabIndex = 24
-        Me.addrBoss.Value = 512
         '
         'Panel7
         '
@@ -557,7 +519,7 @@ Partial Class LevelSettings
         '
         Me.cboPltAnim.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboPltAnim.FormattingEnabled = True
-        Me.cboPltAnim.Items.AddRange(New Object() {"None", "Castle", "Grass", "Beach", "Pyramid"})
+        Me.cboPltAnim.Items.AddRange(New Object() {"None", "Castle", "Grass", "Beach", "Pyramid", "Fire Cave"})
         Me.cboPltAnim.Location = New System.Drawing.Point(23, 0)
         Me.cboPltAnim.Name = "cboPltAnim"
         Me.cboPltAnim.Size = New System.Drawing.Size(103, 21)
@@ -582,14 +544,6 @@ Partial Class LevelSettings
         Me.radPAnimMan.TabIndex = 24
         Me.radPAnimMan.TabStop = True
         Me.radPAnimMan.UseVisualStyleBackColor = True
-        '
-        'addrPAnim
-        '
-        Me.addrPAnim.Location = New System.Drawing.Point(162, 0)
-        Me.addrPAnim.Name = "addrPAnim"
-        Me.addrPAnim.Size = New System.Drawing.Size(147, 20)
-        Me.addrPAnim.TabIndex = 25
-        Me.addrPAnim.Value = 512
         '
         'Panel5
         '
@@ -622,23 +576,6 @@ Partial Class LevelSettings
         Me.radSPalMan.TabStop = True
         Me.radSPalMan.UseVisualStyleBackColor = True
         '
-        'addrSPal
-        '
-        Me.addrSPal.Location = New System.Drawing.Point(162, 0)
-        Me.addrSPal.Name = "addrSPal"
-        Me.addrSPal.Size = New System.Drawing.Size(147, 20)
-        Me.addrSPal.TabIndex = 21
-        Me.addrSPal.Value = 512
-        '
-        'lblBoss
-        '
-        Me.lblBoss.AutoSize = True
-        Me.lblBoss.Location = New System.Drawing.Point(6, 129)
-        Me.lblBoss.Name = "lblBoss"
-        Me.lblBoss.Size = New System.Drawing.Size(33, 13)
-        Me.lblBoss.TabIndex = 22
-        Me.lblBoss.Text = "Boss:"
-        '
         'lblMusic
         '
         Me.lblMusic.AutoSize = True
@@ -651,7 +588,7 @@ Partial Class LevelSettings
         'lblUnknown3
         '
         Me.lblUnknown3.AutoSize = True
-        Me.lblUnknown3.Location = New System.Drawing.Point(6, 185)
+        Me.lblUnknown3.Location = New System.Drawing.Point(6, 158)
         Me.lblUnknown3.Name = "lblUnknown3"
         Me.lblUnknown3.Size = New System.Drawing.Size(56, 13)
         Me.lblUnknown3.TabIndex = 26
@@ -675,62 +612,97 @@ Partial Class LevelSettings
         Me.lblSpritePal.TabIndex = 18
         Me.lblSpritePal.Text = "Sprite" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Palette:"
         '
-        'Panel9
+        'btnCancel
         '
-        Me.Panel9.Controls.Add(Me.nudUnk2)
-        Me.Panel9.Controls.Add(Me.radUnk2Auto)
-        Me.Panel9.Controls.Add(Me.radUnk2Man)
-        Me.Panel9.Location = New System.Drawing.Point(65, 153)
-        Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(307, 21)
-        Me.Panel9.TabIndex = 37
+        Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnCancel.Location = New System.Drawing.Point(155, 373)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(75, 23)
+        Me.btnCancel.TabIndex = 2
+        Me.btnCancel.Text = "Cancel"
+        Me.btnCancel.UseVisualStyleBackColor = True
         '
-        'nudUnk2
+        'btnOK
         '
-        Me.nudUnk2.Hexadecimal = True
-        Me.nudUnk2.Location = New System.Drawing.Point(184, 0)
-        Me.nudUnk2.Maximum = New Decimal(New Integer() {65535, 0, 0, 0})
-        Me.nudUnk2.Name = "nudUnk2"
-        Me.nudUnk2.Size = New System.Drawing.Size(77, 20)
-        Me.nudUnk2.TabIndex = 36
+        Me.btnOK.Location = New System.Drawing.Point(317, 373)
+        Me.btnOK.Name = "btnOK"
+        Me.btnOK.Size = New System.Drawing.Size(75, 23)
+        Me.btnOK.TabIndex = 3
+        Me.btnOK.Text = "OK"
+        Me.btnOK.UseVisualStyleBackColor = True
         '
-        'radUnk2Auto
+        'btnApply
         '
-        Me.radUnk2Auto.AutoSize = True
-        Me.radUnk2Auto.Location = New System.Drawing.Point(3, 3)
-        Me.radUnk2Auto.Name = "radUnk2Auto"
-        Me.radUnk2Auto.Size = New System.Drawing.Size(72, 17)
-        Me.radUnk2Auto.TabIndex = 27
-        Me.radUnk2Auto.TabStop = True
-        Me.radUnk2Auto.Text = "Automatic"
-        Me.radUnk2Auto.UseVisualStyleBackColor = True
+        Me.btnApply.Location = New System.Drawing.Point(236, 373)
+        Me.btnApply.Name = "btnApply"
+        Me.btnApply.Size = New System.Drawing.Size(75, 23)
+        Me.btnApply.TabIndex = 4
+        Me.btnApply.Text = "Apply"
+        Me.btnApply.UseVisualStyleBackColor = True
         '
-        'radUnk2Man
+        'addrPAnim
         '
-        Me.radUnk2Man.AutoSize = True
-        Me.radUnk2Man.Location = New System.Drawing.Point(142, 3)
-        Me.radUnk2Man.Name = "radUnk2Man"
-        Me.radUnk2Man.Size = New System.Drawing.Size(14, 13)
-        Me.radUnk2Man.TabIndex = 28
-        Me.radUnk2Man.TabStop = True
-        Me.radUnk2Man.UseVisualStyleBackColor = True
+        Me.addrPAnim.Location = New System.Drawing.Point(162, 0)
+        Me.addrPAnim.Name = "addrPAnim"
+        Me.addrPAnim.Size = New System.Drawing.Size(147, 20)
+        Me.addrPAnim.TabIndex = 25
+        Me.addrPAnim.Value = 512
         '
-        'lblUnknown2
+        'addrSPal
         '
-        Me.lblUnknown2.AutoSize = True
-        Me.lblUnknown2.Location = New System.Drawing.Point(6, 158)
-        Me.lblUnknown2.Name = "lblUnknown2"
-        Me.lblUnknown2.Size = New System.Drawing.Size(56, 13)
-        Me.lblUnknown2.TabIndex = 38
-        Me.lblUnknown2.Text = "Unknown:"
+        Me.addrSPal.Location = New System.Drawing.Point(162, 0)
+        Me.addrSPal.Name = "addrSPal"
+        Me.addrSPal.Size = New System.Drawing.Size(147, 20)
+        Me.addrSPal.TabIndex = 21
+        Me.addrSPal.Value = 512
+        '
+        'addrCol
+        '
+        Me.addrCol.Location = New System.Drawing.Point(162, 0)
+        Me.addrCol.Name = "addrCol"
+        Me.addrCol.Size = New System.Drawing.Size(147, 20)
+        Me.addrCol.TabIndex = 17
+        Me.addrCol.Value = 512
+        '
+        'addrGFX
+        '
+        Me.addrGFX.Location = New System.Drawing.Point(162, 0)
+        Me.addrGFX.Name = "addrGFX"
+        Me.addrGFX.Size = New System.Drawing.Size(147, 20)
+        Me.addrGFX.TabIndex = 13
+        Me.addrGFX.Value = 512
+        '
+        'addrPal
+        '
+        Me.addrPal.Location = New System.Drawing.Point(162, 0)
+        Me.addrPal.Name = "addrPal"
+        Me.addrPal.Size = New System.Drawing.Size(147, 20)
+        Me.addrPal.TabIndex = 8
+        Me.addrPal.Value = 512
+        '
+        'addrTiles
+        '
+        Me.addrTiles.Location = New System.Drawing.Point(162, 0)
+        Me.addrTiles.Name = "addrTiles"
+        Me.addrTiles.Size = New System.Drawing.Size(147, 20)
+        Me.addrTiles.TabIndex = 1
+        Me.addrTiles.Value = 512
         '
         'LevelSettings
         '
+        Me.AcceptButton = Me.btnOK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(404, 405)
+        Me.CancelButton = Me.btnCancel
+        Me.ClientSize = New System.Drawing.Size(404, 404)
+        Me.Controls.Add(Me.btnApply)
+        Me.Controls.Add(Me.btnOK)
+        Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.grpOther)
         Me.Controls.Add(Me.grpTileset)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "LevelSettings"
         Me.Text = "Level Settings"
         Me.grpTileset.ResumeLayout(False)
@@ -748,11 +720,12 @@ Partial Class LevelSettings
         Me.pnlTiles.PerformLayout()
         Me.grpOther.ResumeLayout(False)
         Me.grpOther.PerformLayout()
+        Me.Panel9.ResumeLayout(False)
+        Me.Panel9.PerformLayout()
+        CType(Me.nudUnk2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         CType(Me.nudUnk3, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel8.ResumeLayout(False)
-        Me.Panel8.PerformLayout()
         Me.Panel7.ResumeLayout(False)
         Me.Panel7.PerformLayout()
         CType(Me.nudMusic, System.ComponentModel.ISupportInitialize).EndInit()
@@ -760,9 +733,6 @@ Partial Class LevelSettings
         Me.Panel6.PerformLayout()
         Me.Panel5.ResumeLayout(False)
         Me.Panel5.PerformLayout()
-        Me.Panel9.ResumeLayout(False)
-        Me.Panel9.PerformLayout()
-        CType(Me.nudUnk2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -806,18 +776,12 @@ Partial Class LevelSettings
     Friend WithEvents radSPalMan As System.Windows.Forms.RadioButton
     Friend WithEvents radSPalAuto As System.Windows.Forms.RadioButton
     Friend WithEvents lblSpritePal As System.Windows.Forms.Label
-    Friend WithEvents addrBoss As ZAMNEditor.AddressUpDown
-    Friend WithEvents radBossMan As System.Windows.Forms.RadioButton
-    Friend WithEvents cboBoss As System.Windows.Forms.ComboBox
-    Friend WithEvents radBossAuto As System.Windows.Forms.RadioButton
-    Friend WithEvents lblBoss As System.Windows.Forms.Label
     Friend WithEvents Panel4 As System.Windows.Forms.Panel
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents pnlPal As System.Windows.Forms.Panel
     Friend WithEvents pnlTiles As System.Windows.Forms.Panel
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents Panel8 As System.Windows.Forms.Panel
     Friend WithEvents Panel7 As System.Windows.Forms.Panel
     Friend WithEvents Panel6 As System.Windows.Forms.Panel
     Friend WithEvents Panel5 As System.Windows.Forms.Panel
@@ -828,4 +792,7 @@ Partial Class LevelSettings
     Friend WithEvents radUnk2Auto As System.Windows.Forms.RadioButton
     Friend WithEvents radUnk2Man As System.Windows.Forms.RadioButton
     Friend WithEvents lblUnknown2 As System.Windows.Forms.Label
+    Friend WithEvents btnCancel As System.Windows.Forms.Button
+    Friend WithEvents btnOK As System.Windows.Forms.Button
+    Friend WithEvents btnApply As System.Windows.Forms.Button
 End Class

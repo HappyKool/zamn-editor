@@ -189,8 +189,8 @@
         For Each m As NRMonster In selectedMonsters
             m.index = NRMPicker.SelectedIndex + 1
             m.UpdatePtr()
-            Repaint()
         Next
+        Repaint()
     End Sub
 
     Public Overrides Sub Paint(ByVal g As System.Drawing.Graphics)

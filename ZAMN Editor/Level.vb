@@ -18,13 +18,14 @@
     Public page1 As TitlePage
     Public page2 As TitlePage
     Public bonuses As New List(Of Integer)
-    Public boss As Integer
     Public spritePal As Integer
+    Public bossMonsters As New List(Of BossMonster)
 
     Public Sub New(ByVal s As IO.Stream, ByVal name As String, ByVal num As Integer)
         Me.name = name
         Me.num = num
         Dim startAddr As Long = s.Position
+        Debug.WriteLine(name + ": " + Hex(startAddr))
         tileset = New Tileset(s)
         s.Seek(&H22, IO.SeekOrigin.Current)
         Width = s.ReadByte() + s.ReadByte() * &H100
@@ -35,7 +36,7 @@
         p1Start = New Point(s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100)
         p2Start = New Point(s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100)
         music = s.ReadByte + s.ReadByte * &H100
-        unknown2 = s.ReadByte * &H100 + s.ReadByte
+        unknown2 = s.ReadByte + s.ReadByte * &H100
         s.Seek(startAddr + &H14, IO.SeekOrigin.Begin)
         spritePal = Shrd.ReadFileAddr(s)
         s.Seek(startAddr + &H20, IO.SeekOrigin.Begin)
@@ -99,7 +100,14 @@
             Loop
         End If
         s.Seek(startAddr + &H3C, IO.SeekOrigin.Begin)
-        boss = Shrd.ReadFileAddr(s)
+        Do
+            Dim ptr As Integer = Shrd.ReadFileAddr(s)
+            If ptr = -1 Then Exit Do
+            bossMonsters.Add(New BossMonster(ptr, s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100))
+            If bossMonsters.Last.name = "Gets Dark" Then
+                MsgBox(Hex(bossMonsters.Last.y) & " " & Hex(bossMonsters.Last.x))
+            End If
+        Loop
         s.Seek(startAddr + 4, IO.SeekOrigin.Begin)
         Shrd.GoToPointer(s)
         ErrorLog.CheckError("Level has no background data.")
@@ -129,7 +137,11 @@
                                   music Mod &H100, music \ &H100, _
                                   unknown2 Mod &H100, unknown2 \ &H100, _
                                   0, 0, 0, 0, 0, 0})
-        file.AddRange(Shrd.ConvertAddr(boss))
+        For Each m As BossMonster In bossMonsters
+            file.AddRange(Shrd.ConvertAddr(m.ptr))
+            file.AddRange(New Byte() {m.x Mod &H100, m.x \ &H100, m.y Mod &H100, m.y \ &H100})
+        Next
+        file.AddRange(New Byte() {0, 0, 0, 0})
         Dim x As Integer, y As Integer
         'Monster data
         addrOffsets(0) = file.Count

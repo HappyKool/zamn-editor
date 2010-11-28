@@ -187,8 +187,8 @@
     Public Overrides Sub ItemChanged()
         For Each i As Item In selectedItems
             i.type = ItemPicker.SelectedIndex
-            Repaint()
         Next
+        Repaint()
     End Sub
 
     Public Overrides Sub Paint(ByVal g As System.Drawing.Graphics)

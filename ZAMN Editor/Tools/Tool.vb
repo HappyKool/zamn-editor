@@ -7,6 +7,7 @@
     Public WithEvents VictimPicker As VictimBrowser
     Public WithEvents NRMPicker As NRMBrowser
     Public WithEvents MonsterPicker As MonsterBrowser
+    Public WithEvents BMonsterPicker As BMonsterBrowser
     Public Status As String
 
     Public Sub New(ByVal ed As Editor)
@@ -45,6 +46,9 @@
     Public Overridable Sub MonsterChanged()
 
     End Sub
+    Public Overridable Sub BMonsterChanged()
+
+    End Sub
     Public Overridable Sub Refresh()
 
     End Sub
@@ -79,7 +83,9 @@
     Private Sub MonsterPicker_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MonsterPicker.ValueChanged
         MonsterChanged()
     End Sub
-
+    Private Sub BMonsterPicker_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles BMonsterPicker.ValueChanged
+        BMonsterChanged()
+    End Sub
 
     Public Sub Repaint()
         ed.EdControl.Repaint()
@@ -96,4 +102,5 @@ Public Enum SideContentType
     Victims
     NRMonsters
     Monsters
+    BossMonsters
 End Enum

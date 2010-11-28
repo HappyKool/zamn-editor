@@ -58,6 +58,9 @@
             TilePicker.SetAll()
         Else
             TilePicker.SetTiles(TileSuggestList.GetList(0, ed.EdControl.lvl.Tiles(XStart, YStart), Direction))
+            TilePicker.SelectedIndex = -1
+            TilePicker.VScrl.Value = 0
+            TilePicker.Invalidate()
         End If
         pX = -1
     End Sub
