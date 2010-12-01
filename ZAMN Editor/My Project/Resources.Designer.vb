@@ -60,6 +60,13 @@ Namespace My.Resources
             End Set
         End Property
         
+        Friend ReadOnly Property Add() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Add", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property Arrow() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Arrow", resourceCulture)
@@ -98,6 +105,13 @@ Namespace My.Resources
         Friend ReadOnly Property Cut() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Cut", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property Delete() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Delete", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

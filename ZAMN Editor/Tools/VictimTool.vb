@@ -40,7 +40,7 @@
         Dim addvictim As Boolean = False
         For l As Integer = ed.EdControl.lvl.victims.Count - 1 To 0 Step -1 'Find victim under mouse
             Dim v As Victim = ed.EdControl.lvl.victims(l)
-            If v.GetRect.Contains(e.Location) Then
+            If v.GetRect(ed.EdControl.lvl.GFX).Contains(e.Location) Then
                 If Not selectedVictims.Contains(v) Then
                     If Control.ModifierKeys <> Keys.Shift Then
                         selectedVictims.Clear()
@@ -92,7 +92,7 @@
                 Dim selRect As New Rectangle(curX, curY, width, height)
                 curSelVictims.Clear()
                 For Each v As Victim In ed.EdControl.lvl.victims 'Find victims in selection rectangle
-                    If selRect.IntersectsWith(v.GetRect) Then
+                    If selRect.IntersectsWith(v.GetRect(ed.EdControl.lvl.GFX)) Then
                         curSelVictims.Add(v)
                     End If
                 Next
@@ -171,12 +171,12 @@
             g.DrawRectangle(borderPen, curX, curY, width, height)
         End If
         For Each v As Victim In selectedVictims
-            g.FillRectangle(darkBrush, v.GetRect)
-            g.DrawRectangle(Pens.White, v.GetRect)
+            g.FillRectangle(darkBrush, v.GetRect(ed.EdControl.lvl.GFX))
+            g.DrawRectangle(Pens.White, v.GetRect(ed.EdControl.lvl.GFX))
         Next
         For Each v As Victim In curSelVictims
-            g.FillRectangle(darkBrush, v.GetRect)
-            g.DrawRectangle(Pens.White, v.GetRect)
+            g.FillRectangle(darkBrush, v.GetRect(ed.EdControl.lvl.GFX))
+            g.DrawRectangle(Pens.White, v.GetRect(ed.EdControl.lvl.GFX))
         Next
     End Sub
 

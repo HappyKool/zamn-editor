@@ -5,14 +5,16 @@
     Private selectedBrush As SolidBrush
     Public SelectedIndex As Integer = -1
     Public itemCt As Integer
+    Public gfx As LevelGFX
     Public Event ValueChanged(ByVal sender As Object, ByVal e As EventArgs)
 
-    Public Sub New()
+    Public Sub New(ByVal gfx As LevelGFX)
         InitializeComponent()
+        Me.gfx = gfx
         bgBrush = New Drawing2D.LinearGradientBrush(New Rectangle(Point.Empty, New Size(Me.Width - 17, Me.Height)), Color.White, Color.FromArgb(228, 225, 208), Drawing2D.LinearGradientMode.Horizontal)
         borderPen = New Pen(Color.FromArgb(49, 106, 197))
         selectedBrush = New SolidBrush(Color.FromArgb(225, 230, 232))
-        itemCt = LevelGFX.ItemImages.Count - 1
+        itemCt = gfx.ItemImages.Count - 1
         UpdateScrollBar()
     End Sub
 
@@ -33,7 +35,7 @@
                 e.Graphics.FillRectangle(selectedBrush, 0, yPos + 1, Me.Width - 18, 32)
                 e.Graphics.DrawRectangle(borderPen, 0, yPos, Me.Width - 18, 32)
             End If
-            e.Graphics.DrawImage(LevelGFX.ItemImages(l), 8, yPos + 8)
+            e.Graphics.DrawImage(gfx.ItemImages(l), 8, yPos + 8)
             e.Graphics.DrawString(l.ToString(), Me.Font, Brushes.Black, 32, yPos + 10)
             yPos += 32
         Next

@@ -20,6 +20,7 @@
     Public bonuses As New List(Of Integer)
     Public spritePal As Integer
     Public bossMonsters As New List(Of BossMonster)
+    Public GFX As LevelGFX
 
     Public Sub New(ByVal s As IO.Stream, ByVal name As String, ByVal num As Integer)
         Me.name = name
@@ -104,9 +105,6 @@
             Dim ptr As Integer = Shrd.ReadFileAddr(s)
             If ptr = -1 Then Exit Do
             bossMonsters.Add(New BossMonster(ptr, s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100))
-            If bossMonsters.Last.name = "Gets Dark" Then
-                MsgBox(Hex(bossMonsters.Last.y) & " " & Hex(bossMonsters.Last.x))
-            End If
         Loop
         s.Seek(startAddr + 4, IO.SeekOrigin.Begin)
         Shrd.GoToPointer(s)
@@ -114,6 +112,7 @@
         For l As Integer = 0 To Width * Height - 1
             Tiles(l Mod Width, l \ Width) = (s.ReadByte() + s.ReadByte() * &H100) And &HFF
         Next
+        GFX = New LevelGFX(s, spritePal)
         s.Close()
     End Sub
 

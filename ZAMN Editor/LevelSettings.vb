@@ -101,6 +101,19 @@
         Else
             radUnk3Man.Checked = True
         End If
+        'Bonuses
+        lvl.bonuses.Sort()
+        lstCustomBonuses.Items.Clear()
+        For l As Integer = 0 To lstBonuses.Items.Count - 1
+            lstBonuses.SetItemChecked(l, False)
+        Next
+        For Each b As Integer In lvl.bonuses
+            If b >= 4 And b <= 32 And b Mod 2 = 0 Then
+                lstBonuses.SetItemChecked(b \ 2 - 2, True)
+            Else
+                lstCustomBonuses.Items.Add(Hex(b))
+            End If
+        Next
         Return Me.ShowDialog()
     End Function
 
@@ -189,6 +202,15 @@
         lvl.music = nudMusic.Value
         lvl.unknown2 = nudUnk2.Value
         lvl.unknown3 = nudUnk3.Value
+        lvl.bonuses.Clear()
+        For l As Integer = 0 To lstBonuses.Items.Count - 1
+            If lstBonuses.GetItemChecked(l) Then
+                lvl.bonuses.Add(l * 2 + 4)
+            End If
+        Next
+        For Each i As String In lstCustomBonuses.Items
+            lvl.bonuses.Add(CInt("&H" & i))
+        Next
         If reloadTileset Then
             Dim s As New IO.FileStream(ed.r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read)
             ed.EdControl.lvl.tileset.Reload(s)
@@ -200,5 +222,21 @@
     Private Sub btnOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOK.Click
         btnApply_Click(sender, e)
         Me.Close()
+    End Sub
+
+    Private Sub btnAddBonus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddBonus.Click
+        If Not lstCustomBonuses.Items.Contains(Hex(nudCustBonus.Value)) And Not (nudCustBonus.Value >= 4 And nudCustBonus.Value <= 32 And nudCustBonus.Value Mod 2 = 0) Then
+            lstCustomBonuses.Items.Add(Hex(nudCustBonus.Value))
+        End If
+    End Sub
+
+    Private Sub btnDeleteBonus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDeleteBonus.Click
+        Dim items As New List(Of String)
+        For Each i As String In lstCustomBonuses.SelectedItems
+            items.Add(i)
+        Next
+        For Each i As String In items
+            lstCustomBonuses.Items.Remove(i)
+        Next
     End Sub
 End Class

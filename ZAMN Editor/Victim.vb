@@ -31,8 +31,8 @@
         Me.index = v.index
     End Sub
 
-    Public Function GetRect() As Rectangle
-        Return Shrd.RealSize(New Rectangle(New Point(Me.x, Me.y), LevelGFX.VictimImages(index).Size))
+    Public Function GetRect(ByVal gfx As LevelGFX) As Rectangle
+        Return Shrd.RealSize(New Rectangle(New Point(Me.x, Me.y), gfx.VictimImages(index).Size))
     End Function
 
     Public Sub UpdatePtr()

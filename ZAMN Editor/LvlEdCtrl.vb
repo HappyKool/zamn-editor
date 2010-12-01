@@ -2,10 +2,10 @@
     Public lvl As Level
     Public t As Tool
     Public TilePicker As New TilesetBrowser
-    Public ItemPicker As New ItemBrowser
-    Public VictimPicker As New VictimBrowser
-    Public NRMPicker As New NRMBrowser
-    Public MonsterPicker As New MonsterBrowser
+    Public ItemPicker As ItemBrowser
+    Public VictimPicker As VictimBrowser
+    Public NRMPicker As NRMBrowser
+    Public MonsterPicker As MonsterBrowser
     Public BMonsterPicker As New BMonsterBrowser
 
     Public Grid As Boolean
@@ -31,6 +31,10 @@
 
     Public Sub LoadLevel(ByVal lvl As Level)
         Me.lvl = lvl
+        ItemPicker = New ItemBrowser(lvl.GFX)
+        VictimPicker = New VictimBrowser(lvl.GFX)
+        NRMPicker = New NRMBrowser(lvl.GFX)
+        MonsterPicker = New MonsterBrowser(lvl.GFX)
         selection = New Selection(lvl.Width, lvl.Height)
         TilePicker.LoadTileset(lvl.tileset)
         UpdateScrollBars()
@@ -94,21 +98,21 @@
             Next
         Next
         For Each v As Victim In lvl.victims
-            Dim img As Bitmap = LevelGFX.VictimImages(v.index)
+            Dim img As Bitmap = lvl.GFX.VictimImages(v.index)
             e.Graphics.DrawImage(img, v.x, v.y)
             e.Graphics.DrawString(v.num.ToString, Me.Font, Brushes.Black, v.x + img.Width \ 2 - 3, v.y + img.Height + 5)
             e.Graphics.DrawString(v.num.ToString, Me.Font, Brushes.White, v.x + img.Width \ 2 - 4, v.y + img.Height + 4)
         Next
         For Each m As NRMonster In lvl.NRMonsters
-            e.Graphics.DrawImage(LevelGFX.VictimImages(m.index), m.x, m.y)
+            e.Graphics.DrawImage(lvl.GFX.VictimImages(m.index), m.x, m.y)
             If m.index = 0 Then
-                e.Graphics.DrawRectangle(Pens.Yellow, m.GetRect)
+                e.Graphics.DrawRectangle(Pens.Yellow, m.GetRect(lvl.GFX))
             End If
         Next
         For Each m As Monster In lvl.Monsters
-            e.Graphics.DrawImage(LevelGFX.VictimImages(m.index), m.x, m.y)
+            e.Graphics.DrawImage(lvl.GFX.VictimImages(m.index), m.x, m.y)
             If m.index = 0 Then
-                e.Graphics.DrawRectangle(Pens.Blue, m.GetRect)
+                e.Graphics.DrawRectangle(Pens.Blue, m.GetRect(lvl.GFX))
             End If
         Next
         For Each m As BossMonster In lvl.bossMonsters
@@ -118,8 +122,8 @@
             e.Graphics.DrawString(m.name, BossMonster.dispfont, Brushes.Black, rect.Location)
         Next
         For Each i As Item In lvl.items
-            If i.type < LevelGFX.ItemImages.Count Then
-                e.Graphics.DrawImage(LevelGFX.ItemImages(i.type), i.x, i.y)
+            If i.type < lvl.GFX.ItemImages.Count Then
+                e.Graphics.DrawImage(lvl.GFX.ItemImages(i.type), i.x, i.y)
             Else
                 e.Graphics.DrawImage(My.Resources.UnknownItem, i.x, i.y)
             End If

@@ -41,7 +41,7 @@
         Dim addmonster As Boolean = False
         For l As Integer = ed.EdControl.lvl.NRMonsters.Count - 1 To 0 Step -1 'Find monster under mouse
             Dim m As NRMonster = ed.EdControl.lvl.NRMonsters(l)
-            If m.GetRect.Contains(e.Location) Then
+            If m.GetRect(ed.EdControl.lvl.GFX).Contains(e.Location) Then
                 If Not selectedMonsters.Contains(m) Then
                     If Control.ModifierKeys <> Keys.Shift Then
                         selectedMonsters.Clear()
@@ -75,8 +75,8 @@
         If Control.ModifierKeys = Keys.Control Then 'Add a new monster
             If selectedMonsters.Count = 0 Then
                 If NRMPicker.SelectedIndex > -1 Then
-                    Dim m As New NRMonster(e.X - LevelGFX.VictimImages(NRMPicker.SelectedIndex).Width / 2, _
-                                           e.Y - LevelGFX.VictimImages(NRMPicker.SelectedIndex).Height / 2, 0, 0, LevelGFX.ptrs(NRMPicker.SelectedIndex))
+                    Dim m As New NRMonster(e.X - ed.EdControl.lvl.GFX.VictimImages(NRMPicker.SelectedIndex).Width / 2, _
+                                           e.Y - ed.EdControl.lvl.GFX.VictimImages(NRMPicker.SelectedIndex).Height / 2, 0, 0, LevelGFX.ptrs(NRMPicker.SelectedIndex))
                     selectedMonsters.Clear()
                     selectedMonsters.Add(m)
                     selectedMonster = m
@@ -117,7 +117,7 @@
                 Dim selRect As New Rectangle(curX, curY, width, height)
                 curSelMonsters.Clear()
                 For Each m As NRMonster In ed.EdControl.lvl.NRMonsters 'Find monsters in selection rectangle
-                    If selRect.IntersectsWith(m.GetRect) Then
+                    If selRect.IntersectsWith(m.GetRect(ed.EdControl.lvl.GFX)) Then
                         curSelMonsters.Add(m)
                     End If
                 Next
@@ -199,12 +199,12 @@
             g.DrawRectangle(borderPen, curX, curY, width, height)
         End If
         For Each m As NRMonster In selectedMonsters
-            g.FillRectangle(darkBrush, m.GetRect)
-            g.DrawRectangle(Pens.White, m.GetRect)
+            g.FillRectangle(darkBrush, m.GetRect(ed.EdControl.lvl.GFX))
+            g.DrawRectangle(Pens.White, m.GetRect(ed.EdControl.lvl.GFX))
         Next
         For Each m As NRMonster In curSelMonsters
-            g.FillRectangle(darkBrush, m.GetRect)
-            g.DrawRectangle(Pens.White, m.GetRect)
+            g.FillRectangle(darkBrush, m.GetRect(ed.EdControl.lvl.GFX))
+            g.DrawRectangle(Pens.White, m.GetRect(ed.EdControl.lvl.GFX))
         Next
     End Sub
 

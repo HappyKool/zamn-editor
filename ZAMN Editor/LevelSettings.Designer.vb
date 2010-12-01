@@ -75,6 +75,13 @@ Partial Class LevelSettings
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnOK = New System.Windows.Forms.Button()
         Me.btnApply = New System.Windows.Forms.Button()
+        Me.grpBonuses = New System.Windows.Forms.GroupBox()
+        Me.btnDeleteBonus = New System.Windows.Forms.Button()
+        Me.btnAddBonus = New System.Windows.Forms.Button()
+        Me.nudCustBonus = New System.Windows.Forms.NumericUpDown()
+        Me.lstCustomBonuses = New System.Windows.Forms.ListBox()
+        Me.lblCustomBonuses = New System.Windows.Forms.Label()
+        Me.lstBonuses = New System.Windows.Forms.CheckedListBox()
         Me.addrPAnim = New ZAMNEditor.AddressUpDown()
         Me.addrSPal = New ZAMNEditor.AddressUpDown()
         Me.addrCol = New ZAMNEditor.AddressUpDown()
@@ -97,6 +104,8 @@ Partial Class LevelSettings
         CType(Me.nudMusic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel6.SuspendLayout()
         Me.Panel5.SuspendLayout()
+        Me.grpBonuses.SuspendLayout()
+        CType(Me.nudCustBonus, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'grpTileset
@@ -640,6 +649,78 @@ Partial Class LevelSettings
         Me.btnApply.Text = "Apply"
         Me.btnApply.UseVisualStyleBackColor = True
         '
+        'grpBonuses
+        '
+        Me.grpBonuses.Controls.Add(Me.btnDeleteBonus)
+        Me.grpBonuses.Controls.Add(Me.btnAddBonus)
+        Me.grpBonuses.Controls.Add(Me.nudCustBonus)
+        Me.grpBonuses.Controls.Add(Me.lstCustomBonuses)
+        Me.grpBonuses.Controls.Add(Me.lblCustomBonuses)
+        Me.grpBonuses.Controls.Add(Me.lstBonuses)
+        Me.grpBonuses.Location = New System.Drawing.Point(396, 12)
+        Me.grpBonuses.Name = "grpBonuses"
+        Me.grpBonuses.Size = New System.Drawing.Size(173, 355)
+        Me.grpBonuses.TabIndex = 5
+        Me.grpBonuses.TabStop = False
+        Me.grpBonuses.Text = "Bonuses"
+        '
+        'btnDeleteBonus
+        '
+        Me.btnDeleteBonus.Image = Global.ZAMNEditor.My.Resources.Resources.Delete
+        Me.btnDeleteBonus.Location = New System.Drawing.Point(132, 327)
+        Me.btnDeleteBonus.Name = "btnDeleteBonus"
+        Me.btnDeleteBonus.Size = New System.Drawing.Size(33, 23)
+        Me.btnDeleteBonus.TabIndex = 9
+        Me.btnDeleteBonus.UseVisualStyleBackColor = True
+        '
+        'btnAddBonus
+        '
+        Me.btnAddBonus.Image = Global.ZAMNEditor.My.Resources.Resources.Add
+        Me.btnAddBonus.Location = New System.Drawing.Point(93, 327)
+        Me.btnAddBonus.Name = "btnAddBonus"
+        Me.btnAddBonus.Size = New System.Drawing.Size(33, 23)
+        Me.btnAddBonus.TabIndex = 8
+        Me.btnAddBonus.UseVisualStyleBackColor = True
+        '
+        'nudCustBonus
+        '
+        Me.nudCustBonus.Hexadecimal = True
+        Me.nudCustBonus.Location = New System.Drawing.Point(6, 328)
+        Me.nudCustBonus.Maximum = New Decimal(New Integer() {255, 0, 0, 0})
+        Me.nudCustBonus.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.nudCustBonus.Name = "nudCustBonus"
+        Me.nudCustBonus.Size = New System.Drawing.Size(81, 20)
+        Me.nudCustBonus.TabIndex = 6
+        Me.nudCustBonus.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'lstCustomBonuses
+        '
+        Me.lstCustomBonuses.FormattingEnabled = True
+        Me.lstCustomBonuses.Location = New System.Drawing.Point(6, 267)
+        Me.lstCustomBonuses.Name = "lstCustomBonuses"
+        Me.lstCustomBonuses.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lstCustomBonuses.Size = New System.Drawing.Size(159, 56)
+        Me.lstCustomBonuses.TabIndex = 7
+        '
+        'lblCustomBonuses
+        '
+        Me.lblCustomBonuses.AutoSize = True
+        Me.lblCustomBonuses.Location = New System.Drawing.Point(6, 251)
+        Me.lblCustomBonuses.Name = "lblCustomBonuses"
+        Me.lblCustomBonuses.Size = New System.Drawing.Size(45, 13)
+        Me.lblCustomBonuses.TabIndex = 6
+        Me.lblCustomBonuses.Text = "Custom:"
+        '
+        'lstBonuses
+        '
+        Me.lstBonuses.CheckOnClick = True
+        Me.lstBonuses.FormattingEnabled = True
+        Me.lstBonuses.Items.AddRange(New Object() {"All Victims Saved", "Ten Cheerleader", "Massive Destruction", "Pass Completion", "Weed Cutting", "No Bazooka Fired", "Monster Frozen", "Extermination", "Chainsaw Begone", "Fish Fry", "Frankenstein Destroyed", "Martian Bubbled", "Alien Invasion Repulsed", "Vampire Crossed Out", "Secret Bonus"})
+        Me.lstBonuses.Location = New System.Drawing.Point(6, 19)
+        Me.lstBonuses.Name = "lstBonuses"
+        Me.lstBonuses.Size = New System.Drawing.Size(159, 229)
+        Me.lstBonuses.TabIndex = 0
+        '
         'addrPAnim
         '
         Me.addrPAnim.Location = New System.Drawing.Point(162, 0)
@@ -694,7 +775,8 @@ Partial Class LevelSettings
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnCancel
-        Me.ClientSize = New System.Drawing.Size(404, 404)
+        Me.ClientSize = New System.Drawing.Size(605, 404)
+        Me.Controls.Add(Me.grpBonuses)
         Me.Controls.Add(Me.btnApply)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.btnCancel)
@@ -733,6 +815,9 @@ Partial Class LevelSettings
         Me.Panel6.PerformLayout()
         Me.Panel5.ResumeLayout(False)
         Me.Panel5.PerformLayout()
+        Me.grpBonuses.ResumeLayout(False)
+        Me.grpBonuses.PerformLayout()
+        CType(Me.nudCustBonus, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -795,4 +880,11 @@ Partial Class LevelSettings
     Friend WithEvents btnCancel As System.Windows.Forms.Button
     Friend WithEvents btnOK As System.Windows.Forms.Button
     Friend WithEvents btnApply As System.Windows.Forms.Button
+    Friend WithEvents grpBonuses As System.Windows.Forms.GroupBox
+    Friend WithEvents nudCustBonus As System.Windows.Forms.NumericUpDown
+    Friend WithEvents lstCustomBonuses As System.Windows.Forms.ListBox
+    Friend WithEvents lblCustomBonuses As System.Windows.Forms.Label
+    Friend WithEvents lstBonuses As System.Windows.Forms.CheckedListBox
+    Friend WithEvents btnAddBonus As System.Windows.Forms.Button
+    Friend WithEvents btnDeleteBonus As System.Windows.Forms.Button
 End Class

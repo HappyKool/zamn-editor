@@ -50,7 +50,6 @@
         If r.failed Then Return
         FileOpenLevel.Enabled = True
         OpenLevelTool.Enabled = True
-        LevelGFX.Load(r)
         OpenLevel.LoadROM(r)
     End Sub
 

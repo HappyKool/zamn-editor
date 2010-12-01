@@ -4,10 +4,12 @@
     Private borderPen As Pen
     Private selectedBrush As SolidBrush
     Public SelectedIndex As Integer = 0
+    Public gfx As LevelGFX
     Public Event ValueChanged(ByVal sender As Object, ByVal e As EventArgs)
 
-    Public Sub New()
+    Public Sub New(ByVal gfx As LevelGFX)
         InitializeComponent()
+        Me.gfx = gfx
         bgBrush = New Drawing2D.LinearGradientBrush(New Rectangle(Point.Empty, New Size(Me.Width - 17, Me.Height)), Color.White, Color.FromArgb(228, 225, 208), Drawing2D.LinearGradientMode.Horizontal)
         borderPen = New Pen(Color.FromArgb(49, 106, 197))
         selectedBrush = New SolidBrush(Color.FromArgb(225, 230, 232))
@@ -31,7 +33,7 @@
                 e.Graphics.FillRectangle(selectedBrush, 0, yPos + 1, Me.Width - 18, 88)
                 e.Graphics.DrawRectangle(borderPen, 0, yPos, Me.Width - 18, 88)
             End If
-            e.Graphics.DrawImage(LevelGFX.VictimImages(l), 8, yPos + (88 - LevelGFX.VictimImages(l).Height) \ 2)
+            e.Graphics.DrawImage(gfx.VictimImages(l), 8, yPos + (88 - gfx.VictimImages(l).Height) \ 2)
             yPos += 88
         Next
     End Sub
