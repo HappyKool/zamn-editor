@@ -150,6 +150,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="NRMonster.vb" />
+    <Compile Include="PasswordEditor.Designer.vb">
+      <DependentUpon>PasswordEditor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="PasswordEditor.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="RecentFilesList.vb">
       <SubType>Component</SubType>
     </Compile>
@@ -243,6 +249,9 @@
     <EmbeddedResource Include="OpenLevel.resx">
       <DependentUpon>OpenLevel.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PasswordEditor.resx">
+      <DependentUpon>PasswordEditor.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TilesetBrowser.resx">
       <DependentUpon>TilesetBrowser.vb</DependentUpon>
     </EmbeddedResource>
@@ -312,6 +321,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Delete.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LevelTxt.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -62,6 +62,7 @@ Partial Class Editor
         Me.ToolsVictims = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsNRMonsters = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsMonsters = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsBossMonsters = New System.Windows.Forms.ToolStripMenuItem()
         Me.Tools = New System.Windows.Forms.ToolStrip()
         Me.OpenTool = New System.Windows.Forms.ToolStripButton()
         Me.OpenLevelTool = New System.Windows.Forms.ToolStripButton()
@@ -86,11 +87,11 @@ Partial Class Editor
         Me.VictimTool = New System.Windows.Forms.ToolStripButton()
         Me.NRMTool = New System.Windows.Forms.ToolStripButton()
         Me.MonTool = New System.Windows.Forms.ToolStripButton()
+        Me.BMonTool = New System.Windows.Forms.ToolStripButton()
         Me.OpenROM = New System.Windows.Forms.OpenFileDialog()
         Me.Tabs = New ZAMNEditor.Tabs()
         Me.RecentROMs = New ZAMNEditor.RecentFilesList()
-        Me.BMonTool = New System.Windows.Forms.ToolStripButton()
-        Me.ToolsBossMonsters = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditPasswords = New System.Windows.Forms.ToolStripMenuItem()
         Me.TSContainer.ContentPanel.SuspendLayout()
         Me.TSContainer.TopToolStripPanel.SuspendLayout()
         Me.TSContainer.SuspendLayout()
@@ -196,7 +197,7 @@ Partial Class Editor
         '
         'EditMenu
         '
-        Me.EditMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditUndo, Me.EditRedo, Me.toolStripSeparator5, Me.EditCut, Me.EditCopy, Me.EditPaste, Me.toolStripSeparator6, Me.EditSelectAll, Me.EditSelectNone, Me.toolStripSeparator9, Me.EditLevelSettings})
+        Me.EditMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditUndo, Me.EditRedo, Me.toolStripSeparator5, Me.EditCut, Me.EditCopy, Me.EditPaste, Me.toolStripSeparator6, Me.EditSelectAll, Me.EditSelectNone, Me.toolStripSeparator9, Me.EditLevelSettings, Me.EditPasswords})
         Me.EditMenu.Name = "EditMenu"
         Me.EditMenu.Size = New System.Drawing.Size(39, 20)
         Me.EditMenu.Text = "&Edit"
@@ -405,6 +406,12 @@ Partial Class Editor
         Me.ToolsMonsters.Size = New System.Drawing.Size(218, 22)
         Me.ToolsMonsters.Text = "&Monsters"
         '
+        'ToolsBossMonsters
+        '
+        Me.ToolsBossMonsters.Name = "ToolsBossMonsters"
+        Me.ToolsBossMonsters.Size = New System.Drawing.Size(218, 22)
+        Me.ToolsBossMonsters.Text = "&Boss Monsters"
+        '
         'Tools
         '
         Me.Tools.Dock = System.Windows.Forms.DockStyle.None
@@ -607,6 +614,15 @@ Partial Class Editor
         Me.MonTool.Size = New System.Drawing.Size(23, 22)
         Me.MonTool.Text = "Monster Tool"
         '
+        'BMonTool
+        '
+        Me.BMonTool.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BMonTool.Image = CType(resources.GetObject("BMonTool.Image"), System.Drawing.Image)
+        Me.BMonTool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BMonTool.Name = "BMonTool"
+        Me.BMonTool.Size = New System.Drawing.Size(23, 22)
+        Me.BMonTool.Text = "Boss Monsters"
+        '
         'OpenROM
         '
         Me.OpenROM.DefaultExt = "smc"
@@ -632,20 +648,12 @@ Partial Class Editor
         Me.RecentROMs.Size = New System.Drawing.Size(173, 22)
         Me.RecentROMs.Text = "Recent ROMs"
         '
-        'BMonTool
+        'EditPasswords
         '
-        Me.BMonTool.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BMonTool.Image = CType(resources.GetObject("BMonTool.Image"), System.Drawing.Image)
-        Me.BMonTool.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BMonTool.Name = "BMonTool"
-        Me.BMonTool.Size = New System.Drawing.Size(23, 22)
-        Me.BMonTool.Text = "Boss Monsters"
-        '
-        'ToolsBossMonsters
-        '
-        Me.ToolsBossMonsters.Name = "ToolsBossMonsters"
-        Me.ToolsBossMonsters.Size = New System.Drawing.Size(218, 22)
-        Me.ToolsBossMonsters.Text = "&Boss Monsters"
+        Me.EditPasswords.Enabled = False
+        Me.EditPasswords.Name = "EditPasswords"
+        Me.EditPasswords.Size = New System.Drawing.Size(164, 22)
+        Me.EditPasswords.Text = "Passwords"
         '
         'Editor
         '
@@ -735,5 +743,6 @@ Partial Class Editor
     Friend WithEvents EditLevelSettings As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolsBossMonsters As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BMonTool As System.Windows.Forms.ToolStripButton
+    Friend WithEvents EditPasswords As System.Windows.Forms.ToolStripMenuItem
 
 End Class

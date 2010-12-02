@@ -50,6 +50,7 @@
         If r.failed Then Return
         FileOpenLevel.Enabled = True
         OpenLevelTool.Enabled = True
+        EditPasswords.Enabled = True
         OpenLevel.LoadROM(r)
     End Sub
 
@@ -127,6 +128,10 @@
 
     Private Sub EditLevelSettings_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditLevelSettings.Click
         LevelSettings.ShowDialog(Me)
+    End Sub
+
+    Private Sub EditPasswords_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditPasswords.Click
+        PasswordEditor.ShowDialog(Me)
     End Sub
 
     Private Sub SelectAll(ByVal selected As Boolean)
