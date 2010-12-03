@@ -114,23 +114,49 @@
                 lstCustomBonuses.Items.Add(Hex(b))
             End If
         Next
+        'Palette fade
+        chkPltFade.Checked = False
+        For Each m As BossMonster In lvl.bossMonsters
+            If m.ptr = &H12D95 Then
+                chkPltFade.Checked = True
+                addrPalF.Value = m.bgPlt
+                palIdx = Array.IndexOf(palettes, m.bgPlt)
+                If palIdx >= cboTiles.SelectedIndex * 5 And palIdx <= cboTiles.SelectedIndex * 5 + 4 Then
+                    cboPalF.SelectedIndex = palIdx Mod 5
+                End If
+                If cboPalF.Items.Count > 0 And cboPalF.SelectedIndex > -1 Then
+                    radPalAutoF.Checked = True
+                Else
+                    radPalManF.Checked = True
+                End If
+                addrSPalF.Value = m.sPlt
+                If m.sPlt = &HF1176 Then
+                    radSPalAutoF.Checked = True
+                Else
+                    radSPalManF.Checked = True
+                End If
+                Exit For
+            End If
+        Next
         Return Me.ShowDialog()
     End Function
 
     Private Sub UpdatePals()
         cboPal.Items.Clear()
+        cboPalF.Items.Clear()
         If cboTiles.SelectedIndex = -1 Then Return
         Dim startIdx As Integer = cboTiles.SelectedIndex * 5
         For l As Integer = startIdx To startIdx + 4
             If palettes(l) <> 0 Then
                 cboPal.Items.Add(palNames(l))
+                cboPalF.Items.Add(palNames(l))
             End If
         Next
     End Sub
 
-    Private Sub radAuto_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles radColAuto.CheckedChanged, _
-      radGFXAuto.CheckedChanged, radMusicAuto.CheckedChanged, radPalAuto.CheckedChanged, radSPalAuto.CheckedChanged, radPAnimAuto.CheckedChanged, _
-      radTilesAuto.CheckedChanged, radUnk2Auto.CheckedChanged, radUnk3Auto.CheckedChanged, radUnkAuto.CheckedChanged
+    Private Sub radAuto_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles radColAuto.CheckedChanged, radPalAutoF.CheckedChanged, _
+        radGFXAuto.CheckedChanged, radMusicAuto.CheckedChanged, radPalAuto.CheckedChanged, radSPalAuto.CheckedChanged, radPAnimAuto.CheckedChanged, _
+        radTilesAuto.CheckedChanged, radUnk2Auto.CheckedChanged, radUnk3Auto.CheckedChanged, radUnkAuto.CheckedChanged, radSPalAutoF.CheckedChanged
         Dim rad As Control = sender
         For Each ctrl As Control In rad.Parent.Controls
             If ctrl.GetType.Equals(GetType(AddressUpDown)) Or ctrl.GetType.Equals(GetType(NumericUpDown)) Then
@@ -140,11 +166,25 @@
                 ctrl.Enabled = True
             End If
         Next
+        'Update values
+        If cboTiles.SelectedIndex > -1 Then
+            If radTilesAuto.Checked Then addrTiles.Value = tilesets(cboTiles.SelectedIndex)
+            If cboPal.SelectedIndex > -1 And radPalAuto.Checked Then addrPal.Value = palettes(cboTiles.SelectedIndex * 5 + cboPal.SelectedIndex)
+            If radGFXAuto.Checked Then addrGFX.Value = graphics(cboTiles.SelectedIndex)
+            If radColAuto.Checked Then addrCol.Value = collision(cboTiles.SelectedIndex)
+            If radUnkAuto.Checked Then nudUnk.Value = unknown(cboTiles.SelectedIndex)
+            If cboPalF.SelectedIndex > -1 And radPalAutoF.Checked Then addrPalF.Value = palettes(cboTiles.SelectedIndex * 5 + cboPalF.SelectedIndex)
+        End If
+        If radSPalAuto.Checked Then addrSPal.Value = &HF1176
+        If cboPltAnim.SelectedIndex > -1 And radPAnimAuto.Checked Then addrPAnim.Value = pltAnim(cboPltAnim.SelectedIndex)
+        If cboMusic.SelectedIndex > -1 And radMusicAuto.Checked Then nudMusic.Value = cboMusic.SelectedIndex + 2
+        If radUnk3Auto.Checked Then nudUnk3.Value = 511
+        If radSPalAutoF.Checked Then addrSPalF.Value = &HF1176
     End Sub
 
-    Private Sub radMan_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles radColMan.CheckedChanged, _
-      radGFXMan.CheckedChanged, radMusicMan.CheckedChanged, radPalMan.CheckedChanged, radPAnimMan.CheckedChanged, radSPalMan.CheckedChanged, _
-      radTilesMan.CheckedChanged, radUnk2Man.CheckedChanged, radUnk3Man.CheckedChanged, radUnkMan.CheckedChanged
+    Private Sub radMan_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles radColMan.CheckedChanged, radPalManF.CheckedChanged, _
+        radGFXMan.CheckedChanged, radMusicMan.CheckedChanged, radPalMan.CheckedChanged, radPAnimMan.CheckedChanged, radSPalMan.CheckedChanged, _
+        radTilesMan.CheckedChanged, radUnk2Man.CheckedChanged, radUnk3Man.CheckedChanged, radUnkMan.CheckedChanged, radSPalManF.CheckedChanged
         Dim rad As Control = sender
         For Each ctrl As Control In rad.Parent.Controls
             If ctrl.GetType.Equals(GetType(ComboBox)) Then
@@ -166,6 +206,11 @@
         addrPal.Value = palettes(cboTiles.SelectedIndex * 5 + cboPal.SelectedIndex)
     End Sub
 
+    Private Sub cboPalF_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cboPalF.SelectedIndexChanged
+        If cboPalF.SelectedIndex = -1 Then Return
+        addrPalF.Value = palettes(cboTiles.SelectedIndex * 5 + cboPalF.SelectedIndex)
+    End Sub
+
     Private Sub cboPltAnim_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cboPltAnim.SelectedIndexChanged
         If cboPltAnim.SelectedIndex = -1 Then Return
         addrPAnim.Value = pltAnim(cboPltAnim.SelectedIndex)
@@ -176,10 +221,14 @@
         If radGFXAuto.Checked Then addrGFX.Value = graphics(cboTiles.SelectedIndex)
         If radColAuto.Checked Then addrCol.Value = collision(cboTiles.SelectedIndex)
         If radUnkAuto.Checked Then nudUnk.Value = unknown(cboTiles.SelectedIndex)
-        If radPalMan.Checked = True Then Return
         UpdatePals()
+        If radPalMan.Checked = True Then Return
         cboPal.SelectedIndex = 0
         addrTiles.Value = tilesets(cboTiles.SelectedIndex)
+    End Sub
+
+    Private Sub chkPltFade_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkPltFade.CheckedChanged
+        grpPltFade.Enabled = chkPltFade.Checked
     End Sub
 
     Private Sub tileset_ValueChanged(ByVal sender As Object, ByVal e As EventArgs) Handles addrCol.ValueChanged, addrGFX.ValueChanged, addrPal.ValueChanged, addrTiles.ValueChanged
@@ -198,7 +247,7 @@
         lvl.unknown = nudUnk.Value
         lvl.spritePal = addrSPal.Value
         lvl.tileset.pltAnimAddr = addrPAnim.Value
-        If cboPltAnim.SelectedIndex = 0 Then lvl.tileset.pltAnimAddr = -1
+        If cboPltAnim.SelectedIndex = 0 And radPAnimAuto.Checked Then lvl.tileset.pltAnimAddr = -1
         lvl.music = nudMusic.Value
         lvl.unknown2 = nudUnk2.Value
         lvl.unknown3 = nudUnk3.Value
@@ -211,6 +260,17 @@
         For Each i As String In lstCustomBonuses.Items
             lvl.bonuses.Add(CInt("&H" & i))
         Next
+        Dim m As Integer = 0
+        Do Until m = lvl.bossMonsters.Count
+            If lvl.bossMonsters(m).ptr = &H12D95 Then
+                lvl.bossMonsters.RemoveAt(m)
+            Else
+                m += 1
+            End If
+        Loop
+        If chkPltFade.Checked Then
+            lvl.bossMonsters.Add(New BossMonster(&H12D95, addrPalF.Value, addrSPalF.Value, False))
+        End If
         If reloadTileset Then
             Dim s As New IO.FileStream(ed.r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read)
             ed.EdControl.lvl.tileset.Reload(s)

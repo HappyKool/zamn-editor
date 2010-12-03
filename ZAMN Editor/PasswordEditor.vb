@@ -9,6 +9,7 @@
         path = ed.r.path
         Dim s As New IO.FileStream(ed.r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read)
         LoadPasswords(s)
+        s.Close()
         Return (Me.ShowDialog())
     End Function
 
@@ -69,7 +70,6 @@
             Chars(l) = Chr(c(l))
         Next
         s.Read(table3, 0, 26)
-        s.Close()
         Dim v1 As Integer, v2 As Integer
         For lvl As Integer = 0 To 12
             For victims As Integer = 0 To 9

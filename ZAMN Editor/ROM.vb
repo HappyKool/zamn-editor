@@ -98,6 +98,10 @@ Public Class ROM
         End If
         fs.Seek(lvlPtr, SeekOrigin.Begin)
         fs.Write(data.data, 0, data.data.Length)
+        fs.Seek(lvlPtr + &H3C, SeekOrigin.Begin)
+        If Shrd.ReadFileAddr(fs) = &H12D95 Then
+            fs.Write(Shrd.ConvertAddr(fs.Position + 8), 0, 4)
+        End If
         For l As Integer = ptrs.L2.IndexOf(lvlPtr) + 1 To ptrs.L2.Count - 1 'update level pointers
             fs.Seek(lvlPtrs + 2 + ptrs.L1(l) * 2, SeekOrigin.Begin)
             Dim NewPtr As Integer = fs.ReadByte + fs.ReadByte * &H100 + lenDiff
@@ -114,6 +118,17 @@ Public Class ROM
                 fs.WriteByte(NewPtr2 Mod &H100)
                 fs.WriteByte(NewPtr2 \ &H100)
             Next
+            fs.Seek(NewPtr + &H3C, SeekOrigin.Begin)
+            Do 'Update palette fade boss monsters
+                NewPtr2 = Shrd.ReadFileAddr(fs)
+                If NewPtr2 = &H12D95 Then
+                    NewPtr2 = Shrd.ReadFileAddr(fs) + lenDiff
+                    fs.Seek(-4, SeekOrigin.Current)
+                    fs.Write(Shrd.ConvertAddr(NewPtr2), 0, 4)
+                ElseIf NewPtr2 = -1 Then
+                    Exit Do
+                End If
+            Loop
         Next
         fs.SetLength(&H100200)
         fs.Close()

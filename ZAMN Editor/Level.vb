@@ -104,7 +104,14 @@
         Do
             Dim ptr As Integer = Shrd.ReadFileAddr(s)
             If ptr = -1 Then Exit Do
-            bossMonsters.Add(New BossMonster(ptr, s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100))
+            If ptr = &H12D95 Then 'Palette fade
+                Dim curaddr As Integer = s.Position
+                Shrd.GoToPointer(s)
+                bossMonsters.Add(New BossMonster(ptr, Shrd.ReadFileAddr(s), Shrd.ReadFileAddr(s), False))
+                s.Seek(curaddr + 4, IO.SeekOrigin.Begin)
+            Else
+                bossMonsters.Add(New BossMonster(ptr, s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100))
+            End If
         Loop
         s.Seek(startAddr + 4, IO.SeekOrigin.Begin)
         Shrd.GoToPointer(s)
@@ -136,11 +143,28 @@
                                   music Mod &H100, music \ &H100, _
                                   unknown2 Mod &H100, unknown2 \ &H100, _
                                   0, 0, 0, 0, 0, 0})
+        Dim fadeM As BossMonster = Nothing
+        Dim bm As Integer = 0
+        Do Until bm = bossMonsters.Count
+            If bossMonsters(bm).ptr = &H12D95 Then
+                fadeM = bossMonsters(bm)
+                bossMonsters.RemoveAt(bm)
+            Else
+                bm += 1
+            End If
+        Loop
+        If fadeM IsNot Nothing Then
+            bossMonsters.Add(fadeM)
+        End If
         For Each m As BossMonster In bossMonsters
             file.AddRange(Shrd.ConvertAddr(m.ptr))
             file.AddRange(New Byte() {m.x Mod &H100, m.x \ &H100, m.y Mod &H100, m.y \ &H100})
         Next
         file.AddRange(New Byte() {0, 0, 0, 0})
+        If bossMonsters.Last.ptr = &H12D95 Then
+            file.AddRange(Shrd.ConvertAddr(bossMonsters.Last.bgPlt))
+            file.AddRange(Shrd.ConvertAddr(bossMonsters.Last.sPlt))
+        End If
         Dim x As Integer, y As Integer
         'Monster data
         addrOffsets(0) = file.Count
