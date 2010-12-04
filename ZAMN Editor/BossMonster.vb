@@ -7,8 +7,8 @@
     Public bgPlt As Integer
     Public sPlt As Integer
 
-    Public Shared names As String() = {"UFO", "Giant Baby", "Desert Snakeoid", "Grass Snakeoid", "Gets Dark", "Unknown", "Giant Spider"}
-    Public Shared ptrs As Integer() = {&H1093C, &H11769, &H12ABB, &H12AC3, &H12D95, &H159CF, &H1AF33}
+    Public Shared names As String() = {"UFO", "Giant Baby", "Desert Snakeoid", "Grass Snakeoid", "Unknown", "Giant Spider"}
+    Public Shared ptrs As Integer() = {&H1093C, &H11769, &H12ABB, &H12AC3, &H159CF, &H1AF33}
     Public Shared dispfont As New Font("Microsoft Sans Serif", 8.25, FontStyle.Regular, GraphicsUnit.Point)
 
     Public Sub New()

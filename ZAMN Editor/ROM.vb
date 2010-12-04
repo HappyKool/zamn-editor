@@ -71,13 +71,13 @@ Public Class ROM
         fs2.Close()
         Dim ptrs As DList(Of Integer, Integer) = GetAllLvlPtrs(fs)
         ptrs.SortBySecond()
-        Dim lvlPtr = GetLvlPtr(lvl.num, fs)
+        Dim lvlPtr As Integer = GetLvlPtr(lvl.num, fs)
         fs.Seek(lvlPtr + 4, SeekOrigin.Begin)
         Shrd.GoToPointer(fs)
-        Dim BGAddr As Byte() = Shrd.ConvertAddr(fs.Position)
-        data.data(4) = BGAddr(0)
-        data.data(5) = BGAddr(1)
-        data.data(6) = BGAddr(2)
+        Dim SNESAddr As Byte() = Shrd.ConvertAddr(fs.Position)
+        data.data(4) = SNESAddr(0)
+        data.data(5) = SNESAddr(1)
+        data.data(6) = SNESAddr(2)
         For y As Integer = 0 To lvl.Height - 1
             For x As Integer = 0 To lvl.Width - 1
                 fs.WriteByte(lvl.Tiles(x, y))
@@ -85,7 +85,6 @@ Public Class ROM
             Next
         Next
         fs.Seek(lvlPtr, SeekOrigin.Begin)
-        Dim SNESAddr As Byte()
         For l As Integer = 0 To 5
             SNESAddr = Shrd.ConvertAddr(data.addrOffsets(l) + lvlPtr)
             data.data(offsetPos(l)) = SNESAddr(0)
@@ -99,9 +98,18 @@ Public Class ROM
         fs.Seek(lvlPtr, SeekOrigin.Begin)
         fs.Write(data.data, 0, data.data.Length)
         fs.Seek(lvlPtr + &H3C, SeekOrigin.Begin)
-        If Shrd.ReadFileAddr(fs) = &H12D95 Then
-            fs.Write(Shrd.ConvertAddr(fs.Position + 8), 0, 4)
-        End If
+        Dim ptr As Integer
+        Do
+            ptr = Shrd.ReadFileAddr(fs)
+            If ptr = &H12D95 Then
+                fs.Write(Shrd.ConvertAddr(fs.Position + 8), 0, 4)
+                Exit Do
+            ElseIf ptr = -1 Then
+                Exit Do
+            Else
+                fs.Seek(4, SeekOrigin.Current)
+            End If
+        Loop
         For l As Integer = ptrs.L2.IndexOf(lvlPtr) + 1 To ptrs.L2.Count - 1 'update level pointers
             fs.Seek(lvlPtrs + 2 + ptrs.L1(l) * 2, SeekOrigin.Begin)
             Dim NewPtr As Integer = fs.ReadByte + fs.ReadByte * &H100 + lenDiff
