@@ -5,7 +5,7 @@
     Public Sub New(ByVal s As IO.Stream)
         Do
             words.Add(New Word(s))
-            If words.Last.last Then Return
+            If words.Last.last Then Exit Do
         Loop
     End Sub
 
@@ -17,7 +17,6 @@
             Next
             lst.Add(&HFF)
         Next
-        lst(lst.Count - 1) = 0
     End Sub
 End Class
 
@@ -32,6 +31,7 @@ Public Class Word
         Me.x = s.ReadByte
         Me.y = s.ReadByte
         Me.font = s.ReadByte
+        Me.font = 6
         s.ReadByte() 'skip page number
         Do
             Dim num As Integer = s.ReadByte

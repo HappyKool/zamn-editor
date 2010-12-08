@@ -132,17 +132,6 @@
         Repaint()
     End Sub
 
-    Public Overrides Sub KeyDown(ByVal e As System.Windows.Forms.KeyEventArgs)
-        If e.KeyCode = Keys.Delete Then
-            For Each v As Victim In selectedVictims
-                ed.EdControl.lvl.victims.Remove(v)
-            Next
-            selectedVictims.Clear()
-            Repaint()
-        End If
-        ResetStatus()
-    End Sub
-
     Public Overrides Sub KeyUp(ByVal e As System.Windows.Forms.KeyEventArgs)
         ResetStatus()
     End Sub
@@ -159,8 +148,10 @@
 
     Public Overrides Sub VictimChanged()
         For Each v As Victim In selectedVictims
-            v.index = VictimPicker.SelectedIndex
-            v.UpdatePtr()
+            If v.ptr > 2 Then
+                v.index = VictimPicker.SelectedIndex
+                v.UpdatePtr()
+            End If
         Next
         Repaint()
     End Sub

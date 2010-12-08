@@ -59,6 +59,8 @@
                 vic.y -= LevelGFX.offsets(vic.index * 2 + 1)
                 victims.Add(vic)
             Next
+            victims.Add(New Victim(p1Start.X - 8, p1Start.Y - 39, 0, 0, 1))
+            victims.Add(New Victim(p2Start.X - 16, p2Start.Y - 42, 0, 0, 2))
             Do
                 Dim x As Integer = s.ReadByte + s.ReadByte * &H100
                 If x = 0 Then Exit Do
@@ -124,6 +126,8 @@
     End Sub
 
     Public Function WriteToFile() As LevelWriteData
+        p1Start = New Point(victims(10).x + 8, victims(10).y + 39)
+        p2Start = New Point(victims(11).x + 16, victims(10).y + 42)
         Dim file As New List(Of Byte)
         Dim addrOffsets(5) As Integer
         file.AddRange(Shrd.ConvertAddr(tileset.address))
@@ -161,7 +165,7 @@
             file.AddRange(New Byte() {m.x Mod &H100, m.x \ &H100, m.y Mod &H100, m.y \ &H100})
         Next
         file.AddRange(New Byte() {0, 0, 0, 0})
-        If bossMonsters.Last.ptr = &H12D95 Then
+        If bossMonsters.Count > 0 AndAlso bossMonsters.Last.ptr = &H12D95 Then
             file.AddRange(Shrd.ConvertAddr(bossMonsters.Last.bgPlt))
             file.AddRange(Shrd.ConvertAddr(bossMonsters.Last.sPlt))
         End If
@@ -178,11 +182,13 @@
         'Victim data
         addrOffsets(1) = file.Count
         For Each v As Victim In victims
-            x = v.x + LevelGFX.offsets(v.index * 2)
-            y = v.y + LevelGFX.offsets(v.index * 2 + 1)
-            file.AddRange(New Byte() {x Mod &H100, x \ &H100, y Mod &H100, y \ &H100, v.unused Mod &H100, v.unused \ &H100, _
-                                      IIf(v.num = 10, 16, v.num), 0})
-            file.AddRange(Shrd.ConvertAddr(v.ptr))
+            If v.ptr > 2 Then
+                x = v.x + LevelGFX.offsets(v.index * 2)
+                y = v.y + LevelGFX.offsets(v.index * 2 + 1)
+                file.AddRange(New Byte() {x Mod &H100, x \ &H100, y Mod &H100, y \ &H100, v.unused Mod &H100, v.unused \ &H100, _
+                                          IIf(v.num = 10, 16, v.num), 0})
+                file.AddRange(Shrd.ConvertAddr(v.ptr))
+            End If
         Next
         'NRMonster data
         For Each m As NRMonster In NRMonsters

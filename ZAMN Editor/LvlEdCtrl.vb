@@ -100,8 +100,10 @@
         For Each v As Victim In lvl.victims
             Dim img As Bitmap = lvl.GFX.VictimImages(v.index)
             e.Graphics.DrawImage(img, v.x, v.y)
-            e.Graphics.DrawString(v.num.ToString, Me.Font, Brushes.Black, v.x + img.Width \ 2 - 3, v.y + img.Height + 5)
-            e.Graphics.DrawString(v.num.ToString, Me.Font, Brushes.White, v.x + img.Width \ 2 - 4, v.y + img.Height + 4)
+            If v.ptr > 2 Then
+                e.Graphics.DrawString(v.num.ToString, Me.Font, Brushes.Black, v.x + img.Width \ 2 - 3, v.y + img.Height + 5)
+                e.Graphics.DrawString(v.num.ToString, Me.Font, Brushes.White, v.x + img.Width \ 2 - 4, v.y + img.Height + 4)
+            End If
         Next
         For Each m As NRMonster In lvl.NRMonsters
             e.Graphics.DrawImage(lvl.GFX.VictimImages(m.index), m.x, m.y)
