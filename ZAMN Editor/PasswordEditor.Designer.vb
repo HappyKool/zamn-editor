@@ -76,6 +76,7 @@ Partial Class PasswordEditor
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "PasswordEditor"
+        Me.ShowIcon = False
         Me.Text = "Password Editor"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

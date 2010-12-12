@@ -8,6 +8,8 @@ Public Class ROM
     Public bonusLvls As New List(Of Integer)
     Public failed As Boolean = False
 
+    Public hacked As Boolean = False
+
     Private Shared offsetPos As Integer() = {&H1C, &H1E, &H20, &H36, &H38, &H3A}
     Public Const lvlPtrs As Integer = &HF8200
     Public Const bonusLvlNums As Integer = &H1537E
@@ -15,9 +17,9 @@ Public Class ROM
     Public Sub New(ByVal path As String)
         Try
             Me.path = path
-            Dim s As New FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)
+            Dim s As New FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read)
             s.Seek(lvlPtrs, SeekOrigin.Begin)
-            regLvlCount = s.ReadByte() + s.ReadByte() * &H100
+            regLvlCount = s.ReadByte() + s.ReadByte() * &H100 - 1
             maxLvlNum = regLvlCount
             s.Seek(bonusLvlNums, SeekOrigin.Begin)
             Dim num As Integer
@@ -30,6 +32,38 @@ Public Class ROM
                 End If
                 curLvl += 1
             Next
+
+            'Testing 4 byte level pointers
+
+            's.Seek(0, SeekOrigin.Begin)
+            'If s.ReadByte <> 159 Then
+            '    s.Seek(lvlPtrs + 2, SeekOrigin.Begin)
+            '    Dim lenDiff As Integer = (maxLvlNum + 1) * 2
+            '    Shrd.InsertBytes(s, lenDiff)
+            '    Dim ptrs As DList(Of Integer, Integer) = GetAllLvlPtrs(s)
+            '    s.Seek(lvlPtrs + 2, SeekOrigin.Begin)
+            '    For l As Integer = 0 To maxLvlNum
+            '        If ptrs.L1.IndexOf(l) > -1 Then
+            '            s.Write(Shrd.ConvertAddr(ptrs.FromSecond(l) + lenDiff), 0, 4)
+            '            ptrs.L2(ptrs.L1.IndexOf(l)) += lenDiff
+            '        Else
+            '            s.Seek(4, SeekOrigin.Current)
+            '        End If
+            '    Next
+            '    For l As Integer = 0 To ptrs.L1.Count - 1
+            '        For m As Integer = 0 To offsetPos.Length - 1
+            '            s.Seek(ptrs.L2(l) + offsetPos(m), SeekOrigin.Begin)
+            '            Dim ptr As Integer = s.ReadByte + s.ReadByte * &H100 + lenDiff
+            '            s.Seek(-2, SeekOrigin.Current)
+            '            s.WriteByte(ptr Mod &H100)
+            '            s.WriteByte(ptr \ &H100)
+            '        Next
+            '    Next
+            '    s.Seek(0, SeekOrigin.Begin)
+            '    s.WriteByte(159)
+            'End If
+            'hacked = True
+
             s.Close()
         Catch ex As Exception
             failed = True
@@ -38,8 +72,13 @@ Public Class ROM
     End Sub
 
     Public Function GetLvlPtr(ByVal num As Integer, ByVal s As Stream) As Integer
-        s.Seek(&HF8202 + num * 2, SeekOrigin.Begin)
-        Return s.ReadByte() + s.ReadByte * &H100 + &HF0200
+        If hacked Then
+            s.Seek(&HF8202 + num * 4, SeekOrigin.Begin)
+            Return Shrd.ReadFileAddr(s)
+        Else
+            s.Seek(&HF8202 + num * 2, SeekOrigin.Begin)
+            Return s.ReadByte() + s.ReadByte * &H100 + &HF0200
+        End If
     End Function
 
     Public Function GotoLvlPtr(ByVal num As Integer, ByVal s As Stream) As Integer
@@ -54,7 +93,7 @@ Public Class ROM
 
     Public Function GetAllLvlPtrs(ByVal s As Stream) As DList(Of Integer, Integer)
         Dim ptrs As New DList(Of Integer, Integer)
-        For l As Integer = 0 To maxLvlNum
+        For l As Integer = 0 To regLvlCount
             ptrs.Add(l, GetLvlPtr(l, s))
         Next
         For Each num As Integer In bonusLvls
@@ -110,33 +149,37 @@ Public Class ROM
                 fs.Seek(4, SeekOrigin.Current)
             End If
         Loop
+        Dim donePtrs As New List(Of Integer)
         For l As Integer = ptrs.L2.IndexOf(lvlPtr) + 1 To ptrs.L2.Count - 1 'update level pointers
             fs.Seek(lvlPtrs + 2 + ptrs.L1(l) * 2, SeekOrigin.Begin)
             Dim NewPtr As Integer = fs.ReadByte + fs.ReadByte * &H100 + lenDiff
-            fs.Seek(-2, SeekOrigin.Current)
-            fs.WriteByte(NewPtr Mod &H100)
-            fs.WriteByte(NewPtr \ &H100)
-            NewPtr += &HF0200
-            fs.Seek(NewPtr, SeekOrigin.Begin)
-            Dim NewPtr2 As Integer
-            For m As Integer = 0 To 5 'Update pointers within level files
-                fs.Seek(NewPtr + offsetPos(m), SeekOrigin.Begin)
-                NewPtr2 = fs.ReadByte + fs.ReadByte * &H100 + lenDiff
+            If Not donePtrs.Contains(NewPtr) Then
+                donePtrs.Add(NewPtr)
                 fs.Seek(-2, SeekOrigin.Current)
-                fs.WriteByte(NewPtr2 Mod &H100)
-                fs.WriteByte(NewPtr2 \ &H100)
-            Next
-            fs.Seek(NewPtr + &H3C, SeekOrigin.Begin)
-            Do 'Update palette fade boss monsters
-                NewPtr2 = Shrd.ReadFileAddr(fs)
-                If NewPtr2 = &H12D95 Then
-                    NewPtr2 = Shrd.ReadFileAddr(fs) + lenDiff
-                    fs.Seek(-4, SeekOrigin.Current)
-                    fs.Write(Shrd.ConvertAddr(NewPtr2), 0, 4)
-                ElseIf NewPtr2 = -1 Then
-                    Exit Do
-                End If
-            Loop
+                fs.WriteByte(NewPtr Mod &H100)
+                fs.WriteByte(NewPtr \ &H100)
+                NewPtr += &HF0200
+                fs.Seek(NewPtr, SeekOrigin.Begin)
+                Dim NewPtr2 As Integer
+                For m As Integer = 0 To 5 'Update pointers within level files
+                    fs.Seek(NewPtr + offsetPos(m), SeekOrigin.Begin)
+                    NewPtr2 = fs.ReadByte + fs.ReadByte * &H100 + lenDiff
+                    fs.Seek(-2, SeekOrigin.Current)
+                    fs.WriteByte(NewPtr2 Mod &H100)
+                    fs.WriteByte(NewPtr2 \ &H100)
+                Next
+                fs.Seek(NewPtr + &H3C, SeekOrigin.Begin)
+                Do 'Update palette fade boss monsters
+                    NewPtr2 = Shrd.ReadFileAddr(fs)
+                    If NewPtr2 = &H12D95 Then
+                        NewPtr2 = Shrd.ReadFileAddr(fs) + lenDiff
+                        fs.Seek(-4, SeekOrigin.Current)
+                        fs.Write(Shrd.ConvertAddr(NewPtr2), 0, 4)
+                    ElseIf NewPtr2 = -1 Then
+                        Exit Do
+                    End If
+                Loop
+            End If
         Next
         fs.SetLength(&H100200)
         fs.Close()

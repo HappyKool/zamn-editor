@@ -130,6 +130,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property DrTongue() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("DrTongue", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property FirstAidKit() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("FirstAidKit", resourceCulture)
@@ -168,6 +175,13 @@ Namespace My.Resources
         Friend ReadOnly Property LevelTxt() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("LevelTxt", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property lightbulb() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("lightbulb", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -252,6 +266,13 @@ Namespace My.Resources
         Friend ReadOnly Property X3() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("X3", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property Zombie() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Zombie", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

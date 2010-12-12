@@ -932,6 +932,7 @@ Partial Class LevelSettings
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "LevelSettings"
+        Me.ShowIcon = False
         Me.Text = "Level Settings"
         Me.grpTileset.ResumeLayout(False)
         Me.grpTileset.PerformLayout()
