@@ -7,7 +7,7 @@
 
     Public Sub Start(ByVal r As ROM, ByVal nums As Integer(), ByVal names As String())
         Progress.Value = 0
-        Progress.Maximum = nums.Length
+        Progress.Maximum = nums.Length - 1
         Me.names = names
         l = 0
         failed = New List(Of String)

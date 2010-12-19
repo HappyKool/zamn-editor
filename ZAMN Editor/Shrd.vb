@@ -185,4 +185,20 @@ Public Class Shrd
         s.Seek(start + byteCount, IO.SeekOrigin.Begin)
         s.Write(rest, 0, rest.Length)
     End Sub
+
+    Public Shared Function ToText(ByVal data As Byte()) As String
+        Dim str As String = ""
+        For l As Integer = 0 To data.Length - 1
+            str &= HexL(data(l), 2)
+        Next
+        Return str
+    End Function
+
+    Public Shared Function FromText(ByVal str As String) As Byte()
+        Dim data(str.Length \ 2 - 1) As Byte
+        For l As Integer = 0 To data.Length - 1
+            data(l) = CByte("&H" & Mid(str, l * 2 + 1, 2))
+        Next
+        Return data
+    End Function
 End Class

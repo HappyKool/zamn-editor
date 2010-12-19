@@ -8,6 +8,7 @@
     Public YStart As Integer
     Public width As Integer
     Public height As Integer
+    Public removing As Boolean
 
     Private curSelMonsters As New List(Of Monster)
     Private selecting As Boolean = False
@@ -18,9 +19,10 @@
     Private borderPen As New Pen(Color.Black)
     Private darkBrush As New SolidBrush(Color.FromArgb(92, 0, 0, 0))
 
-    Private Const DefaultText As String = "Click to select or move monsters. Hold shift to add to selection. Hold ctrl to create a new monster."
+    Private Const DefaultText As String = "Click to select or move monsters. Hold shift to add to selection or alt to remove. Hold ctrl to create a new monster."
     Private Const ShiftText As String = "Click to add to the selection."
     Private Const CtrlText As String = "Click to add a new monster or click an existing monster to clone it."
+    Private Const AltText As String = "Click to remove from the selection."
     Private Const MoveText As String = "Moved monsters {0}, {1}. Hold shift to snap to 8x8 grid."
 
     Public Sub New(ByVal ed As Editor)
@@ -42,6 +44,13 @@
         For l As Integer = ed.EdControl.lvl.Monsters.Count - 1 To 0 Step -1 'Find monster under mouse
             Dim m As Monster = ed.EdControl.lvl.Monsters(l)
             If m.GetRect(ed.EdControl.lvl.GFX).Contains(e.Location) Then
+                If Control.ModifierKeys = Keys.Alt Then
+                    selectedMonsters.Remove(m)
+                    selecting = False
+                    selectedMonster = Nothing
+                    Repaint()
+                    Return
+                End If
                 If Not selectedMonsters.Contains(m) Then
                     If Control.ModifierKeys <> Keys.Shift Then
                         selectedMonsters.Clear()
@@ -60,7 +69,7 @@
             XStart = selectedMonster.x
             YStart = selectedMonster.y
         Else 'Create a selection rectangle
-            If Control.ModifierKeys <> Keys.Shift Then
+            If Control.ModifierKeys <> Keys.Shift And Control.ModifierKeys <> Keys.Alt Then
                 selectedMonsters.Clear()
                 ed.SetCopy(False)
             End If
@@ -70,6 +79,7 @@
             curY = e.Y
             width = 0
             height = 0
+            removing = (Control.ModifierKeys = Keys.Alt)
         End If
         selecting = Not addmonster
         If Control.ModifierKeys = Keys.Control Then 'Add a new monster
@@ -148,8 +158,14 @@
 
     Public Overrides Sub MouseUp(ByVal e As System.Windows.Forms.MouseEventArgs)
         For Each m As Monster In curSelMonsters
-            If Not selectedMonsters.Contains(m) Then
-                selectedMonsters.Add(m)
+            If removing Then
+                If selectedMonsters.Contains(m) Then
+                    selectedMonsters.Remove(m)
+                End If
+            Else
+                If Not selectedMonsters.Contains(m) Then
+                    selectedMonsters.Add(m)
+                End If
             End If
         Next
         curSelMonsters.Clear()
@@ -179,6 +195,8 @@
             Me.Status = ShiftText
         ElseIf Control.ModifierKeys = Keys.Control Then
             Me.Status = CtrlText
+        ElseIf Control.ModifierKeys = Keys.Alt Then
+            Me.Status = AltText
         Else
             Me.Status = DefaultText
         End If
@@ -199,13 +217,17 @@
             g.DrawRectangle(borderPen, curX, curY, width, height)
         End If
         For Each m As Monster In selectedMonsters
-            g.FillRectangle(darkBrush, m.GetRect(ed.EdControl.lvl.GFX))
-            g.DrawRectangle(Pens.White, m.GetRect(ed.EdControl.lvl.GFX))
+            If Not curSelMonsters.Contains(m) Then
+                g.FillRectangle(darkBrush, m.GetRect(ed.EdControl.lvl.GFX))
+                g.DrawRectangle(Pens.White, m.GetRect(ed.EdControl.lvl.GFX))
+            End If
         Next
-        For Each m As Monster In curSelMonsters
-            g.FillRectangle(darkBrush, m.GetRect(ed.EdControl.lvl.GFX))
-            g.DrawRectangle(Pens.White, m.GetRect(ed.EdControl.lvl.GFX))
-        Next
+        If Not removing Then
+            For Each m As Monster In curSelMonsters
+                g.FillRectangle(darkBrush, m.GetRect(ed.EdControl.lvl.GFX))
+                g.DrawRectangle(Pens.White, m.GetRect(ed.EdControl.lvl.GFX))
+            Next
+        End If
     End Sub
 
     Public Overrides Sub RemoveEdCtrl(ByVal e As LvlEdCtrl)
@@ -239,6 +261,7 @@
     End Function
 
     Public Overrides Function Paste() As Boolean
+        If Not Clipboard.GetText.StartsWith("3") Then Return False
         selectedMonsters = FromText(Clipboard.GetText)
         Dim MinX As Integer = Integer.MaxValue, MinY As Integer = Integer.MaxValue
         For Each m As Monster In selectedMonsters
@@ -256,7 +279,7 @@
     End Function
 
     Private Function ToText(ByVal Monsters As List(Of Monster)) As String
-        Dim str As String = ""
+        Dim str As String = "3"
         For Each m As Monster In Monsters
             str &= Shrd.HexL(m.radius, 2) & Shrd.HexL(m.x, 4) & Shrd.HexL(m.y, 4) & _
                    Shrd.HexL(m.delay, 2) & Shrd.HexL(m.ptr, 8)
@@ -267,7 +290,7 @@
     Private Function FromText(ByVal txt As String) As List(Of Monster)
         Dim Monsters As New List(Of Monster)
         Try
-            Dim indx As Integer = 1
+            Dim indx As Integer = 2
             Do Until indx > txt.Length
                 Monsters.Add(New Monster(CInt("&H" & Mid(txt, indx, 2)), CInt("&H" & Mid(txt, indx + 2, 4)), _
                                          CInt("&H" & Mid(txt, indx + 6, 4)), CInt("&H" & Mid(txt, indx + 10, 2)), _

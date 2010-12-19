@@ -27,6 +27,15 @@ Public Class Tileset
         s.Seek(levelStartPos, IO.SeekOrigin.Begin)
     End Sub
 
+    Public Sub New(ByVal s As IO.Stream, ByVal tilesAddr As Integer, ByVal colAddr As Integer, ByVal gfxAddr As Integer, ByVal palAddr As Integer, ByVal sprPal As Integer, ByVal pltAnimAddr As Integer)
+        Me.address = tilesAddr
+        Me.collisionAddr = colAddr
+        Me.gfxAddr = gfxAddr
+        Me.paletteAddr = palAddr
+        Me.pltAnimAddr = pltAnimAddr
+        Reload(s)
+    End Sub
+
     Public Shared Function DecompressMap16(ByVal s As IO.Stream) As Byte()
         Dim result(&H7FFF) As Byte
         Dim dict(&HFFF) As Byte

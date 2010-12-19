@@ -8,6 +8,7 @@
     Public YStart As Integer
     Public width As Integer
     Public height As Integer
+    Public removing As Boolean
 
     Private curSelVictims As New List(Of Victim)
     Private selecting As Boolean = False
@@ -18,8 +19,9 @@
     Private borderPen As New Pen(Color.Black)
     Private darkBrush As New SolidBrush(Color.FromArgb(92, 0, 0, 0))
 
-    Private Const DefaultText As String = "Click to select or move victims. Hold shift to add to selection."
+    Private Const DefaultText As String = "Click to select or move victims. Hold shift to add to selection or alt to remove."
     Private Const ShiftText As String = "Click to add to the selection."
+    Private Const AltText As String = "Click to remove from the selection."
     Private Const MoveText As String = "Moved victims {0}, {1}. Hold shift to snap to 8x8 grid."
 
     Public Sub New(ByVal ed As Editor)
@@ -41,6 +43,13 @@
         For l As Integer = ed.EdControl.lvl.victims.Count - 1 To 0 Step -1 'Find victim under mouse
             Dim v As Victim = ed.EdControl.lvl.victims(l)
             If v.GetRect(ed.EdControl.lvl.GFX).Contains(e.Location) Then
+                If Control.ModifierKeys = Keys.Alt Then
+                    selectedVictims.Remove(v)
+                    selecting = False
+                    selectedVictim = Nothing
+                    Repaint()
+                    Return
+                End If
                 If Not selectedVictims.Contains(v) Then
                     If Control.ModifierKeys <> Keys.Shift Then
                         selectedVictims.Clear()
@@ -59,7 +68,7 @@
             XStart = selectedVictim.x
             YStart = selectedVictim.y
         Else 'Create a selection rectangle
-            If Control.ModifierKeys <> Keys.Shift Then
+            If Control.ModifierKeys <> Keys.Shift And Control.ModifierKeys <> Keys.Alt Then
                 selectedVictims.Clear()
                 ed.SetCopy(False)
             End If
@@ -69,6 +78,7 @@
             curY = e.Y
             width = 0
             height = 0
+            removing = (Control.ModifierKeys = Keys.Alt)
         End If
         selecting = Not addvictim
         Repaint()
@@ -122,8 +132,14 @@
 
     Public Overrides Sub MouseUp(ByVal e As System.Windows.Forms.MouseEventArgs)
         For Each v As Victim In curSelVictims
-            If Not selectedVictims.Contains(v) Then
-                selectedVictims.Add(v)
+            If removing Then
+                If selectedVictims.Contains(v) Then
+                    selectedVictims.Remove(v)
+                End If
+            Else
+                If Not selectedVictims.Contains(v) Then
+                    selectedVictims.Add(v)
+                End If
             End If
         Next
         curSelVictims.Clear()
@@ -140,6 +156,8 @@
         If Control.MouseButtons = MouseButtons.Left Then Return
         If Control.ModifierKeys = Keys.Shift Then
             Me.Status = ShiftText
+        ElseIf Control.ModifierKeys = Keys.Alt Then
+            Me.Status = AltText
         Else
             Me.Status = DefaultText
         End If
@@ -162,13 +180,17 @@
             g.DrawRectangle(borderPen, curX, curY, width, height)
         End If
         For Each v As Victim In selectedVictims
-            g.FillRectangle(darkBrush, v.GetRect(ed.EdControl.lvl.GFX))
-            g.DrawRectangle(Pens.White, v.GetRect(ed.EdControl.lvl.GFX))
+            If Not curSelVictims.Contains(v) Then
+                g.FillRectangle(darkBrush, v.GetRect(ed.EdControl.lvl.GFX))
+                g.DrawRectangle(Pens.White, v.GetRect(ed.EdControl.lvl.GFX))
+            End If
         Next
-        For Each v As Victim In curSelVictims
-            g.FillRectangle(darkBrush, v.GetRect(ed.EdControl.lvl.GFX))
-            g.DrawRectangle(Pens.White, v.GetRect(ed.EdControl.lvl.GFX))
-        Next
+        If Not removing Then
+            For Each v As Victim In curSelVictims
+                g.FillRectangle(darkBrush, v.GetRect(ed.EdControl.lvl.GFX))
+                g.DrawRectangle(Pens.White, v.GetRect(ed.EdControl.lvl.GFX))
+            Next
+        End If
     End Sub
 
     Public Overrides Sub RemoveEdCtrl(ByVal e As LvlEdCtrl)

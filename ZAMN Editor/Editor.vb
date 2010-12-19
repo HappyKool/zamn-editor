@@ -18,7 +18,8 @@
         End If
         EditingTools = New Tool() {New PaintbrushTool(Me), New DropperTool(Me), New TileSuggestTool(Me), New RectangleSelectTool(Me), New PencilSelectTool(Me), _
                                    New TileSelectTool(Me), New ItemTool(Me), New VictimTool(Me), New NRMonsterTool(Me), New MonsterTool(Me), New BossMonsterTool(Me)}
-        LevelItems = New ToolStripItem() {FileSave, SaveTool, EditPaste, PasteTool, EditSelectAll, EditSelectNone, ViewGrid, ViewPriority, EditLevelSettings}
+        LevelItems = New ToolStripItem() {FileSave, SaveTool, EditPaste, PasteTool, EditSelectAll, EditSelectNone, ViewGrid, ViewPriority, _
+                                          LevelExport, LevelImport, LevelCopy, LevelPaste, LevelSettingsM}
         TileSuggestList.LoadAll()
         If My.Settings.RecentROMs <> "" Then
             RecentROMs.Items = StringToList(My.Settings.RecentROMs)
@@ -126,10 +127,6 @@
         EdControl.Repaint()
     End Sub
 
-    Private Sub EditLevelSettings_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditLevelSettings.Click
-        LevelSettings.ShowDialog(Me)
-    End Sub
-
     Private Sub EditPasswords_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditPasswords.Click
         PasswordEditor.ShowDialog(Me)
     End Sub
@@ -150,8 +147,41 @@
         UpdateEdControl()
     End Sub
 
-    Private Sub CollisionDataTestToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewPriority.Click
+    Private Sub ViewPriority_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewPriority.Click
         UpdateEdControl()
+    End Sub
+
+    Private Sub LevelImport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LevelImport.Click
+        If ImportLevel.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Dim fs As New IO.FileStream(ImportLevel.FileName, IO.FileMode.Open, IO.FileAccess.Read)
+            fs.Seek(14, IO.SeekOrigin.Begin)
+            EdControl.lvl = New Level(fs, EdControl.lvl.name, EdControl.lvl.num, True, New IO.FileStream(r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read))
+            UpdateEdControl()
+        End If
+    End Sub
+
+    Private Sub LevelExport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LevelExport.Click
+        If ExportLevel.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Dim data As Byte() = EdControl.lvl.ToFile()
+            Dim fs As New IO.FileStream(ExportLevel.FileName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.Read)
+            fs.Write(data, 0, data.Length)
+        End If
+    End Sub
+
+    Private Sub LevelCopy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LevelCopy.Click
+        Clipboard.SetText(Shrd.ToText(EdControl.lvl.ToFile()))
+    End Sub
+
+    Private Sub LevelPaste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LevelPaste.Click
+        Dim data As Byte() = Shrd.FromText(Clipboard.GetText)
+        Dim fs As New ByteArrayStream(data)
+        fs.Seek(14, IO.SeekOrigin.Begin)
+        EdControl.lvl = New Level(fs, EdControl.lvl.name, EdControl.lvl.num, True, New IO.FileStream(r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read))
+        UpdateEdControl()
+    End Sub
+
+    Private Sub LevelSettingsM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LevelSettingsM.Click
+        LevelSettings.ShowDialog(Me)
     End Sub
 
     Private Sub Tools_ItemClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles Tools.ItemClicked
@@ -278,14 +308,23 @@
     Private Sub ViewMenu_DropDownItemClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles ViewMenu.DropDownItemClicked, Zoom.DropDownItemClicked
         Dim indx As Integer = e.ClickedItem.Owner.Items.IndexOf(e.ClickedItem)
         Dim indx2 As Integer = 0
+        Dim viewMenuStart As Integer = ViewMenu.DropDownItems.IndexOf(View100P)
         If e.ClickedItem.Owner.Items Is ViewMenu.DropDownItems Then
-            indx2 = ViewMenu.DropDownItems.IndexOf(View100P)
+            indx2 = viewMenuStart
         End If
         If indx >= indx2 Then
             indx -= indx2
             zoomLevel = ZoomLevels(indx)
             UpdateEdControl()
         End If
+        For l As Integer = viewMenuStart To ViewMenu.DropDownItems.Count - 1
+            CType(ViewMenu.DropDownItems(l), ToolStripMenuItem).Checked = False
+        Next
+        For Each i As ToolStripMenuItem In Zoom.DropDownItems
+            i.Checked = False
+        Next
+        CType(ViewMenu.DropDownItems(indx + viewMenuStart), ToolStripMenuItem).Checked = True
+        CType(Zoom.DropDownItems(indx), ToolStripMenuItem).Checked = True
     End Sub
 
     Private Function ListToString(ByVal items As List(Of String)) As String

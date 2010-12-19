@@ -1,7 +1,7 @@
 ﻿Public Class ByteArrayStream
     Inherits IO.Stream
 
-    Private array As Byte()
+    Public array As Byte()
     Private pos As Long
 
     Public Sub New(ByVal array As Byte())
@@ -33,7 +33,7 @@
 
     Public Overrides ReadOnly Property Length() As Long
         Get
-            Return array.Count()
+            Return array.Length
         End Get
     End Property
 
@@ -64,7 +64,7 @@
             Case IO.SeekOrigin.Current
                 pos += offset
             Case IO.SeekOrigin.End
-                pos = Me.Length - pos - 1
+                pos = Me.Length - offset
         End Select
         Return pos
     End Function
@@ -74,16 +74,25 @@
     End Sub
 
     Public Overrides Sub Write(ByVal buffer() As Byte, ByVal offset As Integer, ByVal count As Integer)
+        If array.Length < pos + count - 1 Then
+            ReDim Preserve array(pos + count - 1)
+        End If
         System.Array.Copy(buffer, offset, array, pos, count)
         pos += count
     End Sub
 
     Public Overrides Function ReadByte() As Integer
-        ReadByte = array(pos)
+        If array.Length <= pos Then
+            Return -1
+        End If
         pos += 1
+        Return array(pos - 1)
     End Function
 
     Public Overrides Sub WriteByte(ByVal value As Byte)
+        If pos >= array.Length Then
+            ReDim Preserve array(pos)
+        End If
         array(pos) = value
         pos += 1
     End Sub

@@ -8,6 +8,7 @@
     Public YStart As Integer
     Public width As Integer
     Public height As Integer
+    Public removing As Boolean
 
     Private curSelItems As New List(Of Item)
     Private selecting As Boolean = False
@@ -18,9 +19,10 @@
     Private borderPen As New Pen(Color.Black)
     Private darkBrush As New SolidBrush(Color.FromArgb(92, 0, 0, 0))
 
-    Private Const DefaultText As String = "Click to select or move items. Hold shift to add to selection. Hold ctrl to create a new item."
+    Private Const DefaultText As String = "Click to select or move items. Hold shift to add to selection or alt to remove. Hold ctrl to create a new item."
     Private Const ShiftText As String = "Click to add to the selection."
     Private Const CtrlText As String = "Click to add a new item or click an existing item to clone it."
+    Private Const AltText As String = "Click to remove from the selection."
     Private Const MoveText As String = "Moved items {0}, {1}. Hold shift to snap to 8x8 grid."
 
     Public Sub New(ByVal ed As Editor)
@@ -42,6 +44,13 @@
         For l As Integer = ed.EdControl.lvl.items.Count - 1 To 0 Step -1 'Find item under mouse
             Dim i As Item = ed.EdControl.lvl.items(l)
             If i.GetRect.Contains(e.Location) Then
+                If Control.ModifierKeys = Keys.Alt Then
+                    selectedItems.Remove(i)
+                    selecting = False
+                    selectedItem = Nothing
+                    Repaint()
+                    Return
+                End If
                 If Not selectedItems.Contains(i) Then
                     If Control.ModifierKeys <> Keys.Shift Then
                         selectedItems.Clear()
@@ -60,7 +69,7 @@
             XStart = selectedItem.x
             YStart = selectedItem.y
         Else 'Create a selection rectangle
-            If Control.ModifierKeys <> Keys.Shift Then
+            If Control.ModifierKeys <> Keys.Shift And Control.ModifierKeys <> Keys.Alt Then
                 selectedItems.Clear()
                 ed.SetCopy(False)
             End If
@@ -70,6 +79,7 @@
             curY = e.Y
             width = 0
             height = 0
+            removing = (Control.ModifierKeys = Keys.Alt)
         End If
         selecting = Not additem
         If Control.ModifierKeys = Keys.Control Then 'Add a new item
@@ -147,8 +157,14 @@
 
     Public Overrides Sub MouseUp(ByVal e As System.Windows.Forms.MouseEventArgs)
         For Each i As Item In curSelItems
-            If Not selectedItems.Contains(i) Then
-                selectedItems.Add(i)
+            If removing Then
+                If selectedItems.Contains(i) Then
+                    selectedItems.Remove(i)
+                End If
+            Else
+                If Not selectedItems.Contains(i) Then
+                    selectedItems.Add(i)
+                End If
             End If
         Next
         curSelItems.Clear()
@@ -178,6 +194,8 @@
             Me.Status = ShiftText
         ElseIf Control.ModifierKeys = Keys.Control Then
             Me.Status = CtrlText
+        ElseIf Control.ModifierKeys = Keys.Alt Then
+            Me.Status = AltText
         Else
             Me.Status = DefaultText
         End If
@@ -197,13 +215,17 @@
             g.DrawRectangle(borderPen, curX, curY, width, height)
         End If
         For Each i As Item In selectedItems
-            g.FillRectangle(darkBrush, i.GetRect)
-            g.DrawRectangle(Pens.White, i.GetRect)
+            If Not curSelItems.Contains(i) Then
+                g.FillRectangle(darkBrush, i.GetRect)
+                g.DrawRectangle(Pens.White, i.GetRect)
+            End If
         Next
-        For Each i As Item In curSelItems
-            g.FillRectangle(darkBrush, i.GetRect)
-            g.DrawRectangle(Pens.White, i.GetRect)
-        Next
+        If Not removing Then
+            For Each i As Item In curSelItems
+                g.FillRectangle(darkBrush, i.GetRect)
+                g.DrawRectangle(Pens.White, i.GetRect)
+            Next
+        End If
     End Sub
 
     Public Overrides Sub RemoveEdCtrl(ByVal e As LvlEdCtrl)
@@ -237,6 +259,7 @@
     End Function
 
     Public Overrides Function Paste() As Boolean
+        If Not Clipboard.GetText.StartsWith("0") Then Return False
         selectedItems = FromText(Clipboard.GetText)
         Dim MinX As Integer = Integer.MaxValue, MinY As Integer = Integer.MaxValue
         For Each i As Item In selectedItems
@@ -254,7 +277,7 @@
     End Function
 
     Private Function ToText(ByVal items As List(Of Item)) As String
-        Dim str As String = ""
+        Dim str As String = "0"
         For Each i As Item In items
             str &= Shrd.HexL(i.x, 4) & Shrd.HexL(i.y, 4) & Shrd.HexL(i.type, 2)
         Next
@@ -264,7 +287,7 @@
     Private Function FromText(ByVal txt As String) As List(Of Item)
         Dim items As New List(Of Item)
         Try
-            Dim indx As Integer = 1
+            Dim indx As Integer = 2
             Do Until indx > txt.Length
                 items.Add(New Item(CInt("&H" & Mid(txt, indx, 4)), CInt("&H" & Mid(txt, indx + 4, 4)), _
                                    CInt("&H" & Mid(txt, indx + 8, 2))))

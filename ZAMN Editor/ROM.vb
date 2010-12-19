@@ -104,7 +104,7 @@ Public Class ROM
 
     Public Sub SaveLevel(ByVal lvl As Level)
         Dim fs As New FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read)
-        Dim data As LevelWriteData = lvl.WriteToFile()
+        Dim data As LevelWriteData = lvl.GetWriteData()
         Dim fs2 As New FileStream(Application.StartupPath + "\lvl.bin", FileMode.Create)
         fs2.Write(data.data, 0, data.data.Length)
         fs2.Close()
