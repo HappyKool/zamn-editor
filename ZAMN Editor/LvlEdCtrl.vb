@@ -12,6 +12,7 @@
     Public priority As Boolean
     Public zoom As Single = 1
     Public selection As Selection
+    Public UndoMgr As UndoManager
 
     Private fillBrush As SolidBrush
     Private eraserBrush As SolidBrush

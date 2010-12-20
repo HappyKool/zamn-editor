@@ -70,6 +70,7 @@
             If EdControl IsNot Nothing Then
                 SetTool(CurTool)
                 UpdateEdControl()
+                EdControl.UndoMgr = New UndoManager(UndoTool, RedoTool, EdControl)
                 updateTab = True
                 TSContainer.ContentPanel.BackColor = SystemColors.Control
                 For Each item As ToolStripItem In LevelItems
@@ -87,6 +88,22 @@
 
     Private Sub FileExit_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles FileExit.Click
         Me.Close()
+    End Sub
+
+    Private Sub EditUndo_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditUndo.Click
+        UndoTool.PerformButtonClick()
+    End Sub
+
+    Private Sub EditRedo_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditRedo.Click
+        RedoTool.PerformButtonClick()
+    End Sub
+
+    Private Sub UndoTool_EnabledChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles UndoTool.EnabledChanged
+        EditUndo.Enabled = UndoTool.Enabled
+    End Sub
+
+    Private Sub RedoTool_EnabledChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles RedoTool.EnabledChanged
+        EditRedo.Enabled = RedoTool.Enabled
     End Sub
 
     Private Sub EditCopy_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditCopy.Click, CopyTool.Click

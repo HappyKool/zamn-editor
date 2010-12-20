@@ -52,8 +52,8 @@ Partial Class Editor
         Me.View75P = New System.Windows.Forms.ToolStripMenuItem()
         Me.View50P = New System.Windows.Forms.ToolStripMenuItem()
         Me.LevelMenu = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LevelImport = New System.Windows.Forms.ToolStripMenuItem()
         Me.LevelExport = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LevelImport = New System.Windows.Forms.ToolStripMenuItem()
         Me.LevelCopy = New System.Windows.Forms.ToolStripMenuItem()
         Me.LevelPaste = New System.Windows.Forms.ToolStripMenuItem()
         Me.toolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
@@ -78,6 +78,8 @@ Partial Class Editor
         Me.CutTool = New System.Windows.Forms.ToolStripButton()
         Me.CopyTool = New System.Windows.Forms.ToolStripButton()
         Me.PasteTool = New System.Windows.Forms.ToolStripButton()
+        Me.UndoTool = New System.Windows.Forms.ToolStripSplitButton()
+        Me.RedoTool = New System.Windows.Forms.ToolStripSplitButton()
         Me.toolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.Zoom = New System.Windows.Forms.ToolStripDropDownButton()
         Me.Zoom100Tool = New System.Windows.Forms.ToolStripMenuItem()
@@ -213,6 +215,7 @@ Partial Class Editor
         'EditUndo
         '
         Me.EditUndo.Enabled = False
+        Me.EditUndo.Image = Global.ZAMNEditor.My.Resources.Resources.Undo
         Me.EditUndo.Name = "EditUndo"
         Me.EditUndo.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Z), System.Windows.Forms.Keys)
         Me.EditUndo.Size = New System.Drawing.Size(164, 22)
@@ -221,6 +224,7 @@ Partial Class Editor
         'EditRedo
         '
         Me.EditRedo.Enabled = False
+        Me.EditRedo.Image = Global.ZAMNEditor.My.Resources.Resources.Redo
         Me.EditRedo.Name = "EditRedo"
         Me.EditRedo.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Y), System.Windows.Forms.Keys)
         Me.EditRedo.Size = New System.Drawing.Size(164, 22)
@@ -348,19 +352,19 @@ Partial Class Editor
         Me.LevelMenu.Size = New System.Drawing.Size(46, 20)
         Me.LevelMenu.Text = "&Level"
         '
-        'LevelImport
-        '
-        Me.LevelImport.Enabled = False
-        Me.LevelImport.Name = "LevelImport"
-        Me.LevelImport.Size = New System.Drawing.Size(156, 22)
-        Me.LevelImport.Text = "&Import"
-        '
         'LevelExport
         '
         Me.LevelExport.Enabled = False
         Me.LevelExport.Name = "LevelExport"
         Me.LevelExport.Size = New System.Drawing.Size(156, 22)
         Me.LevelExport.Text = "&Export"
+        '
+        'LevelImport
+        '
+        Me.LevelImport.Enabled = False
+        Me.LevelImport.Name = "LevelImport"
+        Me.LevelImport.Size = New System.Drawing.Size(156, 22)
+        Me.LevelImport.Text = "&Import"
         '
         'LevelCopy
         '
@@ -475,11 +479,11 @@ Partial Class Editor
         'Tools
         '
         Me.Tools.Dock = System.Windows.Forms.DockStyle.None
-        Me.Tools.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.OpenLevelTool, Me.SaveTool, Me.toolStripSeparator, Me.CutTool, Me.CopyTool, Me.PasteTool, Me.toolStripSeparator1, Me.Zoom, Me.toolStripSeparator8, Me.BrushTool, Me.DropperTool, Me.TileSgstTool, Me.RectangleTool, Me.PencilTool, Me.TileSlctTool, Me.ItemTool, Me.VictimTool, Me.NRMTool, Me.MonTool, Me.BMonTool})
+        Me.Tools.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.OpenLevelTool, Me.SaveTool, Me.toolStripSeparator, Me.CutTool, Me.CopyTool, Me.PasteTool, Me.UndoTool, Me.RedoTool, Me.toolStripSeparator1, Me.Zoom, Me.toolStripSeparator8, Me.BrushTool, Me.DropperTool, Me.TileSgstTool, Me.RectangleTool, Me.PencilTool, Me.TileSlctTool, Me.ItemTool, Me.VictimTool, Me.NRMTool, Me.MonTool, Me.BMonTool})
         Me.Tools.Location = New System.Drawing.Point(3, 24)
         Me.Tools.Name = "Tools"
         Me.Tools.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.Tools.Size = New System.Drawing.Size(450, 25)
+        Me.Tools.Size = New System.Drawing.Size(545, 25)
         Me.Tools.TabIndex = 1
         '
         'OpenTool
@@ -545,6 +549,26 @@ Partial Class Editor
         Me.PasteTool.Name = "PasteTool"
         Me.PasteTool.Size = New System.Drawing.Size(23, 22)
         Me.PasteTool.Text = "&Paste"
+        '
+        'UndoTool
+        '
+        Me.UndoTool.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.UndoTool.Enabled = False
+        Me.UndoTool.Image = Global.ZAMNEditor.My.Resources.Resources.Undo
+        Me.UndoTool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.UndoTool.Name = "UndoTool"
+        Me.UndoTool.Size = New System.Drawing.Size(32, 22)
+        Me.UndoTool.Text = "Undo"
+        '
+        'RedoTool
+        '
+        Me.RedoTool.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.RedoTool.Enabled = False
+        Me.RedoTool.Image = Global.ZAMNEditor.My.Resources.Resources.Redo
+        Me.RedoTool.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.RedoTool.Name = "RedoTool"
+        Me.RedoTool.Size = New System.Drawing.Size(32, 22)
+        Me.RedoTool.Text = "Redo"
         '
         'toolStripSeparator1
         '
@@ -815,5 +839,7 @@ Partial Class Editor
     Friend WithEvents ExportLevel As System.Windows.Forms.SaveFileDialog
     Friend WithEvents LevelCopy As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LevelPaste As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UndoTool As System.Windows.Forms.ToolStripSplitButton
+    Friend WithEvents RedoTool As System.Windows.Forms.ToolStripSplitButton
 
 End Class

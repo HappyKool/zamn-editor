@@ -198,6 +198,8 @@
     <Compile Include="Tools\TileSuggestTool.vb" />
     <Compile Include="Tools\Tool.vb" />
     <Compile Include="Tools\VictimTool.vb" />
+    <Compile Include="UndoManager\ItemAction.vb" />
+    <Compile Include="UndoManager\UndoManager.vb" />
     <Compile Include="Victim.vb" />
     <Compile Include="VictimBrowser.Designer.vb">
       <DependentUpon>VictimBrowser.vb</DependentUpon>
@@ -328,6 +330,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Zombie.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Redo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Undo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

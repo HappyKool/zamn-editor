@@ -9,6 +9,7 @@
     Public width As Integer
     Public height As Integer
     Public removing As Boolean
+    Public created As Boolean
 
     Private curSelItems As New List(Of Item)
     Private selecting As Boolean = False
@@ -89,19 +90,20 @@
                     selectedItems.Clear()
                     selectedItems.Add(i)
                     selectedItem = i
-                    ed.EdControl.lvl.items.Add(i)
                     dragXOff = 8
                     dragYOff = 8
+                    created = True
                 End If
             Else 'Clone the current item
                 Dim newItems As New List(Of Item)
                 For Each i As Item In selectedItems
                     newItems.Add(New Item(i))
-                    ed.EdControl.lvl.items.Add(newItems.Last)
                 Next
                 selectedItem = newItems(selectedItems.IndexOf(selectedItem))
                 selectedItems = newItems
+                created = True
             End If
+            ed.EdControl.lvl.items.AddRange(selectedItems)
             selecting = False
         End If
         ed.SetCopy(selectedItems.Count > 0 Or curSelItems.Count > 0)
@@ -144,10 +146,11 @@
                 Next
                 Dim XDelta As Integer = Math.Max(-minX, e.X - (selectedItem.x + dragXOff))
                 Dim YDelta As Integer = Math.Max(-minY, e.Y - (selectedItem.y + dragYOff))
-                For Each i As Item In selectedItems
-                    i.x = ((i.x + XDelta) \ stp) * stp
-                    i.y = ((i.y + YDelta) \ stp) * stp
-                Next
+                If created Then
+                    ed.EdControl.UndoMgr.Perform(New MoveItemAction(selectedItems, XDelta, YDelta, stp))
+                Else
+                    ed.EdControl.UndoMgr.Do(New MoveItemAction(selectedItems, XDelta, YDelta, stp))
+                End If
                 Me.Status = String.Format(MoveText, selectedItem.x - XStart, selectedItem.y - YStart)
                 UpdateStatus()
             End If
@@ -167,17 +170,23 @@
                 End If
             End If
         Next
+        If created Then
+            For Each i As Item In selectedItems
+                ed.EdControl.lvl.items.Remove(i)
+            Next
+            ed.EdControl.UndoMgr.Do(New AddItemAction(selectedItems))
+            created = False
+        End If
         curSelItems.Clear()
         selecting = False
         ResetStatus()
         Repaint()
+        ed.EdControl.UndoMgr.merge = False
     End Sub
 
     Public Overrides Sub KeyDown(ByVal e As System.Windows.Forms.KeyEventArgs)
         If e.KeyCode = Keys.Delete Then
-            For Each i As Item In selectedItems
-                ed.EdControl.lvl.items.Remove(i)
-            Next
+            ed.EdControl.UndoMgr.Do(New RemoveItemAction(selectedItems))
             selectedItems.Clear()
             Repaint()
         End If
@@ -203,9 +212,7 @@
     End Sub
 
     Public Overrides Sub ItemChanged()
-        For Each i As Item In selectedItems
-            i.type = ItemPicker.SelectedIndex
-        Next
+        ed.EdControl.UndoMgr.Do(New ChangeItemTypeAction(selectedItems, ItemPicker.SelectedIndex))
         Repaint()
     End Sub
 
