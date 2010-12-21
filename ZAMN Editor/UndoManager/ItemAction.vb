@@ -28,6 +28,14 @@ Public Class AddItemAction
             EdControl.lvl.items.Add(i)
         Next
     End Sub
+
+    Public Overrides Function ToString() As String
+        If items.Count = 1 Then
+            Return "Add item"
+        Else
+            Return "Add " & items.Count.ToString & " items"
+        End If
+    End Function
 End Class
 
 Public Class RemoveItemAction
@@ -48,6 +56,14 @@ Public Class RemoveItemAction
             EdControl.lvl.items.Remove(i)
         Next
     End Sub
+
+    Public Overrides Function ToString() As String
+        If items.Count = 1 Then
+            Return "Delete item"
+        Else
+            Return "Delete " & items.Count.ToString & " items"
+        End If
+    End Function
 End Class
 
 Public Class MoveItemAction
@@ -95,6 +111,14 @@ Public Class MoveItemAction
             Me.ny(l) = act2.ny(l)
         Next
     End Sub
+
+    Public Overrides Function ToString() As String
+        If items.Count = 1 Then
+            Return "Move item"
+        Else
+            Return "Move " & items.Count.ToString & " items"
+        End If
+    End Function
 End Class
 
 Public Class ChangeItemTypeAction
@@ -132,4 +156,12 @@ Public Class ChangeItemTypeAction
     Public Overrides Sub Merge(ByVal act As Action)
         Me.newType = CType(act, ChangeItemTypeAction).newType
     End Sub
+
+    Public Overrides Function ToString() As String
+        If items.Count = 1 Then
+            Return "Change item type"
+        Else
+            Return "Change " & items.Count.ToString & " items types"
+        End If
+    End Function
 End Class

@@ -119,10 +119,7 @@
                 Next
                 Dim XDelta As Integer = Math.Max(-minX, e.X - (selectedVictim.x + dragXOff))
                 Dim YDelta As Integer = Math.Max(-minY, e.Y - (selectedVictim.y + dragYOff))
-                For Each v As Victim In selectedVictims
-                    v.x = ((v.x + XDelta) \ stp) * stp
-                    v.y = ((v.y + YDelta) \ stp) * stp
-                Next
+                ed.EdControl.UndoMgr.Do(New MoveVictimAction(selectedVictims, XDelta, YDelta, stp))
                 Me.Status = String.Format(MoveText, selectedVictim.x - XStart, selectedVictim.y - YStart)
                 UpdateStatus()
             End If
@@ -142,6 +139,7 @@
                 End If
             End If
         Next
+        ed.EdControl.UndoMgr.merge = False
         curSelVictims.Clear()
         selecting = False
         ResetStatus()
@@ -165,12 +163,7 @@
     End Sub
 
     Public Overrides Sub VictimChanged()
-        For Each v As Victim In selectedVictims
-            If v.ptr > 2 Then
-                v.index = VictimPicker.SelectedIndex
-                v.UpdatePtr()
-            End If
-        Next
+        ed.EdControl.UndoMgr.Do(New ChangeVictimTypeAction(selectedVictims, LevelGFX.ptrs(VictimPicker.SelectedIndex - 1)))
         Repaint()
     End Sub
 

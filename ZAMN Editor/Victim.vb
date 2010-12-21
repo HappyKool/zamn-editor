@@ -19,7 +19,7 @@
             Me.num = 10
         End If
         Me.ptr = ptr
-        Me.index = 1 + Array.IndexOf(LevelGFX.ptrs, ptr)
+        UpdateIdx()
     End Sub
 
     Public Sub New(ByVal v As Victim)
@@ -39,5 +39,9 @@
         If index > 0 Then
             ptr = LevelGFX.ptrs(index - 1)
         End If
+    End Sub
+
+    Public Sub UpdateIdx()
+        Me.index = 1 + Array.IndexOf(LevelGFX.ptrs, ptr)
     End Sub
 End Class

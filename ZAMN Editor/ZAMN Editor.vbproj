@@ -200,6 +200,7 @@
     <Compile Include="Tools\VictimTool.vb" />
     <Compile Include="UndoManager\ItemAction.vb" />
     <Compile Include="UndoManager\UndoManager.vb" />
+    <Compile Include="UndoManager\VictimAction.vb" />
     <Compile Include="Victim.vb" />
     <Compile Include="VictimBrowser.Designer.vb">
       <DependentUpon>VictimBrowser.vb</DependentUpon>
