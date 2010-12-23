@@ -3,6 +3,8 @@
     Private bgBrush As Drawing2D.LinearGradientBrush
     Private borderPen As Pen
     Private selectedBrush As SolidBrush
+    Public objCount As Integer = 5
+    Public Const itemHeight As Integer = 29
     Public SelectedIndex As Integer = -1
     Public Event ValueChanged(ByVal sender As Object, ByVal e As EventArgs)
 
@@ -15,8 +17,8 @@
     End Sub
 
     Private Sub UpdateScrollBar()
-        VScrl.Maximum = 7
-        VScrl.LargeChange = Math.Max(1, Me.Height \ 29)
+        VScrl.Maximum = (objCount + 1) * itemHeight
+        VScrl.LargeChange = Math.Max(1, Me.Height)
         VScrl.Value = Math.Min(VScrl.Value, Math.Max(0, VScrl.Maximum - VScrl.LargeChange))
         VScrl.Enabled = (VScrl.Maximum > VScrl.LargeChange)
         Me.Invalidate()
@@ -24,15 +26,15 @@
 
     Private Sub NRMBrowser_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
         e.Graphics.FillRectangle(bgBrush, Me.DisplayRectangle)
-        Dim yPos As Integer = 0
-        For l As Integer = VScrl.Value To Math.Min(BossMonster.ptrs.Length - 1, VScrl.Value + VScrl.LargeChange)
-            e.Graphics.DrawLine(Pens.Black, 0, yPos + 29, Me.Width, yPos + 29)
+        Dim yPos As Integer = -(VScrl.Value Mod itemHeight)
+        For l As Integer = VScrl.Value \ itemHeight To Math.Min(objCount, (VScrl.Value + VScrl.LargeChange) \ itemHeight)
+            e.Graphics.DrawLine(Pens.Black, 0, yPos + itemHeight, Me.Width, yPos + itemHeight)
             If l = SelectedIndex Then
-                e.Graphics.FillRectangle(selectedBrush, 0, yPos + 1, Me.Width - 18, 29)
-                e.Graphics.DrawRectangle(borderPen, 0, yPos, Me.Width - 18, 29)
+                e.Graphics.FillRectangle(selectedBrush, 0, yPos + 1, Me.Width - 18, itemHeight)
+                e.Graphics.DrawRectangle(borderPen, 0, yPos, Me.Width - 18, itemHeight)
             End If
             e.Graphics.DrawString(BossMonster.names(l), BossMonster.dispfont, Brushes.Black, 8, yPos + 8)
-            yPos += 29
+            yPos += itemHeight
         Next
     End Sub
 
@@ -45,8 +47,8 @@
     End Sub
 
     Private Sub NRMBrowser_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDown
-        Dim v As Integer = e.Y \ 29 + VScrl.Value
-        If v <= BossMonster.ptrs.Length - 1 Then
+        Dim v As Integer = (e.Y + VScrl.Value) \ itemHeight
+        If v <= objCount Then
             SelectedIndex = v
             RaiseEvent ValueChanged(Me, EventArgs.Empty)
         End If
@@ -54,7 +56,7 @@
     End Sub
 
     Public Sub ScollToSelected()
-        VScrl.Value = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange + 1, SelectedIndex - VScrl.LargeChange \ 2))
+        VScrl.Value = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange + 1, (SelectedIndex * itemHeight) - (VScrl.LargeChange - itemHeight) \ 2))
         Me.Invalidate()
     End Sub
 End Class

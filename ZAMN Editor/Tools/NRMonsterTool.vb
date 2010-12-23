@@ -9,6 +9,7 @@
     Public width As Integer
     Public height As Integer
     Public removing As Boolean
+    Public created As Boolean
 
     Private curSelMonsters As New List(Of NRMonster)
     Private selecting As Boolean = False
@@ -90,19 +91,20 @@
                     selectedMonsters.Clear()
                     selectedMonsters.Add(m)
                     selectedMonster = m
-                    ed.EdControl.lvl.NRMonsters.Add(m)
                     dragXOff = 8
                     dragYOff = 8
+                    created = True
                 End If
             Else 'Clone the current monster
                 Dim newMonsters As New List(Of NRMonster)
                 For Each m As NRMonster In selectedMonsters
                     newMonsters.Add(New NRMonster(m))
-                    ed.EdControl.lvl.NRMonsters.Add(newMonsters.Last)
                 Next
                 selectedMonster = newMonsters(selectedMonsters.IndexOf(selectedMonster))
                 selectedMonsters = newMonsters
+                created = True
             End If
+            ed.EdControl.lvl.NRMonsters.AddRange(selectedMonsters)
             selecting = False
         End If
         ed.SetCopy(selectedMonsters.Count > 0 Or curSelMonsters.Count > 0)
@@ -145,10 +147,11 @@
                 Next
                 Dim XDelta As Integer = Math.Max(-minX, e.X - (selectedMonster.x + dragXOff))
                 Dim YDelta As Integer = Math.Max(-minY, e.Y - (selectedMonster.y + dragYOff))
-                For Each m As NRMonster In selectedMonsters
-                    m.x = ((m.x + XDelta) \ stp) * stp
-                    m.y = ((m.y + YDelta) \ stp) * stp
-                Next
+                If created Then
+                    ed.EdControl.UndoMgr.Perform(New MoveNRMAction(selectedMonsters, XDelta, YDelta, stp))
+                Else
+                    ed.EdControl.UndoMgr.Do(New MoveNRMAction(selectedMonsters, XDelta, YDelta, stp))
+                End If
                 Me.Status = String.Format(MoveText, selectedMonster.x - XStart, selectedMonster.y - YStart)
                 UpdateStatus()
             End If
@@ -168,17 +171,23 @@
                 End If
             End If
         Next
+        If created Then
+            For Each m As NRMonster In selectedMonsters
+                ed.EdControl.lvl.NRMonsters.Remove(m)
+            Next
+            ed.EdControl.UndoMgr.Do(New AddNRMAction(selectedMonsters))
+            created = False
+        End If
         curSelMonsters.Clear()
         selecting = False
         ResetStatus()
         Repaint()
+        ed.EdControl.UndoMgr.merge = False
     End Sub
 
     Public Overrides Sub KeyDown(ByVal e As System.Windows.Forms.KeyEventArgs)
         If e.KeyCode = Keys.Delete Then
-            For Each m As NRMonster In selectedMonsters
-                ed.EdControl.lvl.NRMonsters.Remove(m)
-            Next
+            ed.EdControl.UndoMgr.Do(New RemoveNRMAction(selectedMonsters))
             selectedMonsters.Clear()
             Repaint()
         End If
@@ -204,11 +213,10 @@
     End Sub
 
     Public Overrides Sub NRMChanged()
-        For Each m As NRMonster In selectedMonsters
-            m.index = NRMPicker.SelectedIndex + 1
-            m.UpdatePtr()
-        Next
-        Repaint()
+        If selectedMonsters.Count > 0 Then
+            ed.EdControl.UndoMgr.Do(New ChangeNRMTypeAction(selectedMonsters, LevelGFX.ptrs(NRMPicker.SelectedIndex)))
+            Repaint()
+        End If
     End Sub
 
     Public Overrides Sub Paint(ByVal g As System.Drawing.Graphics)
@@ -254,9 +262,8 @@
 
     Public Overrides Function Cut() As Boolean
         Copy()
-        For Each m As NRMonster In selectedMonsters
-            ed.EdControl.lvl.NRMonsters.Remove(m)
-        Next
+        ed.EdControl.UndoMgr.Do(New RemoveNRMAction(selectedMonsters))
+        selectedMonsters.Clear()
         Return False
     End Function
 
@@ -265,7 +272,6 @@
         selectedMonsters = FromText(Clipboard.GetText)
         Dim MinX As Integer = Integer.MaxValue, MinY As Integer = Integer.MaxValue
         For Each m As NRMonster In selectedMonsters
-            ed.EdControl.lvl.NRMonsters.Add(m)
             If m.x < MinX Then MinX = m.x
             If m.y < MinY Then MinY = m.y
         Next
@@ -275,6 +281,7 @@
             m.x += dx
             m.y += dy
         Next
+        ed.EdControl.UndoMgr.Do(New AddNRMAction(selectedMonsters))
         Return False
     End Function
 

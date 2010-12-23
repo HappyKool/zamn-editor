@@ -483,7 +483,7 @@ Partial Class Editor
         Me.Tools.Location = New System.Drawing.Point(3, 24)
         Me.Tools.Name = "Tools"
         Me.Tools.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.Tools.Size = New System.Drawing.Size(545, 25)
+        Me.Tools.Size = New System.Drawing.Size(514, 25)
         Me.Tools.TabIndex = 1
         '
         'OpenTool

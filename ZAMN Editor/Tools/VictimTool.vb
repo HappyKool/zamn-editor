@@ -163,7 +163,7 @@
     End Sub
 
     Public Overrides Sub VictimChanged()
-        ed.EdControl.UndoMgr.Do(New ChangeVictimTypeAction(selectedVictims, LevelGFX.ptrs(VictimPicker.SelectedIndex - 1)))
+        ed.EdControl.UndoMgr.Do(New ChangeVictimTypeAction(selectedVictims, LevelGFX.ptrs(VictimPicker.SelectedIndex)))
         Repaint()
     End Sub
 

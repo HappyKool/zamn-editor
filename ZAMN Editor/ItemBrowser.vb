@@ -5,6 +5,7 @@
     Private selectedBrush As SolidBrush
     Public SelectedIndex As Integer = -1
     Public itemCt As Integer
+    Public Const itemHeight As Integer = 32
     Public gfx As LevelGFX
     Public Event ValueChanged(ByVal sender As Object, ByVal e As EventArgs)
 
@@ -19,8 +20,8 @@
     End Sub
 
     Private Sub UpdateScrollBar()
-        VScrl.Maximum = itemCt
-        VScrl.LargeChange = Math.Max(1, Me.Height \ 32)
+        VScrl.Maximum = (itemCt + 1) * itemHeight
+        VScrl.LargeChange = Math.Max(1, Me.Height)
         VScrl.Value = Math.Min(VScrl.Value, Math.Max(0, VScrl.Maximum - VScrl.LargeChange))
         VScrl.Enabled = (VScrl.Maximum > VScrl.LargeChange)
         Me.Invalidate()
@@ -28,16 +29,16 @@
 
     Private Sub ItemBrowser_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
         e.Graphics.FillRectangle(bgBrush, Me.DisplayRectangle)
-        Dim yPos As Integer = 0
-        For l As Integer = VScrl.Value To Math.Min(itemCt, VScrl.Value + VScrl.LargeChange)
-            e.Graphics.DrawLine(Pens.Black, 0, yPos + 32, Me.Width, yPos + 32)
+        Dim yPos As Integer = -(VScrl.Value Mod itemHeight)
+        For l As Integer = VScrl.Value \ itemHeight To Math.Min(itemCt, (VScrl.Value + VScrl.LargeChange) \ itemHeight)
+            e.Graphics.DrawLine(Pens.Black, 0, yPos + itemHeight, Me.Width, yPos + itemHeight)
             If l = SelectedIndex Then
-                e.Graphics.FillRectangle(selectedBrush, 0, yPos + 1, Me.Width - 18, 32)
-                e.Graphics.DrawRectangle(borderPen, 0, yPos, Me.Width - 18, 32)
+                e.Graphics.FillRectangle(selectedBrush, 0, yPos + 1, Me.Width - 18, itemHeight)
+                e.Graphics.DrawRectangle(borderPen, 0, yPos, Me.Width - 18, itemHeight)
             End If
             e.Graphics.DrawImage(gfx.ItemImages(l), 8, yPos + 8)
             e.Graphics.DrawString(l.ToString(), Me.Font, Brushes.Black, 32, yPos + 10)
-            yPos += 32
+            yPos += itemHeight
         Next
     End Sub
 
@@ -50,7 +51,7 @@
     End Sub
 
     Private Sub ItemBrowser_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDown
-        Dim v As Integer = e.Y \ 32 + VScrl.Value
+        Dim v As Integer = (e.Y + VScrl.Value) \ itemHeight
         If v <= itemCt Then
             SelectedIndex = v
             RaiseEvent ValueChanged(Me, EventArgs.Empty)
@@ -59,7 +60,7 @@
     End Sub
 
     Public Sub ScollToSelected()
-        VScrl.Value = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange + 1, SelectedIndex - VScrl.LargeChange \ 2))
+        VScrl.Value = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange + 1, (SelectedIndex * itemHeight) - (VScrl.LargeChange - itemHeight) \ 2))
         Me.Invalidate()
     End Sub
 End Class

@@ -212,8 +212,10 @@
     End Sub
 
     Public Overrides Sub ItemChanged()
-        ed.EdControl.UndoMgr.Do(New ChangeItemTypeAction(selectedItems, ItemPicker.SelectedIndex))
-        Repaint()
+        If selectedItems.Count > 0 Then
+            ed.EdControl.UndoMgr.Do(New ChangeItemTypeAction(selectedItems, ItemPicker.SelectedIndex))
+            Repaint()
+        End If
     End Sub
 
     Public Overrides Sub Paint(ByVal g As System.Drawing.Graphics)
@@ -259,9 +261,8 @@
 
     Public Overrides Function Cut() As Boolean
         Copy()
-        For Each i As Item In selectedItems
-            ed.EdControl.lvl.items.Remove(i)
-        Next
+        ed.EdControl.UndoMgr.Do(New RemoveItemAction(selectedItems))
+        selectedItems.Clear()
         Return False
     End Function
 
@@ -270,7 +271,6 @@
         selectedItems = FromText(Clipboard.GetText)
         Dim MinX As Integer = Integer.MaxValue, MinY As Integer = Integer.MaxValue
         For Each i As Item In selectedItems
-            ed.EdControl.lvl.items.Add(i)
             If i.x < MinX Then MinX = i.x
             If i.y < MinY Then MinY = i.y
         Next
@@ -280,6 +280,7 @@
             i.x += dx
             i.y += dy
         Next
+        ed.EdControl.UndoMgr.Do(New AddItemAction(selectedItems))
         Return False
     End Function
 
