@@ -123,6 +123,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property DropArrow() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("DropArrow", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property Dropper() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Dropper", resourceCulture)

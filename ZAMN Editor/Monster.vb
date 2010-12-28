@@ -32,6 +32,10 @@
         Return Shrd.RealSize(New Rectangle(New Point(Me.x, Me.y), gfx.VictimImages(index).Size))
     End Function
 
+    Public Sub UpdateIdx()
+        Me.index = 1 + Array.IndexOf(LevelGFX.ptrs, ptr)
+    End Sub
+
     Public Sub UpdatePtr()
         If index > 0 Then
             ptr = LevelGFX.ptrs(index - 1)

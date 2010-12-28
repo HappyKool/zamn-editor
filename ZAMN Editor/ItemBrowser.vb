@@ -22,6 +22,7 @@
     Private Sub UpdateScrollBar()
         VScrl.Maximum = (itemCt + 1) * itemHeight
         VScrl.LargeChange = Math.Max(1, Me.Height)
+        VScrl.SmallChange = itemHeight
         VScrl.Value = Math.Min(VScrl.Value, Math.Max(0, VScrl.Maximum - VScrl.LargeChange))
         VScrl.Enabled = (VScrl.Maximum > VScrl.LargeChange)
         Me.Invalidate()

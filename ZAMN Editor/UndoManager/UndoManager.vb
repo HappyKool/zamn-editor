@@ -6,10 +6,9 @@
     Public UActions As New Stack(Of Action)()
     Public RActions As New Stack(Of Action)()
     Public merge As Boolean = True
-    Public multiselect As Integer = 0
     Public dirty As Boolean = False
 
-    Private Shared actionCount As Integer
+    Private actionCount As Integer
 
     Public Sub New(ByVal UndoButton As ToolStripSplitButton, ByVal RedoButton As ToolStripSplitButton, ByVal editor As LvlEdCtrl)
         undo = UndoButton
@@ -20,7 +19,7 @@
         AddHandler redo.ButtonClick, AddressOf onRedoLast
     End Sub
 
-    Public Sub [Do](ByVal act As Action)
+    Public Sub [Do](ByVal act As Action, Optional ByVal performAction As Boolean = True)
         'Determine if the actions should be merged
         If merge AndAlso UActions.Count > 0 AndAlso UActions.Peek().CanMerge AndAlso UActions.Peek().GetType().Equals(act.GetType()) Then
             UActions.Peek().Merge(act)
@@ -41,7 +40,7 @@
         End If
         undo.Enabled = True
         redo.Enabled = False
-        If act IsNot Nothing Then
+        If act IsNot Nothing And performAction Then
             act.DoRedo(False)
         End If
         merge = True
@@ -112,18 +111,23 @@
         Next
     End Sub
 
+    Public Sub ReAddItems()
+        undo.DropDownItems.Clear()
+        For Each act As Action In UActions
+            undo.DropDownItems.Add(act.ToString())
+        Next
+        undo.Enabled = UActions.Count > 0
+        redo.DropDownItems.Clear()
+        For Each act As Action In RActions
+            redo.DropDownItems.Add(act.ToString())
+        Next
+        redo.Enabled = RActions.Count > 0
+    End Sub
+
     Private Sub updateActCount(ByVal sender As Object, ByVal e As EventArgs)
         Dim item As ToolStripMenuItem = TryCast(sender, ToolStripMenuItem)
-        actionCount = TryCast(item.OwnerItem, ToolStripSplitButton).DropDownItems.IndexOf(item) + 1
+        actionCount = CType(item.OwnerItem, ToolStripSplitButton).DropDownItems.IndexOf(item) + 1
     End Sub
-    Public Shared Function Clone(ByVal data As Byte()()) As Byte()()
-        Dim len As Integer = data.GetLength(0)
-        Dim newData As Byte()() = New Byte(len - 1)() {}
-        For l As Integer = 0 To len - 1
-            newData(l) = TryCast(data(l).Clone(), Byte())
-        Next
-        Return newData
-    End Function
 End Class
 
 Public Class Action

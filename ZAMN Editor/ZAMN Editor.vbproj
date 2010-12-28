@@ -156,6 +156,7 @@
     <Compile Include="RecentFilesList.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Settings.vb" />
     <Compile Include="TitlePage.vb" />
     <Compile Include="BMonsterBrowser.Designer.vb">
       <DependentUpon>BMonsterBrowser.vb</DependentUpon>
@@ -191,6 +192,7 @@
     <Compile Include="TileSuggestList.vb" />
     <Compile Include="Tools\DropperTool.vb" />
     <Compile Include="Tools\ItemTool.vb" />
+    <Compile Include="Tools\ObjectTool.vb" />
     <Compile Include="Tools\PaintbrushTool.vb" />
     <Compile Include="Tools\PencilSelectTool.vb" />
     <Compile Include="Tools\RectangleSelectTool.vb" />
@@ -198,7 +200,9 @@
     <Compile Include="Tools\TileSuggestTool.vb" />
     <Compile Include="Tools\Tool.vb" />
     <Compile Include="Tools\VictimTool.vb" />
+    <Compile Include="UndoManager\BMAction.vb" />
     <Compile Include="UndoManager\ItemAction.vb" />
+    <Compile Include="UndoManager\MonsterAction.vb" />
     <Compile Include="UndoManager\NRMAction.vb" />
     <Compile Include="UndoManager\UndoManager.vb" />
     <Compile Include="UndoManager\VictimAction.vb" />
@@ -209,6 +213,7 @@
     <Compile Include="VictimBrowser.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ZAMNObj.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddressUpDown.resx">
@@ -338,6 +343,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Backgrounds\Victims.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DropArrow.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

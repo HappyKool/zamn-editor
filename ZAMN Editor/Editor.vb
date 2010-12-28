@@ -275,6 +275,14 @@
         EdControl.UpdateScrollBars()
         EdControl.Focus()
         EdControl.Repaint()
+        If EdControl.UndoMgr Is Nothing Then
+            UndoTool.Enabled = False
+            RedoTool.Enabled = False
+            UndoTool.DropDownItems.Clear()
+            RedoTool.DropDownItems.Clear()
+        Else
+            EdControl.UndoMgr.ReAddItems()
+        End If
     End Sub
 
     Public Sub SetCopy(ByVal enabled As Boolean)
@@ -308,6 +316,10 @@
         Next
         Tabs.Visible = False
         TSContainer.ContentPanel.BackColor = SystemColors.AppWorkspace
+        UndoTool.DropDownItems.Clear()
+        RedoTool.DropDownItems.Clear()
+        UndoTool.Enabled = False
+        RedoTool.Enabled = False
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
