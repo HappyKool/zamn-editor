@@ -164,7 +164,7 @@ Public Class ROM
                 For m As Integer = 0 To 5 'Update pointers within level files
                     fs.Seek(NewPtr + offsetPos(m), SeekOrigin.Begin)
                     NewPtr2 = fs.ReadByte + fs.ReadByte * &H100 + lenDiff
-                    If NewPtr2 > 0 Then
+                    If NewPtr2 > 0 And NewPtr2 > lenDiff Then
                         fs.Seek(-2, SeekOrigin.Current)
                         fs.WriteByte(NewPtr2 Mod &H100)
                         fs.WriteByte(NewPtr2 \ &H100)

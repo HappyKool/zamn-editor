@@ -70,7 +70,6 @@
             If EdControl IsNot Nothing Then
                 SetTool(CurTool)
                 UpdateEdControl()
-                EdControl.UndoMgr = New UndoManager(UndoTool, RedoTool, EdControl)
                 updateTab = True
                 TSContainer.ContentPanel.BackColor = SystemColors.Control
                 For Each item As ToolStripItem In LevelItems
@@ -276,6 +275,7 @@
         EdControl.Focus()
         EdControl.Repaint()
         If EdControl.UndoMgr Is Nothing Then
+            EdControl.UndoMgr = New UndoManager(UndoTool, RedoTool, EdControl)
             UndoTool.Enabled = False
             RedoTool.Enabled = False
             UndoTool.DropDownItems.Clear()

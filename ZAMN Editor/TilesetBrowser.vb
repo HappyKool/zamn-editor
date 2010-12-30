@@ -76,6 +76,7 @@
     End Sub
 
     Public Sub SetAll()
+        SelectedIndex = SelectedTile
         If tiles Is Nothing Then
             tiles = New List(Of Byte)
         End If
@@ -86,5 +87,6 @@
         Next
         maxIndex = 255
         UpdateScrollBar()
+        ScollToSelected()
     End Sub
 End Class

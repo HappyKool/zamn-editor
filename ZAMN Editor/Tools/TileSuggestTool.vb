@@ -63,6 +63,7 @@
             TilePicker.Invalidate()
         End If
         pX = -1
+        ed.EdControl.UndoMgr.merge = False
     End Sub
 
     Public Overrides Sub Paint(ByVal g As Graphics)
@@ -84,7 +85,7 @@
 
     Public Overrides Sub TileChanged()
         If Direction > -1 Then
-            ed.EdControl.lvl.Tiles(XEnd, YEnd) = TilePicker.SelectedTile
+            ed.EdControl.UndoMgr.Do(New TileSuggestAction(XEnd, YEnd, TilePicker.SelectedTile))
             Repaint()
         End If
     End Sub

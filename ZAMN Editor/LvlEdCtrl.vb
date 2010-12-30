@@ -91,6 +91,9 @@
 
     Private Sub canvas_Paint(ByVal sender As Object, ByVal e As PaintEventArgs) Handles canvas.Paint
         If lvl Is Nothing Then Return
+        If zoom > 1 Then
+            e.Graphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor
+        End If
         e.Graphics.TranslateTransform(-HScrl.Value, -VScrl.Value)
         e.Graphics.ScaleTransform(zoom, zoom)
         For l As Integer = HScrl.Value \ (64 * zoom) To Math.Min(lvl.Width - 1, (HScrl.Value + canvas.Width) \ (64 * zoom) + 1)

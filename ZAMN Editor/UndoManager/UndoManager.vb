@@ -22,9 +22,9 @@
     Public Sub [Do](ByVal act As Action, Optional ByVal performAction As Boolean = True)
         'Determine if the actions should be merged
         If merge AndAlso UActions.Count > 0 AndAlso UActions.Peek().CanMerge AndAlso UActions.Peek().GetType().Equals(act.GetType()) Then
-            UActions.Peek().Merge(act)
             act.SetEdControl(EdControl)
             act.DoRedo(False)
+            UActions.Peek().Merge(act)
             act = Nothing
         Else
             act.SetEdControl(EdControl)

@@ -203,6 +203,7 @@
     <Compile Include="UndoManager\ItemAction.vb" />
     <Compile Include="UndoManager\MonsterAction.vb" />
     <Compile Include="UndoManager\NRMAction.vb" />
+    <Compile Include="UndoManager\TileAction.vb" />
     <Compile Include="UndoManager\UndoManager.vb" />
     <Compile Include="UndoManager\VictimAction.vb" />
     <Compile Include="Victim.vb" />
