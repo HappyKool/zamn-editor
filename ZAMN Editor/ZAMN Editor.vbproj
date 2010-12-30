@@ -156,7 +156,6 @@
     <Compile Include="RecentFilesList.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Settings.vb" />
     <Compile Include="TitlePage.vb" />
     <Compile Include="BMonsterBrowser.Designer.vb">
       <DependentUpon>BMonsterBrowser.vb</DependentUpon>
@@ -213,7 +212,6 @@
     <Compile Include="VictimBrowser.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ZAMNObj.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddressUpDown.resx">

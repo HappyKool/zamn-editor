@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("ZAMN Editor")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Pirahnaplant")> 
+<Assembly: AssemblyCompany("Piranhaplant")> 
 <Assembly: AssemblyProduct("ZAMN Editor")> 
-<Assembly: AssemblyCopyright("Copyright ©  2010")> 
+<Assembly: AssemblyCopyright("Copyright © 2010")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

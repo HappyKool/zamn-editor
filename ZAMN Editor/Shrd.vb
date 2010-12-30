@@ -179,9 +179,9 @@ Public Class Shrd
         If byteCount < 0 Then
             s.Seek(-byteCount, IO.SeekOrigin.Current)
         End If
-        Dim rest(s.Length - s.Position) As Byte
+        Dim rest(s.Length - s.Position - 1) As Byte
         Dim start As Long = s.Position
-        s.Read(rest, 0, s.Length - s.Position)
+        s.Read(rest, 0, rest.Length)
         s.Seek(start + byteCount, IO.SeekOrigin.Begin)
         s.Write(rest, 0, rest.Length)
     End Sub

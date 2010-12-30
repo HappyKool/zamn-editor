@@ -83,27 +83,24 @@
     Public Function ToGP() As Drawing2D.GraphicsPath
         Dim gp As New Drawing2D.GraphicsPath
         Dim edges As New List(Of Edge)
-        For m As Integer = 0 To fullHeight
-            For l As Integer = 0 To fullWidth
-                If curSelectPts(l, m) Then
-                    If l = 0 OrElse Not curSelectPts(l - 1, m) Then
-                        edges.Add(New Edge(New Point(l * 64, m * 64), New Point(l * 64, (m + 1) * 64)))
+        For y As Integer = 0 To fullHeight
+            For x As Integer = 0 To fullWidth
+                If curSelectPts(x, y) Then
+                    If x = 0 OrElse Not curSelectPts(x - 1, y) Then 'Left edge
+                        edges.Add(New Edge(New Point(x * 64, y * 64), New Point(x * 64, (y + 1) * 64)))
                     End If
-                    If m = 0 OrElse Not curSelectPts(l, m - 1) Then
-                        edges.Add(New Edge(New Point(l * 64, m * 64), New Point((l + 1) * 64, m * 64)))
+                    If y = 0 OrElse Not curSelectPts(x, y - 1) Then 'Top edge
+                        edges.Add(New Edge(New Point(x * 64, y * 64), New Point((x + 1) * 64, y * 64)))
                     End If
-                    If l = fullWidth OrElse Not curSelectPts(l + 1, m) Then
-                        edges.Add(New Edge(New Point((l + 1) * 64, m * 64), New Point((l + 1) * 64, (m + 1) * 64)))
+                    If x = fullWidth OrElse Not curSelectPts(x + 1, y) Then 'Right edge
+                        edges.Add(New Edge(New Point((x + 1) * 64, y * 64), New Point((x + 1) * 64, (y + 1) * 64)))
                     End If
-                    If m = fullHeight OrElse Not curSelectPts(l, m + 1) Then
-                        edges.Add(New Edge(New Point(l * 64, (m + 1) * 64), New Point((l + 1) * 64, (m + 1) * 64)))
+                    If y = fullHeight OrElse Not curSelectPts(x, y + 1) Then 'Bottom edge
+                        edges.Add(New Edge(New Point(x * 64, (y + 1) * 64), New Point((x + 1) * 64, (y + 1) * 64)))
                     End If
                 End If
             Next
         Next
-        If edges.Count > 0 Then
-            Debug.Assert(True)
-        End If
         For Each pl As List(Of Point) In AttatchEdges(edges)
             If pl.Count > 2 Then
                 gp.AddPolygon(pl.ToArray())
