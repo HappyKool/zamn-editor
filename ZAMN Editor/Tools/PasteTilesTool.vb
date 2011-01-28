@@ -12,11 +12,17 @@
     Public moving As Boolean = False
     Public DragXOff As Integer
     Public DragYOff As Integer
+    Public FinalX As Integer
+    Public FinalY As Integer
+    Public deltaX As Decimal
+    Public deltaY As Decimal
     Public selection As Selection
     Public gp As Drawing2D.GraphicsPath
+    Public WithEvents moveTmr As New Timer
 
     Public Sub New(ByVal ed As Editor)
         MyBase.New(ed)
+        moveTmr.Interval = 10
     End Sub
 
     Public Event DonePasting(ByVal sender As Object, ByVal e As EventArgs)
@@ -76,19 +82,15 @@
     Public Overrides Sub MouseMove(ByVal e As System.Windows.Forms.MouseEventArgs)
         If moving Then
             Dim px As Integer = xPos, py As Integer = yPos
-            xPos = Math.Max(0, e.X - DragXOff)
-            yPos = Math.Max(0, e.Y - DragYOff)
+            xPos = Math.Max(0, Math.Min((ed.EdControl.lvl.Width - width) * 64, e.X - DragXOff))
+            yPos = Math.Max(0, Math.Min((ed.EdControl.lvl.Height - height) * 64, e.Y - DragYOff))
             MoveGP(gp, xPos - px, yPos - py)
             Repaint()
         Else
-            Dim x As Integer = (e.X - xPos) \ 64
-            Dim y As Integer = (e.Y - yPos) \ 64
-            If pasting And x > -1 And x < width And y > -1 And y < height Then
-                If NewTiles(x, y) > -1 Then
-                    SetCursor(Cursors.SizeAll)
-                Else
-                    SetCursor(Cursors.Arrow)
-                End If
+            Dim x As Integer = Math.Floor((e.X - xPos) / 64)
+            Dim y As Integer = Math.Floor((e.Y - yPos) / 64)
+            If pasting And x > -1 And x < width And y > -1 And y < height AndAlso NewTiles(x, y) > -1 Then
+                SetCursor(Cursors.SizeAll)
             Else
                 SetCursor(Cursors.Arrow)
             End If
@@ -98,36 +100,49 @@
     Public Overrides Sub MouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
         Dim x As Integer = (e.X - xPos) \ 64
         Dim y As Integer = (e.Y - yPos) \ 64
-        If pasting And x > -1 And x < width And y > -1 And y < height Then
-            If NewTiles(x, y) > -1 Then
-                moving = True
-                DragXOff = e.X - xPos
-                DragYOff = e.Y - yPos
-            Else
-                RaiseEvent DonePasting(Me, EventArgs.Empty)
-            End If
-        Else
-            RaiseEvent DonePasting(Me, EventArgs.Empty)
+        If pasting And x > -1 And x < width And y > -1 And y < height AndAlso NewTiles(x, y) > -1 Then
+            moving = True
+            DragXOff = e.X - xPos
+            DragYOff = e.Y - yPos
+            moveTmr.Stop()
+            Return
         End If
+        If moveTmr.Enabled Then
+            xPos = FinalX
+            yPos = FinalY
+            xPosT = xPos \ 64
+            yPosT = yPos \ 64
+            moveTmr.Stop()
+        End If
+        RaiseEvent DonePasting(Me, EventArgs.Empty)
     End Sub
 
     Public Overrides Sub MouseUp(ByVal e As System.Windows.Forms.MouseEventArgs)
         moving = False
-        Dim px As Integer = xPos, py As Integer = yPos
         If xPos Mod 64 < 32 Then
-            xPosT = Math.Floor(xPos / 64)
+            FinalX = Math.Floor(xPos / 64) * 64
         Else
-            xPosT = Math.Ceiling(xPos / 64)
+            FinalX = Math.Ceiling(xPos / 64) * 64
         End If
-        xPos = xPosT * 64
         If yPos Mod 64 < 32 Then
-            yPosT = Math.Floor(yPos / 64)
+            FinalY = Math.Floor(yPos / 64) * 64
         Else
-            yPosT = Math.Ceiling(yPos / 64)
+            FinalY = Math.Ceiling(yPos / 64) * 64
         End If
-        yPos = yPosT * 64
-        MoveGP(gp, xPos - px, yPos - py)
         Repaint()
+        DragXOff = FinalX - xPos
+        DragYOff = FinalY - yPos
+        If Math.Abs(DragXOff) < Math.Abs(DragYOff) Then
+            deltaX = Math.Sign(DragXOff) * Math.Abs(DragXOff / DragYOff)
+            deltaY = Math.Sign(DragYOff)
+        ElseIf DragXOff <> 0 Or DragYOff <> 0 Then
+            deltaY = Math.Sign(DragYOff) * Math.Abs(DragYOff / DragXOff)
+            deltaX = Math.Sign(DragXOff)
+        End If
+        DragXOff = xPos
+        DragYOff = yPos
+        xPosT = 0
+        moveTmr.Start()
     End Sub
 
     Private Sub PasteTilesTool_DonePasting(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.DonePasting
@@ -139,5 +154,21 @@
                 End If
             Next
         Next
+        SetCursor(Cursors.Arrow)
+    End Sub
+
+    Private Sub moveTmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles moveTmr.Tick
+        If xPos = FinalX And yPos = FinalY Then
+            moveTmr.Stop()
+            xPosT = xPos \ 64
+            yPosT = yPos \ 64
+        Else
+            Dim px As Integer = xPos, py As Integer = yPos
+            xPosT += 1
+            xPos = DragXOff + deltaX * xPosT
+            yPos = DragYOff + deltaY * xPosT
+            MoveGP(gp, xPos - px, yPos - py)
+        End If
+        Repaint()
     End Sub
 End Class

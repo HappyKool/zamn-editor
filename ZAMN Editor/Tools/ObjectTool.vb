@@ -318,12 +318,19 @@
             If Not Clipboard.GetText.StartsWith(pasteChar) Then Return False
             selectedObjs = FromText(Clipboard.GetText)
             Dim MinX As Integer = Integer.MaxValue, MinY As Integer = Integer.MaxValue
+            Dim MaxX As Integer = 0, MaxY As Integer = 0
+            Dim r As Rectangle
             For Each o As T In selectedObjs
-                If X(o) < MinX Then MinX = X(o)
-                If Y(o) < MinY Then MinY = Y(o)
+                r = RectOfT(o)
+                If r.X < MinX Then MinX = r.X
+                If r.Y < MinY Then MinY = r.Y
+                If r.Right > MaxX Then MaxX = r.Right
+                If r.Bottom > MaxY Then MaxY = r.Bottom
             Next
-            Dim dx As Integer = ed.EdControl.HScrl.Value * ed.zoomLevel - MinX
-            Dim dy As Integer = ed.EdControl.VScrl.Value * ed.zoomLevel - MinY
+            'Dim dx As Integer = ed.EdControl.HScrl.Value * ed.zoomLevel - MinX
+            'Dim dy As Integer = ed.EdControl.VScrl.Value * ed.zoomLevel - MinY
+            Dim dx As Integer = (ed.EdControl.canvas.Width / ed.EdControl.zoom - (MaxX - MinX)) \ 2 + ed.EdControl.HScrl.Value * ed.EdControl.zoom - MinX
+            Dim dy As Integer = (ed.EdControl.canvas.Height / ed.EdControl.zoom - (MaxY - MinY)) \ 2 + ed.EdControl.VScrl.Value * ed.EdControl.zoom - MinY
             For Each o As T In selectedObjs
                 X(o) += dx
                 Y(o) += dy
