@@ -274,6 +274,7 @@
         If reloadTileset Then
             Dim s As New IO.FileStream(ed.r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read)
             ed.EdControl.lvl.tileset.Reload(s)
+            ed.EdControl.TilePicker.LoadTileset(ed.EdControl.lvl.tileset)
             s.Close()
             ed.EdControl.Invalidate(True)
         End If

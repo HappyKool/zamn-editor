@@ -14,12 +14,12 @@
     Public selection As Selection
     Public UndoMgr As UndoManager
 
-    Private fillBrush As SolidBrush
-    Private eraserBrush As SolidBrush
-    Private borderPen As Pen
-    Private selectionGP As Drawing2D.GraphicsPath
-    Private eraserRect As Rectangle
-    Private forceMove As Boolean = False
+    Public fillBrush As SolidBrush
+    Public eraserBrush As SolidBrush
+    Public borderPen As Pen
+    Public selectionGP As Drawing2D.GraphicsPath
+    Public eraserRect As Rectangle
+    Public forceMove As Boolean = False
 
     Public Sub New()
         InitializeComponent()
@@ -229,7 +229,7 @@
     End Sub
 
     Private Sub borderTimer_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles BorderTimer.Tick
-        If selection.exists Then
+        If selection.exists Or TypeOf t Is PasteTilesTool AndAlso DirectCast(t, PasteTilesTool).pasting = True Then
             borderPen.DashOffset += 1
             If borderPen.DashOffset = 8 Then
                 borderPen.DashOffset = 0

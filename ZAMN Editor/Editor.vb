@@ -3,6 +3,8 @@
     Public r As ROM
     Public EdControl As LvlEdCtrl
     Public CurTool As Tool
+    Public PTool As Tool
+    Public WithEvents TilePaste As PasteTilesTool
     Public zoomLevel As Single = 1
     Private updateTab As Boolean = True
     Private EditingTools As Tool()
@@ -20,6 +22,7 @@
                                    New TileSelectTool(Me), New ItemTool(Me), New VictimTool(Me), New NRMonsterTool(Me), New MonsterTool(Me), New BossMonsterTool(Me)}
         LevelItems = New ToolStripItem() {FileSave, SaveTool, EditPaste, PasteTool, EditSelectAll, EditSelectNone, ViewGrid, ViewPriority, _
                                           LevelExport, LevelImport, LevelCopy, LevelPaste, LevelSettingsM}
+        TilePaste = New PasteTilesTool(Me)
         TileSuggestList.LoadAll()
         If My.Settings.RecentROMs <> "" Then
             RecentROMs.Items = StringToList(My.Settings.RecentROMs)
@@ -107,22 +110,28 @@
 
     Private Sub EditCopy_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditCopy.Click, CopyTool.Click
         If CurTool.Copy() Then
-            'Copy selected tiles
+            Clipboard.SetText(CopyTiles())
         End If
     End Sub
 
     Private Sub EditCut_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditCut.Click, CutTool.Click
         If CurTool.Cut() Then
-            'Cut selected tiles
+            Clipboard.SetText(CopyTiles())
         End If
         EdControl.Repaint()
     End Sub
 
     Private Sub EditPaste_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditPaste.Click, PasteTool.Click
         If CurTool.Paste() Then
-            'Paste tiles
+            PTool = CurTool
+            SetTool(TilePaste)
+            CurTool.Paste()
         End If
         EdControl.Repaint()
+    End Sub
+
+    Private Sub TilePaste_DonePasting(ByVal sender As Object, ByVal e As System.EventArgs) Handles TilePaste.DonePasting
+        SetTool(PTool)
     End Sub
 
     Private Sub EditSelectAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditSelectAll.Click
@@ -147,7 +156,7 @@
         PasswordEditor.ShowDialog(Me)
     End Sub
 
-    Private Sub SelectAll(ByVal selected As Boolean)
+    Public Sub SelectAll(ByVal selected As Boolean)
         For m As Integer = 0 To EdControl.lvl.Height - 1
             For l As Integer = 0 To EdControl.lvl.Width - 1
                 EdControl.selection.selectPts(l, m) = selected
@@ -375,5 +384,34 @@
             str2 = Mid(str2, indx + 1)
         Loop
         Return items
+    End Function
+
+    Private Function CopyTiles() As String
+        Dim str As String
+        Dim xStart As Integer = EdControl.lvl.Width
+        Dim yStart As Integer = EdControl.lvl.Height
+        Dim xEnd As Integer = -1
+        Dim yEnd As Integer = -1
+        For y As Integer = 0 To EdControl.lvl.Height - 1
+            For x As Integer = 0 To EdControl.lvl.Width - 1
+                If EdControl.selection.selectPts(x, y) Then
+                    If x < xStart Then xStart = x
+                    If y < yStart Then yStart = y
+                    If x > xEnd Then xEnd = x
+                    If y > yEnd Then yEnd = y
+                End If
+            Next
+        Next
+        str = "A" & Shrd.HexL(xEnd - xStart + 1, 2) & Shrd.HexL(yEnd - yStart + 1, 2)
+        For y As Integer = yStart To yEnd
+            For x As Integer = xStart To xEnd
+                If EdControl.selection.selectPts(x, y) Then
+                    str &= Shrd.HexL(EdControl.lvl.Tiles(x, y), 2)
+                Else
+                    str &= "--"
+                End If
+            Next
+        Next
+        Return str
     End Function
 End Class

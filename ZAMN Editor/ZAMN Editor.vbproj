@@ -193,6 +193,7 @@
     <Compile Include="Tools\ItemTool.vb" />
     <Compile Include="Tools\ObjectTool.vb" />
     <Compile Include="Tools\PaintbrushTool.vb" />
+    <Compile Include="Tools\PasteTilesTool.vb" />
     <Compile Include="Tools\PencilSelectTool.vb" />
     <Compile Include="Tools\RectangleSelectTool.vb" />
     <Compile Include="Tools\TileSelectTool.vb" />

@@ -94,6 +94,10 @@
         If ed.EdControl Is Nothing Then Return
         ed.EdControl.SetStatusText(Status)
     End Sub
+
+    Public Sub SetCursor(ByVal cur As Cursor)
+        ed.EdControl.canvas.Cursor = cur
+    End Sub
 End Class
 
 Public Enum SideContentType
