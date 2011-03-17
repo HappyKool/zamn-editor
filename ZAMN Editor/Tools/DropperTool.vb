@@ -20,6 +20,7 @@
         If (nx <> pX Or ny <> pY) And e.Button = MouseButtons.Left And _
         nx < ed.EdControl.lvl.Width And ny < ed.EdControl.lvl.Height And nx >= 0 And ny >= 0 Then
             TilePicker.SelectedIndex = ed.EdControl.lvl.Tiles(nx, ny)
+            TilePicker.SelectedTile = TilePicker.SelectedIndex
             TilePicker.ScollToSelected()
             pX = nx
             pY = ny

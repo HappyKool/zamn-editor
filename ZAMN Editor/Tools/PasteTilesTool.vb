@@ -87,9 +87,9 @@
             MoveGP(gp, xPos - px, yPos - py)
             Repaint()
         Else
-            Dim x As Integer = Math.Floor((e.X - xPos) / 64)
-            Dim y As Integer = Math.Floor((e.Y - yPos) / 64)
-            If pasting And x > -1 And x < width And y > -1 And y < height AndAlso NewTiles(x, y) > -1 Then
+            Dim x As Integer = (e.X - xPos) \ 64
+            Dim y As Integer = (e.Y - yPos) \ 64
+            If pasting And e.X >= xPos And x < width And e.Y >= yPos And y < height AndAlso NewTiles(x, y) > -1 Then
                 SetCursor(Cursors.SizeAll)
             Else
                 SetCursor(Cursors.Arrow)
@@ -100,11 +100,12 @@
     Public Overrides Sub MouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
         Dim x As Integer = (e.X - xPos) \ 64
         Dim y As Integer = (e.Y - yPos) \ 64
-        If pasting And x > -1 And x < width And y > -1 And y < height AndAlso NewTiles(x, y) > -1 Then
+        If pasting And e.X >= xPos And x < width And e.Y >= yPos And y < height AndAlso NewTiles(x, y) > -1 Then
             moving = True
             DragXOff = e.X - xPos
             DragYOff = e.Y - yPos
             moveTmr.Stop()
+            Debug.WriteLine(x.ToString & " " & y.ToString & " " & NewTiles(x, y).ToString)
             Return
         End If
         If moveTmr.Enabled Then

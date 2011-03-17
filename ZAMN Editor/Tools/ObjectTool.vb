@@ -327,8 +327,6 @@
                 If r.Right > MaxX Then MaxX = r.Right
                 If r.Bottom > MaxY Then MaxY = r.Bottom
             Next
-            'Dim dx As Integer = ed.EdControl.HScrl.Value * ed.zoomLevel - MinX
-            'Dim dy As Integer = ed.EdControl.VScrl.Value * ed.zoomLevel - MinY
             Dim dx As Integer = (ed.EdControl.canvas.Width / ed.EdControl.zoom - (MaxX - MinX)) \ 2 + ed.EdControl.HScrl.Value * ed.EdControl.zoom - MinX
             Dim dy As Integer = (ed.EdControl.canvas.Height / ed.EdControl.zoom - (MaxY - MinY)) \ 2 + ed.EdControl.VScrl.Value * ed.EdControl.zoom - MinY
             For Each o As T In selectedObjs
