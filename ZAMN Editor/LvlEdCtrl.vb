@@ -20,6 +20,8 @@
     Public selectionGP As Drawing2D.GraphicsPath
     Public eraserRect As Rectangle
     Public forceMove As Boolean = False
+    Public scrollEnd As Integer
+    Public scrollVert As Boolean
 
     Public Sub New()
         InitializeComponent()
@@ -179,9 +181,13 @@
 
     Private Sub LvlEdCtrl_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseWheel
         If VScrl.Enabled Then
-            VScrl.Value = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange + 1, VScrl.Value - 64 * Math.Sign(e.Delta)))
+            scrollEnd = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange + 1, VScrl.Value - 64 * Math.Sign(e.Delta)))
+            scrollVert = True
+            SmoothScroll.Start()
         ElseIf HScrl.Enabled Then
-            HScrl.Value = Math.Max(0, Math.Min(HScrl.Maximum - HScrl.LargeChange + 1, HScrl.Value - 64 * Math.Sign(e.Delta)))
+            scrollEnd = Math.Max(0, Math.Min(HScrl.Maximum - HScrl.LargeChange + 1, HScrl.Value - 64 * Math.Sign(e.Delta)))
+            scrollVert = False
+            SmoothScroll.Start()
         End If
         DoMouseMove()
     End Sub
@@ -255,6 +261,24 @@
         If pt.Y < 0 Then
             VScrl.Value = Math.Max(0, VScrl.Value + pt.Y \ 2)
             DoMouseMove()
+        End If
+    End Sub
+
+    Private Sub SmoothScroll_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles SmoothScroll.Tick
+        If scrollVert Then
+            If scrollEnd > VScrl.Value Then
+                VScrl.Value = Math.Min(scrollEnd, VScrl.Value + 8)
+            Else
+                VScrl.Value = Math.Max(scrollEnd, VScrl.Value - 8)
+            End If
+            If VScrl.Value = scrollEnd Then SmoothScroll.Stop()
+        Else
+            If scrollEnd > HScrl.Value Then
+                HScrl.Value = Math.Min(scrollEnd, HScrl.Value + 8)
+            Else
+                HScrl.Value = Math.Max(scrollEnd, HScrl.Value - 8)
+            End If
+            If HScrl.Value = scrollEnd Then SmoothScroll.Stop()
         End If
     End Sub
 End Class

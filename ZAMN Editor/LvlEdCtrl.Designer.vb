@@ -22,15 +22,16 @@ Partial Class LvlEdCtrl
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
-        Me.VScrl = New System.Windows.Forms.VScrollBar
-        Me.HScrl = New System.Windows.Forms.HScrollBar
-        Me.canvas = New System.Windows.Forms.PictureBox
-        Me.SideContent = New System.Windows.Forms.Panel
+        Me.components = New System.ComponentModel.Container()
+        Me.VScrl = New System.Windows.Forms.VScrollBar()
+        Me.HScrl = New System.Windows.Forms.HScrollBar()
+        Me.canvas = New System.Windows.Forms.PictureBox()
+        Me.SideContent = New System.Windows.Forms.Panel()
         Me.BorderTimer = New System.Windows.Forms.Timer(Me.components)
         Me.DragTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip
-        Me.Status = New System.Windows.Forms.ToolStripStatusLabel
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.Status = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.SmoothScroll = New System.Windows.Forms.Timer(Me.components)
         CType(Me.canvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -100,8 +101,12 @@ Partial Class LvlEdCtrl
         'Status
         '
         Me.Status.Name = "Status"
-        Me.Status.Size = New System.Drawing.Size(91, 17)
+        Me.Status.Size = New System.Drawing.Size(100, 17)
         Me.Status.Text = "ZAMN Editor v1.0"
+        '
+        'SmoothScroll
+        '
+        Me.SmoothScroll.Interval = 1
         '
         'LvlEdCtrl
         '
@@ -130,5 +135,6 @@ Partial Class LvlEdCtrl
     Friend WithEvents DragTimer As System.Windows.Forms.Timer
     Friend WithEvents StatusStrip1 As System.Windows.Forms.StatusStrip
     Friend WithEvents Status As System.Windows.Forms.ToolStripStatusLabel
+    Friend WithEvents SmoothScroll As System.Windows.Forms.Timer
 
 End Class

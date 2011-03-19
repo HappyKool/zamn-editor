@@ -31,7 +31,7 @@ Public Class Word
         Me.x = s.ReadByte
         Me.y = s.ReadByte
         Me.font = s.ReadByte
-        Me.font = 6
+        'Me.font = 6
         s.ReadByte() 'skip page number
         Do
             Dim num As Integer = s.ReadByte
