@@ -61,7 +61,7 @@
     Private Sub FileOpenLevel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FileOpenLevel.Click, OpenLevelTool.Click
         If OpenLevel.ShowDialog = DialogResult.OK Then
             EdControl = Nothing
-            LoadingLevel.Start(r, OpenLevel.levelNums, OpenLevel.LevelNames)
+            LoadingLevel.Start(r, OpenLevel.levelNums, OpenLevel.levelNames)
             For Each l As Level In LoadingLevel.lvls
                 EdControl = New LvlEdCtrl
                 updateTab = False

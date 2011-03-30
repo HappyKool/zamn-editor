@@ -6,6 +6,7 @@ Public Class ROM
     Public regLvlCount As Integer
     Public maxLvlNum As Integer
     Public bonusLvls As New List(Of Integer)
+    Public names As New Dictionary(Of Integer, String)
     Public failed As Boolean = False
 
     Public hacked As Boolean = False
@@ -15,60 +16,85 @@ Public Class ROM
     Public Const bonusLvlNums As Integer = &H1537E
 
     Public Sub New(ByVal path As String)
-        Try
-            Me.path = path
-            Dim s As New FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read)
-            s.Seek(lvlPtrs, SeekOrigin.Begin)
-            regLvlCount = s.ReadByte() + s.ReadByte() * &H100 - 1
-            maxLvlNum = regLvlCount
-            s.Seek(bonusLvlNums, SeekOrigin.Begin)
-            Dim num As Integer
-            Dim curLvl As Integer = 0
-            For l As Integer = 0 To maxLvlNum
-                num = s.ReadByte() + s.ReadByte() * &H100
-                If num <> 0 Then
-                    bonusLvls.Add(num)
-                    maxLvlNum = Math.Max(maxLvlNum, num)
-                End If
-                curLvl += 1
-            Next
+        'Try
+        Me.path = path
+        Dim s As New FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read)
+        s.Seek(lvlPtrs, SeekOrigin.Begin)
+        regLvlCount = s.ReadByte() + s.ReadByte() * &H100 - 1
+        maxLvlNum = regLvlCount
+        s.Seek(bonusLvlNums, SeekOrigin.Begin)
+        Dim num As Integer
+        Dim curLvl As Integer = 0
+        For l As Integer = 0 To maxLvlNum
+            num = s.ReadByte() + s.ReadByte() * &H100
+            If num <> 0 Then
+                bonusLvls.Add(num)
+                maxLvlNum = Math.Max(maxLvlNum, num)
+            End If
+            curLvl += 1
+        Next
+        'Get level names
+        Dim ptrs As DList(Of Integer, Integer) = GetAllLvlPtrs(s)
+        For l As Integer = 0 To ptrs.L1.Count - 1
+            s.Seek(ptrs.L2(l) + &H36, SeekOrigin.Begin)
+            Shrd.GoToRelativePointer(s, &H9F)
+            Dim TP1 As New TitlePage(s)
+            s.Seek(ptrs.L2(l) + &H38, SeekOrigin.Begin)
+            Shrd.GoToRelativePointer(s, &H9F)
+            Dim TP2 As New TitlePage(s)
+            Dim name As String = TP1.ToString & " " & TP2.ToString
+            name = name.Replace("LEVEI", "LEVEL")
+            If name.Contains("CREDIT") Then
+                name = Mid(name, InStrRev(name, "CREDIT"))
+                name = Shrd.ReplaceFirst(name, "LEVEL", "LEVEL:")
+            ElseIf name.Contains("BONUS") Then
+                name = Mid(name, InStrRev(name, "BONUS"))
+                name = Shrd.ReplaceFirst(name, "LEVEL", "LEVEL:")
+            ElseIf name.Contains("LEVEL") Then
+                name = Mid(name, InStrRev(name, "LEVEL"))
+                Dim p As Integer = InStr(InStr(name, " ") + 1, name, " ") - 1
+                name = Mid(name, 1, p) & ":" & Mid(name, p + 1)
+            End If
+            name = Shrd.PropperCase(name.Replace("  ", " "))
+            names.Add(ptrs.L1(l), name)
+        Next
 
-            'Testing 4 byte level pointers
+        'Testing 4 byte level pointers
 
-            's.Seek(0, SeekOrigin.Begin)
-            'If s.ReadByte <> 159 Then
-            '    s.Seek(lvlPtrs + 2, SeekOrigin.Begin)
-            '    Dim lenDiff As Integer = (maxLvlNum + 1) * 2
-            '    Shrd.InsertBytes(s, lenDiff)
-            '    Dim ptrs As DList(Of Integer, Integer) = GetAllLvlPtrs(s)
-            '    s.Seek(lvlPtrs + 2, SeekOrigin.Begin)
-            '    For l As Integer = 0 To maxLvlNum
-            '        If ptrs.L1.IndexOf(l) > -1 Then
-            '            s.Write(Shrd.ConvertAddr(ptrs.FromSecond(l) + lenDiff), 0, 4)
-            '            ptrs.L2(ptrs.L1.IndexOf(l)) += lenDiff
-            '        Else
-            '            s.Seek(4, SeekOrigin.Current)
-            '        End If
-            '    Next
-            '    For l As Integer = 0 To ptrs.L1.Count - 1
-            '        For m As Integer = 0 To offsetPos.Length - 1
-            '            s.Seek(ptrs.L2(l) + offsetPos(m), SeekOrigin.Begin)
-            '            Dim ptr As Integer = s.ReadByte + s.ReadByte * &H100 + lenDiff
-            '            s.Seek(-2, SeekOrigin.Current)
-            '            s.WriteByte(ptr Mod &H100)
-            '            s.WriteByte(ptr \ &H100)
-            '        Next
-            '    Next
-            '    s.Seek(0, SeekOrigin.Begin)
-            '    s.WriteByte(159)
-            'End If
-            'hacked = True
+        's.Seek(0, SeekOrigin.Begin)
+        'If s.ReadByte <> 159 Then
+        '    s.Seek(lvlPtrs + 2, SeekOrigin.Begin)
+        '    Dim lenDiff As Integer = (maxLvlNum + 1) * 2
+        '    Shrd.InsertBytes(s, lenDiff)
+        '    'Dim ptrs As DList(Of Integer, Integer) = GetAllLvlPtrs(s)
+        '    s.Seek(lvlPtrs + 2, SeekOrigin.Begin)
+        '    For l As Integer = 0 To maxLvlNum
+        '        If ptrs.L1.IndexOf(l) > -1 Then
+        '            s.Write(Shrd.ConvertAddr(ptrs.FromSecond(l) + lenDiff), 0, 4)
+        '            ptrs.L2(ptrs.L1.IndexOf(l)) += lenDiff
+        '        Else
+        '            s.Seek(4, SeekOrigin.Current)
+        '        End If
+        '    Next
+        '    For l As Integer = 0 To ptrs.L1.Count - 1
+        '        For m As Integer = 0 To offsetPos.Length - 1
+        '            s.Seek(ptrs.L2(l) + offsetPos(m), SeekOrigin.Begin)
+        '            Dim ptr As Integer = s.ReadByte + s.ReadByte * &H100 + lenDiff
+        '            s.Seek(-2, SeekOrigin.Current)
+        '            s.WriteByte(ptr Mod &H100)
+        '            s.WriteByte(ptr \ &H100)
+        '        Next
+        '    Next
+        '    s.Seek(0, SeekOrigin.Begin)
+        '    s.WriteByte(159)
+        'End If
+        'hacked = True
 
-            s.Close()
-        Catch ex As Exception
-            failed = True
-            MsgBox("Error: " & ex.Message, MsgBoxStyle.Critical)
-        End Try
+        s.Close()
+        'Catch ex As Exception
+        '    failed = True
+        '    MsgBox("Error: " & ex.Message, MsgBoxStyle.Critical)
+        'End Try
     End Sub
 
     Public Function GetLvlPtr(ByVal num As Integer, ByVal s As Stream) As Integer

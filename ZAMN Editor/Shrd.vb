@@ -3,6 +3,8 @@ Imports System.Drawing.Imaging
 
 Public Class Shrd
 
+    Private Shared nameLCase As String() = {"The", "A", "An", "And", "But", "As", "At", "By", "For", "From", "In", "Into", "Of", "Off", "On", "Onto", "Over", "Past", "To", "Upon", "With", "Vs"}
+
     Public Shared Function ReadFileAddr(ByVal s As IO.Stream) As Integer
         Dim part2 As Integer = s.ReadByte() + s.ReadByte() * &H100
         Dim Banknum As Integer = s.ReadByte()
@@ -200,5 +202,36 @@ Public Class Shrd
             data(l) = CByte("&H" & Mid(str, l * 2 + 1, 2))
         Next
         Return data
+    End Function
+
+    Public Shared Function PropperCase(ByVal str As String) As String
+        Dim pos As Integer = 1
+        Dim len As Integer
+        Dim rstr As String = UCase(str(0)) & LCase(Mid(str, 2))
+        Do While InStr(pos, rstr, " ") > 0
+            pos = InStr(pos, rstr, " ")
+            rstr = Mid(rstr, 1, pos) & UCase(rstr(pos)) & Mid(rstr, pos + 2)
+            pos += 1
+        Loop
+        For l As Integer = 0 To nameLCase.Length - 1
+            len = nameLCase(l).Length
+            pos = 1
+            Do While InStr(pos, rstr, nameLCase(l))
+                pos = InStr(pos, rstr, nameLCase(l))
+                If (pos >= 3 AndAlso rstr(pos - 3) <> ":") And (pos = rstr.Length - len + 1 OrElse rstr(pos + len - 1) = " ") Then
+                    rstr = Mid(rstr, 1, pos - 1) & LCase(nameLCase(l)) & Mid(rstr, pos + len)
+                End If
+                pos += 1
+            Loop
+        Next
+        Return rstr
+    End Function
+
+    Public Shared Function ReplaceFirst(ByVal str As String, ByVal findStr As String, ByVal replaceStr As String) As String
+        Dim pos As Integer = InStr(str, findStr)
+        If pos > 0 Then
+            Return Mid(str, 1, pos - 1) & replaceStr & Mid(str, pos + findStr.Length)
+        End If
+        Return str
     End Function
 End Class
