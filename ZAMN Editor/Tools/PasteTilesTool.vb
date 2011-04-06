@@ -28,6 +28,7 @@
     Public Event DonePasting(ByVal sender As Object, ByVal e As EventArgs)
 
     Public Overrides Function Paste() As Boolean
+        pasting = False
         Dim txt As String = Clipboard.GetText
         If txt.StartsWith("A") Then
             ed.SelectAll(False)
@@ -148,14 +149,10 @@
 
     Private Sub PasteTilesTool_DonePasting(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.DonePasting
         pasting = False
-        For y As Integer = 0 To height - 1
-            For x As Integer = 0 To width - 1
-                If NewTiles(x, y) > -1 Then
-                    ed.EdControl.lvl.Tiles(x + xPosT, y + yPosT) = NewTiles(x, y)
-                End If
-            Next
-        Next
-        SetCursor(Cursors.Arrow)
+        If pasting Then
+            ed.EdControl.UndoMgr.Do(New PasteTilesAction(xPosT, yPosT, NewTiles))
+            SetCursor(Cursors.Arrow)
+        End If
     End Sub
 
     Private Sub moveTmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles moveTmr.Tick

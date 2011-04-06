@@ -234,4 +234,13 @@ Public Class Shrd
         End If
         Return str
     End Function
+
+    Public Shared Function InStrN(ByVal str As String, ByVal find As String, ByVal n As Integer) As Integer
+        Dim p As Integer = 1
+        Do While InStr(p, str, find) > 0 And n > 0
+            p = InStr(p, str, find) + 1
+            n -= 1
+        Loop
+        Return p - 1
+    End Function
 End Class

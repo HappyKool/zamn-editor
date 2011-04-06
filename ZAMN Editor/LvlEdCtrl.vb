@@ -68,14 +68,7 @@
     End Sub
 
     Public Sub FillSelection()
-        For m As Integer = 0 To lvl.Height - 1
-            For l As Integer = 0 To lvl.Width - 1
-                If selection.selectPts(l, m) Then
-                    lvl.Tiles(l, m) = TilePicker.SelectedTile
-                End If
-            Next
-        Next
-        Repaint()
+        UndoMgr.Do(New FillSelectionAction(TilePicker.SelectedTile))
     End Sub
 
     Public Sub UpdateScrollBars()

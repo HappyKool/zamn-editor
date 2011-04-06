@@ -126,12 +126,3 @@ Public Class ItemClickedEventArgs
         _Text = Text
     End Sub
 End Class
-
-Public Class StringList
-
-    Public Items As List(Of String)
-
-    Public Sub New(ByVal Items As List(Of String))
-        Me.Items = Items
-    End Sub
-End Class

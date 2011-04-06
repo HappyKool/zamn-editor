@@ -9,6 +9,7 @@
     Public WithEvents MonsterPicker As MonsterBrowser
     Public WithEvents BMonsterPicker As BMonsterBrowser
     Public Status As String
+    Public active As Boolean = False
 
     Public Sub New(ByVal ed As Editor)
         Me.ed = ed
@@ -69,22 +70,22 @@
     End Function
 
     Private Sub TilePicker_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TilePicker.ValueChanged
-        TileChanged()
+        If active Then TileChanged()
     End Sub
     Private Sub ItemPicker_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ItemPicker.ValueChanged
-        ItemChanged()
+        If active Then ItemChanged()
     End Sub
     Private Sub VictimPicker_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles VictimPicker.ValueChanged
-        VictimChanged()
+        If active Then VictimChanged()
     End Sub
     Private Sub NRMPicker_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles NRMPicker.ValueChanged
-        NRMChanged()
+        If active Then NRMChanged()
     End Sub
     Private Sub MonsterPicker_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MonsterPicker.ValueChanged
-        MonsterChanged()
+        If active Then MonsterChanged()
     End Sub
     Private Sub BMonsterPicker_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles BMonsterPicker.ValueChanged
-        BMonsterChanged()
+        If active Then BMonsterChanged()
     End Sub
 
     Public Sub Repaint()

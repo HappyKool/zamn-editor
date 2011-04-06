@@ -27,6 +27,7 @@
             End If
             selection.StartRect(nx, ny, (Control.ModifierKeys And Keys.Alt) <> Keys.None)
             ed.EdControl.UpdateSelection()
+            ed.EdControl.UndoMgr.merge = False
         End If
     End Sub
 
@@ -41,6 +42,7 @@
             TilePicker.SelectedIndex = -1
             TilePicker.Invalidate()
             ed.EdControl.UpdateSelection()
+            ed.EdControl.UndoMgr.merge = False
             If selection.erasing Then
                 ed.CheckCopy()
             Else
@@ -56,6 +58,7 @@
         pY = -1
         selection.ApplySelection()
         ed.EdControl.UpdateSelection()
+        ed.EdControl.UndoMgr.merge = False
         ResetStatus()
     End Sub
 

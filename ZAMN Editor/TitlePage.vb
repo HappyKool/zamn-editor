@@ -37,7 +37,7 @@ Public Class Word
 
     Public Shared Strs As String() = {"", "", "", "", "", "", "", "", "", "", "", "", "", "F", "", "", _
                                       "J", "", "", "H", "", "", "N", "", "", "L", "", "", "P", "", "", "", _
-                                      " ", "NT", "TH", "TE", "STE", "IT", "ET", "STI", "RTI", "TO", "NTS", "TY", "CTO", "T", "TA", "PTS", _
+                                      " ", "NT", "TH", "TE", "STE", "IT", "ET", "ST", "RT", "TO", "NTS", "TY", "CTO", "T", "TA", "PTS", _
                                       "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "O", "Q", "", "", "", "", _
                                       "", "A", "B", "C", "D", "E", "F", "G", "H", "A", "J", "K", "L", "M", "N", "O", _
                                       "P", "R", "R", "S", "P", "U", "EI", "LI", "X", "Y", "Z", "E", "S", "M", "", "", _
@@ -63,7 +63,11 @@ Public Class Word
     Public Overrides Function ToString() As String
         Dim str As String = ""
         For l As Integer = 0 To chars.Count - 1
-            str &= Strs(chars(l))
+            If l > 0 AndAlso (chars(l) = &H2E And chars(l - 1) <> &H7B) Then
+                str &= "ITA"
+            Else
+                str &= Strs(chars(l))
+            End If
         Next
         Return str
     End Function

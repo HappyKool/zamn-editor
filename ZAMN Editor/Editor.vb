@@ -65,7 +65,7 @@
             For Each l As Level In LoadingLevel.lvls
                 EdControl = New LvlEdCtrl
                 updateTab = False
-                Dim tp As TabPage = Tabs.AddXPage(l.name)
+                Dim tp As TabPage = Tabs.AddXPage(If(l.name.StartsWith("Level"), Mid(l.name, 1, Shrd.InStrN(l.name, " ", 2) - 2), l.name))
                 tp.Controls.Add(EdControl)
                 EdControl.Dock = DockStyle.Fill
                 EdControl.LoadLevel(l)
@@ -268,6 +268,10 @@
                 t.BMonsterPicker = EdControl.BMonsterPicker
                 EdControl.SetSidePanel(EdControl.BMonsterPicker)
         End Select
+        If CurTool IsNot Nothing Then
+            CurTool.active = False
+        End If
+        t.active = True
         CurTool = t
         EdControl.t = t
         EdControl.SetStatusText(t.Status)

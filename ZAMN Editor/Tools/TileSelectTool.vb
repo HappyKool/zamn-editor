@@ -36,6 +36,7 @@
             TilePicker.SelectedIndex = -1
             TilePicker.Invalidate()
             ed.EdControl.UpdateSelection()
+            ed.EdControl.UndoMgr.merge = False
             ed.SetCopy(True)
         End If
     End Sub

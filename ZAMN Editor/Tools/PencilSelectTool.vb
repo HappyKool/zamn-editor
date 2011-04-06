@@ -30,6 +30,7 @@
             TilePicker.SelectedIndex = -1
             TilePicker.Invalidate()
             ed.EdControl.UpdateSelection()
+            ed.EdControl.UndoMgr.merge = False
             If erasing Then
                 ed.CheckCopy()
             Else

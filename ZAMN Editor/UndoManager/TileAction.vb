@@ -85,3 +85,102 @@ Public Class TileSuggestAction
         Return "Change tile"
     End Function
 End Class
+
+Public Class FillSelectionAction
+    Inherits Action
+
+    Public selected As Boolean(,)
+    Public oldTileTypes As Integer(,)
+    Public newTileType As Integer
+
+    Public Sub New(ByVal newTileType As Integer)
+        Me.newTileType = newTileType
+    End Sub
+
+    Public Overrides Sub AfterSetEdControl()
+        selected = EdControl.selection.selectPts.Clone()
+        oldTileTypes = EdControl.lvl.Tiles.Clone()
+    End Sub
+
+    Public Overrides Sub Undo()
+        For y As Integer = 0 To EdControl.lvl.Height - 1
+            For x As Integer = 0 To EdControl.lvl.Width - 1
+                If selected(x, y) Then
+                    EdControl.lvl.Tiles(x, y) = oldTileTypes(x, y)
+                End If
+            Next
+        Next
+    End Sub
+
+    Public Overrides Sub Redo()
+        For y As Integer = 0 To EdControl.lvl.Height - 1
+            For x As Integer = 0 To EdControl.lvl.Width - 1
+                If selected(x, y) Then
+                    EdControl.lvl.Tiles(x, y) = newTileType
+                End If
+            Next
+        Next
+    End Sub
+
+    Public Overrides ReadOnly Property CanMerge As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
+    Public Overrides Sub Merge(ByVal act As Action)
+        Me.newTileType = DirectCast(act, FillSelectionAction).newTileType
+    End Sub
+
+    Public Overrides Function ToString() As String
+        Return "Fill Selection"
+    End Function
+End Class
+
+Public Class PasteTilesAction
+    Inherits Action
+
+    Public newTiles As Integer(,)
+    Public oldTiles As Integer(,)
+    Public x As Integer
+    Public y As Integer
+    Public width As Integer
+    Public height As Integer
+
+    Public Sub New(ByVal x As Integer, ByVal y As Integer, ByVal newTiles As Integer(,))
+        Me.x = x
+        Me.y = y
+        Me.newTiles = newTiles
+        Me.width = newTiles.GetLength(0) - 1
+        Me.height = newTiles.GetLength(1) - 1
+        ReDim oldTiles(width, height)
+    End Sub
+
+    Public Overrides Sub AfterSetEdControl()
+        For yp As Integer = 0 To height
+            For xp As Integer = 0 To width
+                oldTiles(xp, yp) = level.Tiles(xp + x, yp + y)
+            Next
+        Next
+    End Sub
+
+    Public Overrides Sub Redo()
+        For yp As Integer = 0 To height
+            For xp As Integer = 0 To width
+                If newTiles(xp, yp) > -1 Then
+                    level.Tiles(xp + x, yp + y) = newTiles(xp, yp)
+                End If
+            Next
+        Next
+    End Sub
+
+    Public Overrides Sub Undo()
+        For yp As Integer = 0 To height
+            For xp As Integer = 0 To width
+                If newTiles(xp, yp) > -1 Then
+                    level.Tiles(xp + x, yp + y) = oldTiles(xp, yp)
+                End If
+            Next
+        Next
+    End Sub
+End Class
