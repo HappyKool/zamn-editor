@@ -21,7 +21,7 @@
         EditingTools = New Tool() {New PaintbrushTool(Me), New DropperTool(Me), New TileSuggestTool(Me), New RectangleSelectTool(Me), New PencilSelectTool(Me), _
                                    New TileSelectTool(Me), New ItemTool(Me), New VictimTool(Me), New NRMonsterTool(Me), New MonsterTool(Me), New BossMonsterTool(Me)}
         LevelItems = New ToolStripItem() {FileSave, SaveTool, EditPaste, PasteTool, EditSelectAll, EditSelectNone, ViewGrid, ViewPriority, _
-                                          LevelExport, LevelImport, LevelCopy, LevelPaste, LevelSettingsM}
+                                          LevelExport, LevelImport, LevelCopy, LevelPaste, LevelEditTitle, LevelSettingsM}
         TilePaste = New PasteTilesTool(Me)
         TileSuggestList.LoadAll()
         If My.Settings.RecentROMs <> "" Then
@@ -122,6 +122,7 @@
     End Sub
 
     Private Sub EditPaste_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditPaste.Click, PasteTool.Click
+        If CurTool Is Nothing Then Return
         If CurTool.Paste() Then
             PTool = CurTool
             SetTool(TilePaste)
@@ -203,6 +204,10 @@
         fs.Seek(14, IO.SeekOrigin.Begin)
         EdControl.lvl = New Level(fs, EdControl.lvl.name, EdControl.lvl.num, True, New IO.FileStream(r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read))
         UpdateEdControl()
+    End Sub
+
+    Private Sub LevelEditTitle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LevelEditTitle.Click
+        TitlePageEditor.ShowDialog(Me)
     End Sub
 
     Private Sub LevelSettingsM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LevelSettingsM.Click

@@ -243,4 +243,26 @@ Public Class Shrd
         Loop
         Return p - 1
     End Function
+
+    Public Shared Function ArrayToString(ByVal a As Array) As String
+        Dim result As String = "{"
+        For l As Integer = 0 To a.Length - 1
+            result &= a.GetValue(l).ToString & ","
+        Next
+        Return Mid(result, 1, result.Length - 1) & "}"
+    End Function
+
+    Public Shared Function GetBytes(ByVal value As Integer) As Byte()
+        Dim result As Byte() = BitConverter.GetBytes(value)
+        If result(3) = 0 Then
+            ReDim Preserve result(2)
+        End If
+        If result(2) = 0 Then
+            ReDim Preserve result(1)
+        End If
+        If result(1) = 0 Then
+            ReDim Preserve result(0)
+        End If
+        Return result
+    End Function
 End Class

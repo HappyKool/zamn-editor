@@ -16,6 +16,7 @@
     Public FinalY As Integer
     Public deltaX As Decimal
     Public deltaY As Decimal
+    Public ending As Boolean = False
     Public selection As Selection
     Public gp As Drawing2D.GraphicsPath
     Public WithEvents moveTmr As New Timer
@@ -106,7 +107,6 @@
             DragXOff = e.X - xPos
             DragYOff = e.Y - yPos
             moveTmr.Stop()
-            Debug.WriteLine(x.ToString & " " & y.ToString & " " & NewTiles(x, y).ToString)
             Return
         End If
         If moveTmr.Enabled Then
@@ -135,11 +135,11 @@
         DragXOff = FinalX - xPos
         DragYOff = FinalY - yPos
         If Math.Abs(DragXOff) < Math.Abs(DragYOff) Then
-            deltaX = Math.Sign(DragXOff) * Math.Abs(DragXOff / DragYOff)
-            deltaY = Math.Sign(DragYOff)
+            deltaX = Math.Sign(DragXOff) * Math.Abs(DragXOff / DragYOff) * 2
+            deltaY = Math.Sign(DragYOff) * 2
         ElseIf DragXOff <> 0 Or DragYOff <> 0 Then
-            deltaY = Math.Sign(DragYOff) * Math.Abs(DragYOff / DragXOff)
-            deltaX = Math.Sign(DragXOff)
+            deltaY = Math.Sign(DragYOff) * Math.Abs(DragYOff / DragXOff) * 2
+            deltaX = Math.Sign(DragXOff) * 2
         End If
         DragXOff = xPos
         DragYOff = yPos
@@ -148,11 +148,11 @@
     End Sub
 
     Private Sub PasteTilesTool_DonePasting(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.DonePasting
-        pasting = False
         If pasting Then
             ed.EdControl.UndoMgr.Do(New PasteTilesAction(xPosT, yPosT, NewTiles))
             SetCursor(Cursors.Arrow)
         End If
+        pasting = False
     End Sub
 
     Private Sub moveTmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles moveTmr.Tick
@@ -165,6 +165,16 @@
             xPosT += 1
             xPos = DragXOff + deltaX * xPosT
             yPos = DragYOff + deltaY * xPosT
+            If deltaX > 0 Then
+                xPos = Math.Min(xPos, FinalX)
+            Else
+                xPos = Math.Max(xPos, FinalX)
+            End If
+            If deltaY > 0 Then
+                yPos = Math.Min(yPos, FinalY)
+            Else
+                yPos = Math.Max(yPos, FinalY)
+            End If
             MoveGP(gp, xPos - px, yPos - py)
         End If
         Repaint()

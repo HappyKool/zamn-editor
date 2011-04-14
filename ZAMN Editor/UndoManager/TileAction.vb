@@ -183,4 +183,8 @@ Public Class PasteTilesAction
             Next
         Next
     End Sub
+
+    Public Overrides Function ToString() As String
+        Return "Paste Tiles"
+    End Function
 End Class

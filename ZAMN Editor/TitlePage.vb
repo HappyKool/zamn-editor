@@ -16,6 +16,9 @@
                 lst.Add(c)
             Next
             lst.Add(&HFF)
+            If w Is words.Last Then
+                lst(lst.Count - 1) = 0
+            End If
         Next
     End Sub
 
@@ -29,6 +32,7 @@
 End Class
 
 Public Class Word
+
     Public x As Integer
     Public y As Integer
     Public font As Integer
@@ -58,6 +62,10 @@ Public Class Word
             End If
             chars.Add(num)
         Loop
+    End Sub
+
+    Public Sub New()
+
     End Sub
 
     Public Overrides Function ToString() As String

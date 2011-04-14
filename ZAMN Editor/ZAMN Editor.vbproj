@@ -163,6 +163,18 @@
     <Compile Include="BMonsterBrowser.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="TitlePageEdCtrl.Designer.vb">
+      <DependentUpon>TitlePageEdCtrl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TitlePageEdCtrl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TitlePageEditor.Designer.vb">
+      <DependentUpon>TitlePageEditor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TitlePageEditor.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Tools\BossMonsterTool.vb" />
     <Compile Include="Tools\MonsterTool.vb" />
     <Compile Include="Tools\NRMonsterTool.vb" />
@@ -257,6 +269,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TilesetBrowser.resx">
       <DependentUpon>TilesetBrowser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TitlePageEdCtrl.resx">
+      <DependentUpon>TitlePageEdCtrl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TitlePageEditor.resx">
+      <DependentUpon>TitlePageEditor.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VictimBrowser.resx">
       <DependentUpon>VictimBrowser.vb</DependentUpon>

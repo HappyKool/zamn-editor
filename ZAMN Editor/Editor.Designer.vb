@@ -57,6 +57,7 @@ Partial Class Editor
         Me.LevelCopy = New System.Windows.Forms.ToolStripMenuItem()
         Me.LevelPaste = New System.Windows.Forms.ToolStripMenuItem()
         Me.toolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
+        Me.LevelEditTitle = New System.Windows.Forms.ToolStripMenuItem()
         Me.LevelSettingsM = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
@@ -177,7 +178,7 @@ Partial Class Editor
         Me.FileOpenLevel.Name = "FileOpenLevel"
         Me.FileOpenLevel.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.L), System.Windows.Forms.Keys)
         Me.FileOpenLevel.Size = New System.Drawing.Size(173, 22)
-        Me.FileOpenLevel.Text = "Open Level"
+        Me.FileOpenLevel.Text = "Open &Level"
         '
         'toolStripSeparator2
         '
@@ -218,7 +219,7 @@ Partial Class Editor
         Me.EditUndo.Image = Global.ZAMNEditor.My.Resources.Resources.Undo
         Me.EditUndo.Name = "EditUndo"
         Me.EditUndo.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Z), System.Windows.Forms.Keys)
-        Me.EditUndo.Size = New System.Drawing.Size(164, 22)
+        Me.EditUndo.Size = New System.Drawing.Size(211, 22)
         Me.EditUndo.Text = "&Undo"
         '
         'EditRedo
@@ -227,13 +228,13 @@ Partial Class Editor
         Me.EditRedo.Image = Global.ZAMNEditor.My.Resources.Resources.Redo
         Me.EditRedo.Name = "EditRedo"
         Me.EditRedo.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Y), System.Windows.Forms.Keys)
-        Me.EditRedo.Size = New System.Drawing.Size(164, 22)
+        Me.EditRedo.Size = New System.Drawing.Size(211, 22)
         Me.EditRedo.Text = "&Redo"
         '
         'toolStripSeparator5
         '
         Me.toolStripSeparator5.Name = "toolStripSeparator5"
-        Me.toolStripSeparator5.Size = New System.Drawing.Size(161, 6)
+        Me.toolStripSeparator5.Size = New System.Drawing.Size(208, 6)
         '
         'EditCut
         '
@@ -242,7 +243,7 @@ Partial Class Editor
         Me.EditCut.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.EditCut.Name = "EditCut"
         Me.EditCut.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.X), System.Windows.Forms.Keys)
-        Me.EditCut.Size = New System.Drawing.Size(164, 22)
+        Me.EditCut.Size = New System.Drawing.Size(211, 22)
         Me.EditCut.Text = "Cu&t"
         '
         'EditCopy
@@ -252,7 +253,7 @@ Partial Class Editor
         Me.EditCopy.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.EditCopy.Name = "EditCopy"
         Me.EditCopy.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.C), System.Windows.Forms.Keys)
-        Me.EditCopy.Size = New System.Drawing.Size(164, 22)
+        Me.EditCopy.Size = New System.Drawing.Size(211, 22)
         Me.EditCopy.Text = "&Copy"
         '
         'EditPaste
@@ -262,39 +263,41 @@ Partial Class Editor
         Me.EditPaste.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.EditPaste.Name = "EditPaste"
         Me.EditPaste.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.V), System.Windows.Forms.Keys)
-        Me.EditPaste.Size = New System.Drawing.Size(164, 22)
+        Me.EditPaste.Size = New System.Drawing.Size(211, 22)
         Me.EditPaste.Text = "&Paste"
         '
         'toolStripSeparator6
         '
         Me.toolStripSeparator6.Name = "toolStripSeparator6"
-        Me.toolStripSeparator6.Size = New System.Drawing.Size(161, 6)
+        Me.toolStripSeparator6.Size = New System.Drawing.Size(208, 6)
         '
         'EditSelectAll
         '
         Me.EditSelectAll.Enabled = False
         Me.EditSelectAll.Name = "EditSelectAll"
         Me.EditSelectAll.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.A), System.Windows.Forms.Keys)
-        Me.EditSelectAll.Size = New System.Drawing.Size(164, 22)
+        Me.EditSelectAll.Size = New System.Drawing.Size(211, 22)
         Me.EditSelectAll.Text = "Select &All"
         '
         'EditSelectNone
         '
         Me.EditSelectNone.Enabled = False
         Me.EditSelectNone.Name = "EditSelectNone"
-        Me.EditSelectNone.Size = New System.Drawing.Size(164, 22)
+        Me.EditSelectNone.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Shift) _
+                    Or System.Windows.Forms.Keys.A), System.Windows.Forms.Keys)
+        Me.EditSelectNone.Size = New System.Drawing.Size(211, 22)
         Me.EditSelectNone.Text = "Select &None"
         '
         'toolStripSeparator9
         '
         Me.toolStripSeparator9.Name = "toolStripSeparator9"
-        Me.toolStripSeparator9.Size = New System.Drawing.Size(161, 6)
+        Me.toolStripSeparator9.Size = New System.Drawing.Size(208, 6)
         '
         'EditPasswords
         '
         Me.EditPasswords.Enabled = False
         Me.EditPasswords.Name = "EditPasswords"
-        Me.EditPasswords.Size = New System.Drawing.Size(164, 22)
+        Me.EditPasswords.Size = New System.Drawing.Size(211, 22)
         Me.EditPasswords.Text = "Pass&words"
         '
         'ViewMenu
@@ -347,7 +350,7 @@ Partial Class Editor
         '
         'LevelMenu
         '
-        Me.LevelMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LevelExport, Me.LevelImport, Me.LevelCopy, Me.LevelPaste, Me.toolStripSeparator10, Me.LevelSettingsM})
+        Me.LevelMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LevelExport, Me.LevelImport, Me.LevelCopy, Me.LevelPaste, Me.toolStripSeparator10, Me.LevelEditTitle, Me.LevelSettingsM})
         Me.LevelMenu.Name = "LevelMenu"
         Me.LevelMenu.Size = New System.Drawing.Size(46, 20)
         Me.LevelMenu.Text = "&Level"
@@ -384,6 +387,13 @@ Partial Class Editor
         '
         Me.toolStripSeparator10.Name = "toolStripSeparator10"
         Me.toolStripSeparator10.Size = New System.Drawing.Size(153, 6)
+        '
+        'LevelEditTitle
+        '
+        Me.LevelEditTitle.Enabled = False
+        Me.LevelEditTitle.Name = "LevelEditTitle"
+        Me.LevelEditTitle.Size = New System.Drawing.Size(156, 22)
+        Me.LevelEditTitle.Text = "Edit &Title"
         '
         'LevelSettingsM
         '
@@ -740,7 +750,7 @@ Partial Class Editor
         Me.RecentROMs.MaxLength = 60
         Me.RecentROMs.Name = "RecentROMs"
         Me.RecentROMs.Size = New System.Drawing.Size(173, 22)
-        Me.RecentROMs.Text = "Recent ROMs"
+        Me.RecentROMs.Text = "&Recent ROMs"
         '
         'Editor
         '
@@ -841,5 +851,6 @@ Partial Class Editor
     Friend WithEvents LevelPaste As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UndoTool As System.Windows.Forms.ToolStripSplitButton
     Friend WithEvents RedoTool As System.Windows.Forms.ToolStripSplitButton
+    Friend WithEvents LevelEditTitle As System.Windows.Forms.ToolStripMenuItem
 
 End Class
