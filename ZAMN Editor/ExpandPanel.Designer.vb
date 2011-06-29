@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class BMonsterBrowser
+Partial Class ExpandPanel
     Inherits System.Windows.Forms.UserControl
 
     'UserControl overrides dispose to clean up the component list.
@@ -22,31 +22,26 @@ Partial Class BMonsterBrowser
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.VScrl = New System.Windows.Forms.VScrollBar()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.SuspendLayout()
         '
-        'VScrl
+        'Panel1
         '
-        Me.VScrl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.VScrl.LargeChange = 1
-        Me.VScrl.Location = New System.Drawing.Point(116, 0)
-        Me.VScrl.Maximum = 0
-        Me.VScrl.Name = "VScrl"
-        Me.VScrl.Size = New System.Drawing.Size(17, 329)
-        Me.VScrl.TabIndex = 4
+        Me.Panel1.Location = New System.Drawing.Point(0, 25)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(150, 125)
+        Me.Panel1.TabIndex = 0
         '
-        'BMonsterBrowser
+        'ExpandPanel
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.Controls.Add(Me.VScrl)
+        Me.Controls.Add(Me.Panel1)
         Me.DoubleBuffered = True
-        Me.Name = "BMonsterBrowser"
-        Me.Size = New System.Drawing.Size(133, 329)
+        Me.Name = "ExpandPanel"
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents VScrl As System.Windows.Forms.VScrollBar
+    Friend WithEvents Panel1 As Panel
 
 End Class

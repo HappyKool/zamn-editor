@@ -70,14 +70,14 @@
                                     "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "O", _
                                     "P", "R", "S", "U", "EI", "LI", "X", "Y", "Z", "RE", "RS", "HTM", _
                                     "I", "!", "FE", "FO", "LE", "W", _
-                                    "VE", "V", " ", "VEL", "RR"}
+                                    "VE", "V", " ", "VEL", "RR", "VEI"}
 
     Public ByteTable As Integer() = {&H21, &H22, &H23, &H24, &H25, &H26, &H27, &H7127, &H28, &H7228, &H29, &H772A, &H2B6A, &H2D, &H2E, &H2E7B, &H772F, _
                                      &H30, &H31, &H32, &H33, &H34, &H35, &H36, &H37, &H38, &H39, &H3A6A, &H3B, _
                                      &H41, &H42, &H43, &H44, &H45, &H46, &H47, &H48, &H4A, &H4B, &H4C, &H4D, &H4E, &H4F, _
                                      &H50, &H51, &H53, &H55, &H56, &H57, &H58, &H59, &H5A, &H5B6A, &H5C6A, &H5D7473, _
                                      &H64, &H67, &H6968, &H7A68, &H6D6C, &H6F6E, _
-                                     &H7675, &H75, &H7D, &H647675, &H5251}
+                                     &H7675, &H75, &H7D, &H647675, &H5251, &H647675}
 
     Public TextTableR As String() = {"E", "I", "O", "R", "S"}
 
@@ -90,13 +90,13 @@
         Dim chars As New List(Of Byte)
         Dim pos As Integer = 1
         Dim str As String = txtWord.Text
-        Dim r As New Random()
+        Dim rand As New Random()
         Do Until pos > str.Length
             For l As Integer = Math.Min(3, str.Length - pos + 1) To 1 Step -1
                 Dim str2 As String = Mid(str, pos, l)
                 If TextTableR.Contains(str2) Then
                     Dim nums As Byte() = Shrd.GetBytes(ByteTableR(Array.IndexOf(TextTableR, str2)))
-                    chars.Add(nums(r.Next(0, nums.Length)))
+                    chars.Add(nums(rand.Next(0, nums.Length)))
                     pos += l
                     Exit For
                 ElseIf TextTable.Contains(str2) Then

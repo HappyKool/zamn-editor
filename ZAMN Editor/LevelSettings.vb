@@ -11,7 +11,7 @@
                                     &HF2076, &HF2176, &HF2276, &HF2376, &HF2476, _
                                     &HF1676, &HF1776, &HF1876, &HF1976, 0}
     Public palNames As String() = {"Standard", "Fall", "Winter", "Night", "", _
-                                   "Standard", "Alternate", "", "", "", _
+                                   "Mall", "Factory", "", "", "", _
                                    "Standard", "Night", "Bright", "Dark", "", _
                                    "Office", "Dark Cave", "Light Office", "Dark Office", "Cave", _
                                    "Pyramid", "Beach", "Dark Beach", "Cave", ""}

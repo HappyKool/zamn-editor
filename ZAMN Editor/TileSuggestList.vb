@@ -1,4 +1,5 @@
 ﻿Public Class TileSuggestList
+    Public Shared TilesetAddresses As Integer() = {&HD8200} ', &HE38EF, &HD4200, &HE0200, &HDBEB5}
     Public Shared Lists As Byte()() = {My.Resources.Grass}
     Public Shared Data As New List(Of List(Of List(Of List(Of Byte))))
     Public Shared ConnectsTo As New List(Of List(Of List(Of List(Of Integer))))
@@ -31,16 +32,18 @@
 
     Public Shared Function GetList(ByVal tilesetNum As Integer, ByVal startTileNum As Byte, ByVal direction As Integer) As List(Of Byte)
         Dim l As New List(Of Byte)
-        Dim index As Integer
-        For m As Integer = 0 To Data(tilesetNum)(direction).Count - 1
-            If Data(tilesetNum)(direction)(m).Contains(startTileNum) Then
-                index = m
-                Exit For
-            End If
-        Next
-        For Each i As Integer In ConnectsTo(tilesetNum)(direction)(index)
-            l.AddRange(AllDataLists(tilesetNum)(i))
-        Next
+        If tilesetNum > -1 Then
+            Dim index As Integer
+            For m As Integer = 0 To Data(tilesetNum)(direction).Count - 1
+                If Data(tilesetNum)(direction)(m).Contains(startTileNum) Then
+                    index = m
+                    Exit For
+                End If
+            Next
+            For Each i As Integer In ConnectsTo(tilesetNum)(direction)(index)
+                l.AddRange(AllDataLists(tilesetNum)(i))
+            Next
+        End If
         Return l
     End Function
 End Class

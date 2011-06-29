@@ -50,6 +50,9 @@
     End Sub
 
     Public Sub LoadROM(ByVal path As String)
+        If path = "D:\DEBUG.SMC" Then
+            LevelDebugTools.Visible = True
+        End If
         r = New ROM(path)
         If r.failed Then Return
         FileOpenLevel.Enabled = True
@@ -65,7 +68,8 @@
             For Each l As Level In LoadingLevel.lvls
                 EdControl = New LvlEdCtrl
                 updateTab = False
-                Dim tp As TabPage = Tabs.AddXPage(If(l.name.StartsWith("Level"), Mid(l.name, 1, Shrd.InStrN(l.name, " ", 2) - 2), l.name))
+                Dim tp As TabPage = Tabs.AddXPage(If(l.name.StartsWith("Level"), Mid(l.name, 1, Shrd.InStrN(l.name, " ", 2) - 2), _
+                                                  If(l.name.StartsWith("ERROR:"), "ERROR", l.name)))
                 tp.Controls.Add(EdControl)
                 EdControl.Dock = DockStyle.Fill
                 EdControl.LoadLevel(l)
@@ -423,4 +427,18 @@
         Next
         Return str
     End Function
+
+    Private Sub DebugFontHacker_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DebugFontHacker.Click
+        FontHacker.ShowDialog(r)
+    End Sub
+
+    Private Sub DebugCopyTileset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DebugCopyTileset.Click
+        Dim img As New Bitmap(64 * 16, 64 * 16)
+        Using g As Graphics = Graphics.FromImage(img)
+            For l As Integer = 0 To 255
+                g.DrawImage(EdControl.lvl.tileset.images(l), (l Mod 16) * 64, (l \ 16) * 64)
+            Next
+        End Using
+        Clipboard.SetImage(img)
+    End Sub
 End Class

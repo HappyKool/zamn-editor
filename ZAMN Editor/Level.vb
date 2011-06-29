@@ -26,7 +26,7 @@
         Me.name = name
         Me.num = num
         Dim startAddr As Long = s.Position
-        Debug.WriteLine(name + ": " + Hex(startAddr))
+        Debug.WriteLine(name + ": 0x" + Hex(startAddr))
         If import Then
             Dim tiles As Integer = Shrd.ReadFileAddr(s)
             s.Seek(4, IO.SeekOrigin.Current)

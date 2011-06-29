@@ -10,6 +10,10 @@ Public Class Tileset
     Public gfxAddr As Integer
     Public pltAnimAddr As Integer
 
+    'Testing
+    Public TileTiles(&HFF)(,) As Short
+    Public collision As Byte()
+
     Public Sub New(ByVal s As IO.Stream)
         Dim levelStartPos As Long = s.Position
         address = Shrd.ReadFileAddr(s)
@@ -37,11 +41,11 @@ Public Class Tileset
     End Sub
 
     Public Shared Function DecompressMap16(ByVal s As IO.Stream) As Byte()
-        Dim result(&H7FFF) As Byte
+        Dim result(&H10000) As Byte
         Dim dict(&HFFF) As Byte
+        Dim bytesLeft As Integer = s.ReadByte + s.ReadByte * &H100
         Dim writeDictPos As Integer = &HFEE
         Dim readDictPos As Integer
-        Dim bytesLeft As Integer = s.ReadByte + s.ReadByte * &H100
         Dim bitsLeft As Integer = 0
         Dim writeByte As Byte
         Dim curByte As Byte
@@ -70,6 +74,7 @@ Public Class Tileset
             End If
             writeByte = writeByte \ 2
         Loop
+        'ReDim Preserve result(writeIndex - 1)
         Return result
     End Function
 
@@ -100,6 +105,9 @@ Public Class Tileset
         s.Seek(collisionAddr, IO.SeekOrigin.Begin)
         Dim collision(&H3FF) As Byte
         s.Read(collision, 0, &H400)
+
+        Me.collision = collision
+
         'Palette animation (currently not used)
         If pltAnimAddr > 0 Then
             'Shrd.GoToPointer(s)
@@ -111,6 +119,9 @@ Public Class Tileset
         Next
         'Copy to bitmaps
         For i As Integer = 0 To &HFF
+            'Testing
+            TileTiles(i) = New Short(7, 7) {}
+
             Dim CurBmp As New Bitmap(64, 64, PixelFormat.Format8bppIndexed), CurPrBmp As New Bitmap(64, 64, PixelFormat.Format8bppIndexed)
             Shrd.FillPalette(CurBmp, plt)
             Shrd.FillPalette(CurPrBmp, plt)
@@ -118,15 +129,18 @@ Public Class Tileset
             Dim data As BitmapData = CurBmp.LockBits(New Rectangle(0, 0, 64, 64), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed)
             Dim dataPr As BitmapData = CurPrBmp.LockBits(New Rectangle(0, 0, 64, 64), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed)
             Dim x As Integer = 0, y As Integer = 0
-            For m = i * &H80 To i * &H80 + &H7F Step 2
+            For m As Integer = i * &H80 To i * &H80 + &H7F Step 2
                 Dim g As Integer = map16(m)
                 If (map16(m + 1) And 1) = 1 Then
                     g += &H100
                 End If
-                Shrd.DrawTile(data, x, y, LinGFX(g), &H10 * ((map16(m + 1) \ 4) And 7), (map16(m + 1) And &H40) > 1, (map16(m + 1) And &H80) > 1)
-                If (collision(g * 2) And 2) > 0 Then
-                    Shrd.DrawTile(dataPr, x, y, LinGFX(g), &H10 * ((map16(m + 1) \ 4) And 7), (map16(m + 1) And &H40) > 1, (map16(m + 1) And &H80) > 1)
+                Shrd.DrawTile(data, x, y, map16(m + 1), LinGFX(g))
+                If (collision(g * 2) = 0 And collision(g * 2 + 1) = 0) Then
+                    Shrd.DrawTile(dataPr, x, y, map16(m + 1), LinGFX(g))
                 End If
+                'Testing
+                TileTiles(i)(x \ 8, y \ 8) = (map16(m + 1) And 1) * &H100 + map16(m)
+
                 x += 8
                 If x = 64 Then
                     x = 0

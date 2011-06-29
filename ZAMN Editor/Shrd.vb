@@ -3,8 +3,6 @@ Imports System.Drawing.Imaging
 
 Public Class Shrd
 
-    Private Shared nameLCase As String() = {"The", "A", "An", "And", "But", "As", "At", "By", "For", "From", "In", "Into", "Of", "Off", "On", "Onto", "Over", "Past", "To", "Upon", "With", "Vs"}
-
     Public Shared Function ReadFileAddr(ByVal s As IO.Stream) As Integer
         Dim part2 As Integer = s.ReadByte() + s.ReadByte() * &H100
         Dim Banknum As Integer = s.ReadByte()
@@ -127,7 +125,10 @@ Public Class Shrd
         DrawTile(bmp, x, y, gfx, 0, palette, palIndex, xFlip, yFlip)
     End Sub
 
-    Public Shared Sub DrawTile(ByVal bmp As BitmapData, ByVal x As Integer, ByVal y As Integer, ByVal tile As Byte(,), ByVal palIndex As Byte, ByVal xFlip As Boolean, ByVal yFlip As Boolean)
+    Public Shared Sub DrawTile(ByVal bmp As BitmapData, ByVal x As Integer, ByVal y As Integer, ByVal data As Byte, ByVal tile As Byte(,))
+        Dim palIndex As Byte = &H10 * ((data \ 4) And 7)
+        Dim xFlip As Boolean = (data And &H40) > 1
+        Dim yFlip As Boolean = (data And &H80) > 1
         Dim xStep As Integer = 1, yStep As Integer = 1
         If xFlip Then
             x += 7
@@ -204,6 +205,8 @@ Public Class Shrd
         Return data
     End Function
 
+    Private Shared nameLCase As String() = {"The", "A", "An", "And", "But", "As", "At", "By", "For", "From", "In", "Into", "Of", "Off", "On", "Onto", "Over", "Past", "To", "Upon", "With", "Vs"}
+
     Public Shared Function PropperCase(ByVal str As String) As String
         Dim pos As Integer = 1
         Dim len As Integer
@@ -264,5 +267,49 @@ Public Class Shrd
             ReDim Preserve result(0)
         End If
         Return result
+    End Function
+
+    Public Shared Function FormatTitleString(ByVal str As String) As String
+        str = str.Replace("LEVEI", "LEVEL")
+        If str.Contains("CREDIT") Then
+            str = Mid(str, InStrRev(str, "CREDIT"))
+            str = Shrd.ReplaceFirst(str, "LEVEL", "LEVEL:")
+        ElseIf str.Contains("BONUS") Then
+            str = Mid(str, InStrRev(str, "BONUS"))
+            str = Shrd.ReplaceFirst(str, "LEVEL", "LEVEL:")
+        ElseIf str.Contains("LEVEL") Then
+            str = Mid(str, InStrRev(str, "LEVEL"))
+            Dim p As Integer = InStr(InStr(str, " ") + 1, str, " ") - 1
+            str = Mid(str, 1, p) & ":" & Mid(str, p + 1)
+        End If
+        str = Shrd.PropperCase(str.Replace("  ", " "))
+        Return str
+    End Function
+
+    Public Shared Function GetRoundRect(ByVal Rect As Rectangle, ByVal CurveRadius As Integer) As Drawing2D.GraphicsPath
+        Dim gp As New Drawing2D.GraphicsPath
+        Dim pt2x As Integer = Rect.X + Rect.Width - 1
+        Dim pt2y As Integer = Rect.Y + Rect.Height - 1
+        CurveRadius *= 2
+
+        gp.AddArc(pt2x - CurveRadius, Rect.Y, CurveRadius, CurveRadius, 270, 90)
+        gp.AddArc(pt2x - CurveRadius, pt2y - CurveRadius, CurveRadius, CurveRadius, 0, 90)
+        gp.AddArc(Rect.X, pt2y - CurveRadius, CurveRadius, CurveRadius, 90, 90)
+        gp.AddArc(Rect.X, Rect.Y, CurveRadius, CurveRadius, 180, 90)
+        gp.CloseFigure()
+        Return gp
+    End Function
+
+    Public Shared Function GetRoundRectTop(ByVal Rect As Rectangle, ByVal CurveRadius As Integer) As Drawing2D.GraphicsPath
+        Dim gp As New Drawing2D.GraphicsPath
+        Dim pt2x As Integer = Rect.X + Rect.Width - 1
+        Dim pt2y As Integer = Rect.Y + Rect.Height - 1
+        CurveRadius *= 2
+
+        gp.AddArc(Rect.X, Rect.Y, CurveRadius, CurveRadius, 180, 90)
+        gp.AddArc(pt2x - CurveRadius, Rect.Y, CurveRadius, CurveRadius, 270, 90)
+        gp.AddLine(pt2x, pt2y, Rect.X, pt2y)
+        gp.CloseFigure()
+        Return gp
     End Function
 End Class

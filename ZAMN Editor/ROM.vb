@@ -36,27 +36,18 @@ Public Class ROM
             'Get level names
             Dim ptrs As DList(Of Integer, Integer) = GetAllLvlPtrs(s)
             For l As Integer = 0 To ptrs.L1.Count - 1
-                s.Seek(ptrs.L2(l) + &H36, SeekOrigin.Begin)
-                Shrd.GoToRelativePointer(s, &H9F)
-                Dim TP1 As New TitlePage(s)
-                s.Seek(ptrs.L2(l) + &H38, SeekOrigin.Begin)
-                Shrd.GoToRelativePointer(s, &H9F)
-                Dim TP2 As New TitlePage(s)
-                Dim name As String = TP1.ToString & " " & TP2.ToString
-                name = name.Replace("LEVEI", "LEVEL")
-                If name.Contains("CREDIT") Then
-                    name = Mid(name, InStrRev(name, "CREDIT"))
-                    name = Shrd.ReplaceFirst(name, "LEVEL", "LEVEL:")
-                ElseIf name.Contains("BONUS") Then
-                    name = Mid(name, InStrRev(name, "BONUS"))
-                    name = Shrd.ReplaceFirst(name, "LEVEL", "LEVEL:")
-                ElseIf name.Contains("LEVEL") Then
-                    name = Mid(name, InStrRev(name, "LEVEL"))
-                    Dim p As Integer = InStr(InStr(name, " ") + 1, name, " ") - 1
-                    name = Mid(name, 1, p) & ":" & Mid(name, p + 1)
-                End If
-                name = Shrd.PropperCase(name.Replace("  ", " "))
-                names.Add(ptrs.L1(l), name)
+                Try
+                    s.Seek(ptrs.L2(l) + &H36, SeekOrigin.Begin)
+                    Shrd.GoToRelativePointer(s, &H9F)
+                    Dim TP1 As New TitlePage(s)
+                    s.Seek(ptrs.L2(l) + &H38, SeekOrigin.Begin)
+                    Shrd.GoToRelativePointer(s, &H9F)
+                    Dim TP2 As New TitlePage(s)
+                    Dim name As String = Shrd.FormatTitleString(TP1.ToString & " " & TP2.ToString)
+                    names.Add(ptrs.L1(l), name)
+                Catch ex As Exception
+                    names.Add(ptrs.L1(l), "ERROR: " & ex.Message)
+                End Try
             Next
 
             'Testing 4 byte level pointers

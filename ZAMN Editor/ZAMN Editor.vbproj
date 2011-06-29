@@ -47,6 +47,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -83,13 +84,19 @@
     <Compile Include="ByteArrayStream.vb" />
     <Compile Include="DList.vb" />
     <Compile Include="ErrorLog.vb" />
-    <Compile Include="Item.vb" />
-    <Compile Include="ItemBrowser.Designer.vb">
-      <DependentUpon>ItemBrowser.vb</DependentUpon>
+    <Compile Include="ExpandPanel.Designer.vb">
+      <DependentUpon>ExpandPanel.vb</DependentUpon>
     </Compile>
-    <Compile Include="ItemBrowser.vb">
+    <Compile Include="ExpandPanel.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="FontHacker.Designer.vb">
+      <DependentUpon>FontHacker.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FontHacker.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item.vb" />
     <Compile Include="LevelGFX.vb" />
     <Compile Include="LevelSettings.Designer.vb">
       <DependentUpon>LevelSettings.vb</DependentUpon>
@@ -119,10 +126,10 @@
     </Compile>
     <Compile Include="Level.vb" />
     <Compile Include="Monster.vb" />
-    <Compile Include="MonsterBrowser.Designer.vb">
-      <DependentUpon>MonsterBrowser.vb</DependentUpon>
+    <Compile Include="ObjectBrowsers\BMonsterBrowser.vb">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MonsterBrowser.vb">
+    <Compile Include="ObjectBrowsers\ItemBrowser.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -140,13 +147,31 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="NRMBrowser.Designer.vb">
-      <DependentUpon>NRMBrowser.vb</DependentUpon>
-    </Compile>
-    <Compile Include="NRMBrowser.vb">
+    <Compile Include="ObjectBrowsers\MonsterBrowser.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="NRMonster.vb" />
+    <Compile Include="ObjectBrowsers\NRMBrowser.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectBrowsers\ObjectBrowser.Designer.vb">
+      <DependentUpon>ObjectBrowser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectBrowsers\ObjectBrowser.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectBrowsers\TilesetBrowser.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectBrowsers\VictimBrowser.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectBrowsers\VictimProp.Designer.vb">
+      <DependentUpon>VictimProp.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectBrowsers\VictimProp.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="PasswordEditor.Designer.vb">
       <DependentUpon>PasswordEditor.vb</DependentUpon>
     </Compile>
@@ -157,12 +182,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TitlePage.vb" />
-    <Compile Include="BMonsterBrowser.Designer.vb">
-      <DependentUpon>BMonsterBrowser.vb</DependentUpon>
-    </Compile>
-    <Compile Include="BMonsterBrowser.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="TitlePageEdCtrl.Designer.vb">
       <DependentUpon>TitlePageEdCtrl.vb</DependentUpon>
     </Compile>
@@ -194,12 +213,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Tileset.vb" />
-    <Compile Include="TilesetBrowser.Designer.vb">
-      <DependentUpon>TilesetBrowser.vb</DependentUpon>
-    </Compile>
-    <Compile Include="TilesetBrowser.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="TileSuggestList.vb" />
     <Compile Include="Tools\DropperTool.vb" />
     <Compile Include="Tools\ItemTool.vb" />
@@ -220,22 +233,22 @@
     <Compile Include="UndoManager\UndoManager.vb" />
     <Compile Include="UndoManager\VictimAction.vb" />
     <Compile Include="Victim.vb" />
-    <Compile Include="VictimBrowser.Designer.vb">
-      <DependentUpon>VictimBrowser.vb</DependentUpon>
+    <Compile Include="ViewImage.Designer.vb">
+      <DependentUpon>ViewImage.vb</DependentUpon>
     </Compile>
-    <Compile Include="VictimBrowser.vb">
-      <SubType>UserControl</SubType>
+    <Compile Include="ViewImage.vb">
+      <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddressUpDown.resx">
       <DependentUpon>AddressUpDown.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BMonsterBrowser.resx">
-      <DependentUpon>BMonsterBrowser.vb</DependentUpon>
+    <EmbeddedResource Include="ExpandPanel.resx">
+      <DependentUpon>ExpandPanel.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ItemBrowser.resx">
-      <DependentUpon>ItemBrowser.vb</DependentUpon>
+    <EmbeddedResource Include="FontHacker.resx">
+      <DependentUpon>FontHacker.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LevelSettings.resx">
       <DependentUpon>LevelSettings.vb</DependentUpon>
@@ -249,17 +262,17 @@
     <EmbeddedResource Include="Editor.resx">
       <DependentUpon>Editor.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MonsterBrowser.resx">
-      <DependentUpon>MonsterBrowser.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="NRMBrowser.resx">
-      <DependentUpon>NRMBrowser.vb</DependentUpon>
+    <EmbeddedResource Include="ObjectBrowsers\ObjectBrowser.resx">
+      <DependentUpon>ObjectBrowser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectBrowsers\VictimProp.resx">
+      <DependentUpon>VictimProp.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OpenLevel.resx">
       <DependentUpon>OpenLevel.vb</DependentUpon>
@@ -267,17 +280,14 @@
     <EmbeddedResource Include="PasswordEditor.resx">
       <DependentUpon>PasswordEditor.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TilesetBrowser.resx">
-      <DependentUpon>TilesetBrowser.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="TitlePageEdCtrl.resx">
       <DependentUpon>TitlePageEdCtrl.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TitlePageEditor.resx">
       <DependentUpon>TitlePageEditor.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="VictimBrowser.resx">
-      <DependentUpon>VictimBrowser.vb</DependentUpon>
+    <EmbeddedResource Include="ViewImage.resx">
+      <DependentUpon>ViewImage.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

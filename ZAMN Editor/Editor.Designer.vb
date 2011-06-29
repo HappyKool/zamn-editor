@@ -59,6 +59,9 @@ Partial Class Editor
         Me.toolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.LevelEditTitle = New System.Windows.Forms.ToolStripMenuItem()
         Me.LevelSettingsM = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LevelDebugTools = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DebugFontHacker = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DebugCopyTileset = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsDropper = New System.Windows.Forms.ToolStripMenuItem()
@@ -82,10 +85,6 @@ Partial Class Editor
         Me.UndoTool = New System.Windows.Forms.ToolStripSplitButton()
         Me.RedoTool = New System.Windows.Forms.ToolStripSplitButton()
         Me.toolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.Zoom = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.Zoom100Tool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Zoom75Tool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Zoom50Tool = New System.Windows.Forms.ToolStripMenuItem()
         Me.toolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.BrushTool = New System.Windows.Forms.ToolStripButton()
         Me.DropperTool = New System.Windows.Forms.ToolStripButton()
@@ -103,6 +102,10 @@ Partial Class Editor
         Me.ExportLevel = New System.Windows.Forms.SaveFileDialog()
         Me.Tabs = New ZAMNEditor.Tabs()
         Me.RecentROMs = New ZAMNEditor.RecentFilesList()
+        Me.Zoom100Tool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Zoom75Tool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Zoom50Tool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Zoom = New System.Windows.Forms.ToolStripDropDownButton()
         Me.TSContainer.ContentPanel.SuspendLayout()
         Me.TSContainer.TopToolStripPanel.SuspendLayout()
         Me.TSContainer.SuspendLayout()
@@ -350,7 +353,7 @@ Partial Class Editor
         '
         'LevelMenu
         '
-        Me.LevelMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LevelExport, Me.LevelImport, Me.LevelCopy, Me.LevelPaste, Me.toolStripSeparator10, Me.LevelEditTitle, Me.LevelSettingsM})
+        Me.LevelMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LevelExport, Me.LevelImport, Me.LevelCopy, Me.LevelPaste, Me.toolStripSeparator10, Me.LevelEditTitle, Me.LevelSettingsM, Me.LevelDebugTools})
         Me.LevelMenu.Name = "LevelMenu"
         Me.LevelMenu.Size = New System.Drawing.Size(46, 20)
         Me.LevelMenu.Text = "&Level"
@@ -401,6 +404,26 @@ Partial Class Editor
         Me.LevelSettingsM.Name = "LevelSettingsM"
         Me.LevelSettingsM.Size = New System.Drawing.Size(156, 22)
         Me.LevelSettingsM.Text = "&Settings"
+        '
+        'LevelDebugTools
+        '
+        Me.LevelDebugTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DebugFontHacker, Me.DebugCopyTileset})
+        Me.LevelDebugTools.Name = "LevelDebugTools"
+        Me.LevelDebugTools.Size = New System.Drawing.Size(156, 22)
+        Me.LevelDebugTools.Text = "Debug Tools"
+        Me.LevelDebugTools.Visible = False
+        '
+        'DebugFontHacker
+        '
+        Me.DebugFontHacker.Name = "DebugFontHacker"
+        Me.DebugFontHacker.Size = New System.Drawing.Size(175, 22)
+        Me.DebugFontHacker.Text = "Font Hacker"
+        '
+        'DebugCopyTileset
+        '
+        Me.DebugCopyTileset.Name = "DebugCopyTileset"
+        Me.DebugCopyTileset.Size = New System.Drawing.Size(175, 22)
+        Me.DebugCopyTileset.Text = "Copy Tileset Image"
         '
         'ToolsMenu
         '
@@ -585,36 +608,6 @@ Partial Class Editor
         Me.toolStripSeparator1.Name = "toolStripSeparator1"
         Me.toolStripSeparator1.Size = New System.Drawing.Size(6, 25)
         '
-        'Zoom
-        '
-        Me.Zoom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.Zoom.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Zoom100Tool, Me.Zoom75Tool, Me.Zoom50Tool})
-        Me.Zoom.Image = Global.ZAMNEditor.My.Resources.Resources.MagnifyingGlass
-        Me.Zoom.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.Zoom.Name = "Zoom"
-        Me.Zoom.Size = New System.Drawing.Size(29, 22)
-        Me.Zoom.Text = "Zoom Level"
-        '
-        'Zoom100Tool
-        '
-        Me.Zoom100Tool.Checked = True
-        Me.Zoom100Tool.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.Zoom100Tool.Name = "Zoom100Tool"
-        Me.Zoom100Tool.Size = New System.Drawing.Size(102, 22)
-        Me.Zoom100Tool.Text = "100%"
-        '
-        'Zoom75Tool
-        '
-        Me.Zoom75Tool.Name = "Zoom75Tool"
-        Me.Zoom75Tool.Size = New System.Drawing.Size(102, 22)
-        Me.Zoom75Tool.Text = "75%"
-        '
-        'Zoom50Tool
-        '
-        Me.Zoom50Tool.Name = "Zoom50Tool"
-        Me.Zoom50Tool.Size = New System.Drawing.Size(102, 22)
-        Me.Zoom50Tool.Text = "50%"
-        '
         'toolStripSeparator8
         '
         Me.toolStripSeparator8.Name = "toolStripSeparator8"
@@ -752,6 +745,36 @@ Partial Class Editor
         Me.RecentROMs.Size = New System.Drawing.Size(173, 22)
         Me.RecentROMs.Text = "&Recent ROMs"
         '
+        'Zoom100Tool
+        '
+        Me.Zoom100Tool.Checked = True
+        Me.Zoom100Tool.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.Zoom100Tool.Name = "Zoom100Tool"
+        Me.Zoom100Tool.Size = New System.Drawing.Size(152, 22)
+        Me.Zoom100Tool.Text = "100%"
+        '
+        'Zoom75Tool
+        '
+        Me.Zoom75Tool.Name = "Zoom75Tool"
+        Me.Zoom75Tool.Size = New System.Drawing.Size(152, 22)
+        Me.Zoom75Tool.Text = "75%"
+        '
+        'Zoom50Tool
+        '
+        Me.Zoom50Tool.Name = "Zoom50Tool"
+        Me.Zoom50Tool.Size = New System.Drawing.Size(152, 22)
+        Me.Zoom50Tool.Text = "50%"
+        '
+        'Zoom
+        '
+        Me.Zoom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.Zoom.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Zoom100Tool, Me.Zoom75Tool, Me.Zoom50Tool})
+        Me.Zoom.Image = Global.ZAMNEditor.My.Resources.Resources.MagnifyingGlass
+        Me.Zoom.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.Zoom.Name = "Zoom"
+        Me.Zoom.Size = New System.Drawing.Size(29, 22)
+        Me.Zoom.Text = "Zoom Level"
+        '
         'Editor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -828,10 +851,6 @@ Partial Class Editor
     Friend WithEvents View75P As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents View50P As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents toolStripSeparator8 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents Zoom As System.Windows.Forms.ToolStripDropDownButton
-    Friend WithEvents Zoom100Tool As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Zoom75Tool As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Zoom50Tool As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RecentROMs As ZAMNEditor.RecentFilesList
     Friend WithEvents ToolsMonsters As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MonTool As System.Windows.Forms.ToolStripButton
@@ -852,5 +871,12 @@ Partial Class Editor
     Friend WithEvents UndoTool As System.Windows.Forms.ToolStripSplitButton
     Friend WithEvents RedoTool As System.Windows.Forms.ToolStripSplitButton
     Friend WithEvents LevelEditTitle As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LevelDebugTools As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DebugFontHacker As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DebugCopyTileset As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Zoom As System.Windows.Forms.ToolStripDropDownButton
+    Friend WithEvents Zoom100Tool As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Zoom75Tool As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Zoom50Tool As System.Windows.Forms.ToolStripMenuItem
 
 End Class

@@ -1,6 +1,7 @@
 ﻿Public Class TileSuggestTool
     Inherits Tool
 
+    Private TilesetNum As Integer
     Private XStart As Integer = -1
     Private YStart As Integer = -1
     Private XEnd As Integer = -1
@@ -57,9 +58,8 @@
             Repaint()
             TilePicker.SetAll()
         Else
-            TilePicker.SetTiles(TileSuggestList.GetList(0, ed.EdControl.lvl.Tiles(XStart, YStart), Direction))
+            TilePicker.SetTiles(TileSuggestList.GetList(TilesetNum, ed.EdControl.lvl.Tiles(XStart, YStart), Direction))
             TilePicker.SelectedIndex = -1
-            TilePicker.VScrl.Value = 0
             TilePicker.Invalidate()
         End If
         pX = -1
@@ -81,6 +81,7 @@
     Public Overrides Sub Refresh()
         XStart = -1
         Direction = -1
+        TilesetNum = Array.IndexOf(TileSuggestList.TilesetAddresses, ed.EdControl.lvl.tileset.address)
     End Sub
 
     Public Overrides Sub TileChanged()

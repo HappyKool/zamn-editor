@@ -4,6 +4,8 @@
     Private pX As Integer = -1
     Private pY As Integer = -1
 
+    Public t As New ToolTip
+
     Public Sub New(ByVal ed As Editor)
         MyBase.New(ed)
         Me.SidePanel = SideContentType.Tiles
@@ -12,6 +14,13 @@
 
     Public Overrides Sub MouseDown(ByVal e As MouseEventArgs)
         Me.MouseMove(e)
+
+        Dim nx As Integer = e.X \ 64
+        Dim ny As Integer = e.Y \ 64
+
+        'With ed.EdControl.lvl
+        '    MsgBox(Hex(.tileset.TileTiles(.Tiles(nx, ny))(nx \ 8, nx \ 9)))
+        'End With
     End Sub
 
     Public Overrides Sub MouseMove(ByVal e As MouseEventArgs)

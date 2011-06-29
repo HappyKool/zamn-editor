@@ -1,7 +1,7 @@
 ﻿Public Class LvlEdCtrl
     Public lvl As Level
     Public t As Tool
-    Public TilePicker As New TilesetBrowser
+    Public TilePicker As TilesetBrowser
     Public ItemPicker As ItemBrowser
     Public VictimPicker As VictimBrowser
     Public NRMPicker As NRMBrowser
@@ -38,8 +38,8 @@
         VictimPicker = New VictimBrowser(lvl.GFX)
         NRMPicker = New NRMBrowser(lvl.GFX)
         MonsterPicker = New MonsterBrowser(lvl.GFX)
+        TilePicker = New TilesetBrowser(lvl.tileset)
         selection = New Selection(lvl.Width, lvl.Height)
-        TilePicker.LoadTileset(lvl.tileset)
         UpdateScrollBars()
     End Sub
 
@@ -163,7 +163,7 @@
         canvas.Focus()
     End Sub
 
-    Private Sub LvlEdCtrl_SizeChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.SizeChanged, Me.DockChanged
+    Private Sub LvlEdCtrl_SizeChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.SizeChanged, Me.DockChanged, canvas.SizeChanged
         If lvl Is Nothing Then Return
         UpdateScrollBars()
     End Sub
