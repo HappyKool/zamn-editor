@@ -8,12 +8,12 @@
     Public palettes As Integer() = {&HF1076, &HF1276, &HF1376, &HF1476, 0, _
                                     &HF1E76, &HF1F76, 0, 0, 0, _
                                     &HF1A76, &HF1B76, &HF1C76, &HF1D76, 0, _
-                                    &HF2076, &HF2176, &HF2276, &HF2376, &HF2476, _
+                                    &HF2076, &HF2276, &HF2376, &HF2476, &HF2176, _
                                     &HF1676, &HF1776, &HF1876, &HF1976, 0}
     Public palNames As String() = {"Standard", "Fall", "Winter", "Night", "", _
                                    "Mall", "Factory", "", "", "", _
                                    "Standard", "Night", "Bright", "Dark", "", _
-                                   "Office", "Dark Cave", "Light Office", "Dark Office", "Cave", _
+                                   "Office", "Light Office", "Dark Office", "Cave", "Dark Cave", _
                                    "Pyramid", "Beach", "Dark Beach", "Cave", ""}
     Public graphics As Integer() = {&HC0200, &HCC200, &HC8200, &HD0200, &HC4200}
     Public collision As Integer() = {&HDF6D1, &HE70AB, &HE6CAB, &HE74AB, &HDFAD1}

@@ -71,9 +71,9 @@ Partial Class LvlEdCtrl
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.canvas.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.canvas.Location = New System.Drawing.Point(-1, 0)
+        Me.canvas.Location = New System.Drawing.Point(0, 0)
         Me.canvas.Name = "canvas"
-        Me.canvas.Size = New System.Drawing.Size(472, 383)
+        Me.canvas.Size = New System.Drawing.Size(471, 383)
         Me.canvas.TabIndex = 2
         Me.canvas.TabStop = False
         '

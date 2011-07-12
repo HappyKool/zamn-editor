@@ -16,7 +16,7 @@
         Me.y = y
         Me.delay = delay
         Me.ptr = ptr
-        Me.index = 1 + Array.IndexOf(LevelGFX.ptrs, ptr)
+        UpdateIdx()
     End Sub
 
     Public Sub New(ByVal m As Monster)
@@ -25,7 +25,7 @@
         Me.y = m.y
         Me.delay = m.delay
         Me.ptr = m.ptr
-        Me.index = m.index
+        UpdateIdx()
     End Sub
 
     Public Function GetRect(ByVal gfx As LevelGFX) As Rectangle
@@ -33,12 +33,13 @@
     End Function
 
     Public Sub UpdateIdx()
-        Me.index = 1 + Array.IndexOf(LevelGFX.ptrs, ptr)
+        Me.index = Array.IndexOf(LevelGFX.ptrs, ptr)
+        If Me.index = -1 Then Me.index = 0
     End Sub
 
     Public Sub UpdatePtr()
         If index > 0 Then
-            ptr = LevelGFX.ptrs(index - 1)
+            ptr = LevelGFX.ptrs(index)
         End If
     End Sub
 End Class

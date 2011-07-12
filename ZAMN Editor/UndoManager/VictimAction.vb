@@ -20,6 +20,10 @@ Public Class MoveVictimAction
 
     Public Sub New(ByVal victims As List(Of Victim), ByVal dx As Integer, ByVal dy As Integer, ByVal stp As Integer)
         MyBase.New(victims)
+        If dx = 0 And dy = 0 Then
+            cancelAction = True
+            Return
+        End If
         For Each v As Victim In victims
             px.Add(v.x)
             py.Add(v.y)

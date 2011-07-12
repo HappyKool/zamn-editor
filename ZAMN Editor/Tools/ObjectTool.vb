@@ -123,6 +123,7 @@
             selecting = False
         End If
         ed.SetCopy((selectedObjs.Count > 0 Or curSelObjs.Count > 0) And removable)
+        UpdateProperties()
         Repaint()
     End Sub
 
@@ -170,6 +171,7 @@
                 Me.Status = String.Format(MoveText, X(selectedObj) - XStart, Y(selectedObj) - YStart)
                 UpdateStatus()
             End If
+            UpdateProperties()
             Repaint()
         End If
     End Sub
@@ -193,12 +195,13 @@
         curSelObjs.Clear()
         selecting = False
         ResetStatus()
+        UpdateProperties()
         Repaint()
         ed.EdControl.UndoMgr.merge = False
     End Sub
 
     Public Overrides Sub KeyDown(ByVal e As System.Windows.Forms.KeyEventArgs)
-        If e.KeyCode = Keys.Delete Then
+        If e.KeyCode = Keys.Delete And selectedObjs.Count > 0 Then
             ed.EdControl.UndoMgr.Do(GetRemoveAction(selectedObjs))
             selectedObjs.Clear()
             Repaint()
@@ -229,6 +232,7 @@
     Public Overrides Sub BMonsterChanged()
         If selectedObjs.Count > 0 And SidePanel = SideContentType.BossMonsters Then
             ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, BossMonster.ptrs(BMonsterPicker.SelectedIndex)))
+            UpdateProperties()
             Repaint()
         End If
     End Sub
@@ -236,6 +240,7 @@
     Public Overrides Sub ItemChanged()
         If selectedObjs.Count > 0 And SidePanel = SideContentType.Items Then
             ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, ItemPicker.SelectedIndex))
+            UpdateProperties()
             Repaint()
         End If
     End Sub
@@ -243,6 +248,7 @@
     Public Overrides Sub MonsterChanged()
         If selectedObjs.Count > 0 And SidePanel = SideContentType.Monsters Then
             ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, LevelGFX.ptrs(MonsterPicker.SelectedIndex)))
+            UpdateProperties()
             Repaint()
         End If
     End Sub
@@ -250,6 +256,7 @@
     Public Overrides Sub NRMChanged()
         If selectedObjs.Count > 0 And SidePanel = SideContentType.NRMonsters Then
             ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, LevelGFX.ptrs(NRMPicker.SelectedIndex)))
+            UpdateProperties()
             Repaint()
         End If
     End Sub
@@ -257,6 +264,7 @@
     Public Overrides Sub VictimChanged()
         If selectedObjs.Count > 0 And SidePanel = SideContentType.Victims Then
             ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, LevelGFX.ptrs(VictimPicker.SelectedIndex)))
+            UpdateProperties()
             Repaint()
         End If
     End Sub
@@ -337,6 +345,14 @@
             Return False
         End If
     End Function
+
+    Public Sub UpdateProperties()
+        If selectedObjs.Count = 1 Then
+            Browser.SetObject(selectedObj)
+        Else
+            Browser.ClearObject()
+        End If
+    End Sub
 
     Public MustOverride Function ToText(ByVal Objs As List(Of T)) As String
     Public MustOverride Function FromText(ByVal txt As String) As List(Of T)

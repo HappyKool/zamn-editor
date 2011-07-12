@@ -7,6 +7,7 @@
         SidePanel = SideContentType.BossMonsters
         typeName = "boss monster"
         UpdateCaptions()
+        Me.Status = DefaultText
     End Sub
 
     Public Overrides Function CloneT(ByVal o As BossMonster) As BossMonster

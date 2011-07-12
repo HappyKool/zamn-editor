@@ -76,6 +76,10 @@ Public Class MoveMonsterAction
 
     Public Sub New(ByVal monsters As List(Of Monster), ByVal dx As Integer, ByVal dy As Integer, ByVal stp As Integer)
         MyBase.New(monsters)
+        If dx = 0 And dy = 0 Then
+            cancelAction = True
+            Return
+        End If
         For Each m As Monster In monsters
             px.Add(m.x)
             py.Add(m.y)
@@ -164,6 +168,96 @@ Public Class ChangeMonsterTypeAction
             Return "Change monster type"
         Else
             Return "Change " & Monsters.Count.ToString & " monsters types"
+        End If
+    End Function
+End Class
+
+Public Class ChangeMonsterRadiusAction
+    Inherits MonsterAction
+
+    Public newRadius As Integer
+    Public prevRadius As New List(Of Integer)
+
+    Public Sub New(ByVal monsters As List(Of Monster), ByVal radius As Integer)
+        MyBase.New(monsters)
+        For Each m As Monster In monsters
+            prevRadius.Add(m.radius)
+        Next
+        newRadius = radius
+    End Sub
+
+    Public Overrides Sub Undo()
+        For l As Integer = 0 To Monsters.Count - 1
+            Monsters(l).radius = prevRadius(l)
+        Next
+    End Sub
+
+    Public Overrides Sub Redo()
+        For Each m As Monster In Monsters
+            m.radius = newRadius
+        Next
+    End Sub
+
+    Public Overrides ReadOnly Property CanMerge As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
+    Public Overrides Sub Merge(ByVal act As Action)
+        Me.newRadius = CType(act, ChangeMonsterRadiusAction).newRadius
+    End Sub
+
+    Public Overrides Function ToString() As String
+        If Monsters.Count = 1 Then
+            Return "Change monster radius"
+        Else
+            Return "Change " & Monsters.Count.ToString & " monsters radii"
+        End If
+    End Function
+End Class
+
+Public Class ChangeMonsterDelayAction
+    Inherits MonsterAction
+
+    Public newDelay As Integer
+    Public prevDelay As New List(Of Integer)
+
+    Public Sub New(ByVal monsters As List(Of Monster), ByVal delay As Integer)
+        MyBase.New(monsters)
+        For Each m As Monster In monsters
+            prevDelay.Add(m.radius)
+        Next
+        newDelay = delay
+    End Sub
+
+    Public Overrides Sub Undo()
+        For l As Integer = 0 To Monsters.Count - 1
+            Monsters(l).delay = prevDelay(l)
+        Next
+    End Sub
+
+    Public Overrides Sub Redo()
+        For Each m As Monster In Monsters
+            m.delay = newDelay
+        Next
+    End Sub
+
+    Public Overrides ReadOnly Property CanMerge As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
+    Public Overrides Sub Merge(ByVal act As Action)
+        Me.newDelay = CType(act, ChangeMonsterDelayAction).newDelay
+    End Sub
+
+    Public Overrides Function ToString() As String
+        If Monsters.Count = 1 Then
+            Return "Change monster delay"
+        Else
+            Return "Change " & Monsters.Count.ToString & " monsters delays"
         End If
     End Function
 End Class

@@ -21,6 +21,9 @@
 
     Public Overrides Sub Init()
         itemCt = 5
+        Dim mp As New BMonsterProp
+        mp.Dock = DockStyle.Fill
+        propCtrl = mp
     End Sub
 
     Public Overrides Sub PaintObject(ByVal g As System.Drawing.Graphics, ByVal x As Integer, ByVal y As Integer, ByVal num As Integer)

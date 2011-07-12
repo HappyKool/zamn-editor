@@ -76,6 +76,10 @@ Public Class MoveItemAction
 
     Public Sub New(ByVal items As List(Of Item), ByVal dx As Integer, ByVal dy As Integer, ByVal stp As Integer)
         MyBase.New(items)
+        If dx = 0 And dy = 0 Then
+            cancelAction = True
+            Return
+        End If
         For Each i As Item In items
             px.Add(i.x)
             py.Add(i.y)

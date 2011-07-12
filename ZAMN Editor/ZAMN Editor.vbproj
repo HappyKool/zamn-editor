@@ -129,6 +129,13 @@
     <Compile Include="ObjectBrowsers\BMonsterBrowser.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ObjectBrowsers\BMonsterProp.Designer.vb">
+      <DependentUpon>BMonsterProp.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectBrowsers\BMonsterProp.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectBrowsers\IPropCtrl.vb" />
     <Compile Include="ObjectBrowsers\ItemBrowser.vb">
       <SubType>UserControl</SubType>
     </Compile>
@@ -147,11 +154,29 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ObjectBrowsers\ItemProp.Designer.vb">
+      <DependentUpon>ItemProp.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectBrowsers\ItemProp.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ObjectBrowsers\MonsterBrowser.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="NRMonster.vb" />
+    <Compile Include="ObjectBrowsers\MonsterProp.Designer.vb">
+      <DependentUpon>MonsterProp.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectBrowsers\MonsterProp.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ObjectBrowsers\NRMBrowser.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectBrowsers\NRMProp.Designer.vb">
+      <DependentUpon>NRMProp.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectBrowsers\NRMProp.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ObjectBrowsers\ObjectBrowser.Designer.vb">
@@ -268,6 +293,18 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ObjectBrowsers\BMonsterProp.resx">
+      <DependentUpon>BMonsterProp.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectBrowsers\ItemProp.resx">
+      <DependentUpon>ItemProp.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectBrowsers\MonsterProp.resx">
+      <DependentUpon>MonsterProp.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectBrowsers\NRMProp.resx">
+      <DependentUpon>NRMProp.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ObjectBrowsers\ObjectBrowser.resx">
       <DependentUpon>ObjectBrowser.vb</DependentUpon>
     </EmbeddedResource>
@@ -303,6 +340,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Suggest Lists\Mall.zsl" />
     <None Include="Resources\X2.PNG" />
   </ItemGroup>
   <ItemGroup>

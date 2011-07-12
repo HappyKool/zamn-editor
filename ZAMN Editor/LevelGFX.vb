@@ -2,15 +2,15 @@
 
     Public ItemImages As New List(Of Bitmap)
     Public VictimImages As New List(Of Bitmap)
-    Public Shared ptrs As Integer() = {&H1A1E2, &H19976, &H19E6D, &H1A015, &H19F00, &H19899, &H19B3D, &H19A43, &H19C89, &H1A0BE, &H19DAD, _
+    Public Shared ptrs As Integer() = {-1, &H1A1E2, &H19976, &H19E6D, &H1A015, &H19F00, &H19899, &H19B3D, &H19A43, &H19C89, &H1A0BE, &H19DAD, _
                                        &H17136, &H9A3A, &HA655, &H1745D, &HD4F1, &HD4F9, &H1B75E, &H1B9F6, _
                                        &H89F8, &H8ACA, &H8E17, &H9089, &H911F, &H9BDF, &H9C3E, &HADF5, &HB4B0, &HB864, &HC3FB, _
                                        &HC521, &HC5B6, &HCA7B, &HCECF, &HD904, &HE681, &HE71A, &H11B0F, &H1B477, 1, 2}
     Public Shared offsets As Integer() = {0, 0, 24, 47, 17, 29, 13, 38, 17, 38, 29, 40, 31, 63, 16, 47, 16, 29, 14, 32, 16, 37, 28, 44, _
                                           15, 48, 14, 46, 24, 63, 9, 31, 21, 31, 21, 31, 18, 42, 16, 48, _
                                           20, 47, 20, 47, 16, 55, 16, 35, 16, 35, 15, 44, 15, 44, 14, 65, 16, 31, 8, 15, 19, 21, _
-                                          26, 172, 19, 21, 17, 34, 24, 30, 9, 22, 8, 16, 16, 32, 12, 16, 8, 12}
-    'Tourist, Baby, Teacher, Explorer, Pool, Barbeque, Army, Trampoline, Dog, Cheerleader, Dr. Bug
+                                          26, 26, 19, 21, 17, 34, 24, 30, 9, 22, 8, 16, 16, 32, 12, 16, 8, 12}
+    'PLACEHOLDER, Tourist, Baby, Teacher, Explorer, Pool, Barbeque, Army, Trampoline, Dog, Cheerleader, Dr. Bug
     'Dracula, Chainsaw, Frankenstein, Fire, Plant, Plant 2, Dr. Tongue, Credit Level enemy head
     'Zombie, Fast Zombie, Mummy, Clone, Fast Clone, Martian, Martian, Werewolf, Chuckie, Fire guy, Hole Ant,
     ' Hiding Ant, Hole Red Ant, Football, Blob, Mushroom, Fast Squidman, Squidman, Tentacle, Spider

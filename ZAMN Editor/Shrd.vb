@@ -312,4 +312,10 @@ Public Class Shrd
         gp.CloseFigure()
         Return gp
     End Function
+
+    Public Shared Function CreateList(Of T)(ByVal item As T) As List(Of T)
+        Dim l As New List(Of T)
+        l.Add(item)
+        Return l
+    End Function
 End Class

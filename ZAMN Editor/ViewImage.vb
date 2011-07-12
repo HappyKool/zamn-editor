@@ -1,7 +1,7 @@
 ﻿Public Class ViewImage
 
-    Public Overloads Function ShowDialog(ByVal img As Bitmap)
+    Public Overloads Function ShowDialog(ByVal img As Bitmap) As DialogResult
         PictureBox1.Image = img
-        Me.ShowDialog()
+        Return Me.ShowDialog()
     End Function
 End Class

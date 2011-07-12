@@ -2,6 +2,7 @@
     Inherits Tool
 
     Private selection As Selection
+    Private selecting As Boolean = False
     Public pX As Integer = -1
     Public pY As Integer = -1
 
@@ -28,14 +29,14 @@
             selection.StartRect(nx, ny, (Control.ModifierKeys And Keys.Alt) <> Keys.None)
             ed.EdControl.UpdateSelection()
             ed.EdControl.UndoMgr.merge = False
+            selecting = True
         End If
     End Sub
 
     Public Overrides Sub MouseMove(ByVal e As System.Windows.Forms.MouseEventArgs)
-        Dim nx As Integer = e.X \ 64
-        Dim ny As Integer = e.Y \ 64
-        If e.Button = MouseButtons.Left And nx < ed.EdControl.lvl.Width _
-        And ny < ed.EdControl.lvl.Height And nx >= 0 And ny >= 0 And (pX <> nx Or pY <> ny) Then
+        Dim nx As Integer = Math.Min(ed.EdControl.lvl.Width - 1, Math.Max(0, e.X \ 64))
+        Dim ny As Integer = Math.Min(ed.EdControl.lvl.Height - 1, Math.Max(0, e.Y \ 64))
+        If e.Button = MouseButtons.Left And selecting And (pX <> nx Or pY <> ny) Then
             selection.MoveTo(nx, ny)
             pX = nx
             pY = ny
@@ -59,6 +60,7 @@
         selection.ApplySelection()
         ed.EdControl.UpdateSelection()
         ed.EdControl.UndoMgr.merge = False
+        selecting = False
         ResetStatus()
     End Sub
 

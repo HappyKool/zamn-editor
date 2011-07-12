@@ -1,14 +1,14 @@
-﻿Public Class VictimProp
+﻿Public Class ItemProp
     Implements IPropCtrl
 
-    Public v As Victim
-    Public vl As List(Of Victim)
+    Public i As Item
+    Public il As List(Of Item)
     Public ed As Editor
     Public init As Boolean
 
     Public ReadOnly Property GetHeight As Integer Implements IPropCtrl.GetHeight
         Get
-            Return 100
+            Return 80
         End Get
     End Property
 
@@ -19,33 +19,33 @@
     Public Sub SetEnabled(ByVal enabled As Boolean) Implements IPropCtrl.SetEnabled
         nudX.Enabled = enabled
         nudY.Enabled = enabled
-        addr.Enabled = enabled
+        nudNum.Enabled = enabled
     End Sub
 
     Public Sub SetObject(ByVal obj As Object) Implements IPropCtrl.SetObject
-        If TypeOf obj Is Victim Then
-            v = obj
-            vl = Shrd.CreateList(v)
+        If TypeOf obj Is Item Then
+            i = obj
+            il = Shrd.CreateList(i)
             init = True
-            nudX.Value = Math.Max(0, v.x)
-            nudY.Value = Math.Max(0, v.y)
-            addr.Value = v.ptr
+            nudX.Value = i.x
+            nudY.Value = i.y
+            nudNum.Value = i.type
             init = False
         End If
     End Sub
 
     Private Sub nudX_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles nudX.ValueChanged
         If init Then Return
-        ed.EdControl.UndoMgr.Do(New MoveVictimAction(vl, nudX.Value - v.x, 0, 1))
+        ed.EdControl.UndoMgr.Do(New MoveItemAction(il, nudX.Value - i.x, 0, 1))
     End Sub
 
     Private Sub nudY_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles nudY.ValueChanged
         If init Then Return
-        ed.EdControl.UndoMgr.Do(New MoveVictimAction(vl, 0, nudY.Value - v.y, 1))
+        ed.EdControl.UndoMgr.Do(New MoveItemAction(il, 0, nudY.Value - i.y, 1))
     End Sub
 
-    Private Sub addr_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles addr.ValueChanged
+    Private Sub nudNum_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles nudNum.ValueChanged
         If init Then Return
-        ed.EdControl.UndoMgr.Do(New ChangeVictimTypeAction(vl, addr.Value))
+        ed.EdControl.UndoMgr.Do(New ChangeItemTypeAction(il, nudNum.Value))
     End Sub
 End Class

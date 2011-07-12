@@ -76,6 +76,10 @@ Public Class MoveBMAction
 
     Public Sub New(ByVal bossmonsters As List(Of BossMonster), ByVal dx As Integer, ByVal dy As Integer, ByVal stp As Integer)
         MyBase.New(bossmonsters)
+        If dx = 0 And dy = 0 Then
+            cancelAction = True
+            Return
+        End If
         For Each m As BossMonster In bossmonsters
             px.Add(m.x)
             py.Add(m.y)

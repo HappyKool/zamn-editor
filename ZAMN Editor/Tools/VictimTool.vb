@@ -7,14 +7,15 @@
         SidePanel = SideContentType.Victims
         typeName = "victim"
         UpdateCaptions()
+        Me.Status = DefaultText
     End Sub
 
     Public Overrides Function CloneT(ByVal o As Victim) As Victim
-
+        Return Nothing
     End Function
 
     Public Overrides Function FromText(ByVal txt As String) As System.Collections.Generic.List(Of Victim)
-
+        Return Nothing
     End Function
 
     Public Overrides Function GetChangeAction(ByVal objs As System.Collections.Generic.List(Of Victim), ByVal newType As Integer) As Action
@@ -26,7 +27,7 @@
     End Function
 
     Public Overrides Function NewOfT(ByVal x As Integer, ByVal y As Integer) As Victim
-
+        Return Nothing
     End Function
 
     Public Overrides Function RectOfT(ByVal obj As Victim) As System.Drawing.Rectangle
@@ -38,7 +39,7 @@
     End Sub
 
     Public Overrides Function ToText(ByVal Objs As System.Collections.Generic.List(Of Victim)) As String
-
+        Return Nothing
     End Function
 
     Public Overrides Property X(ByVal obj As Victim) As Integer

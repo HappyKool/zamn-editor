@@ -70,6 +70,7 @@ Partial Class VictimProp
         'nudY
         '
         Me.nudY.Location = New System.Drawing.Point(26, 29)
+        Me.nudY.Maximum = New Decimal(New Integer() {65535, 0, 0, 0})
         Me.nudY.Name = "nudY"
         Me.nudY.Size = New System.Drawing.Size(52, 20)
         Me.nudY.TabIndex = 5

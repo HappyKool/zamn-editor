@@ -12,6 +12,8 @@
     Public itemRect As List(Of Rectangle)
     Public totalHeight As Integer
     Public isSetup As Boolean = False
+    Public WithEvents propCtrl As IPropCtrl
+    Public ed As Editor
     Public Event ValueChanged(ByVal sender As Object, ByVal e As EventArgs)
 
     Public Overridable ReadOnly Property hasProperties As Boolean
@@ -34,6 +36,17 @@
         End Get
     End Property
 
+    Public Sub SetObject(ByVal obj As Object)
+        If propCtrl Is Nothing Then Return
+        propCtrl.SetObject(obj)
+        propCtrl.SetEnabled(True)
+    End Sub
+
+    Public Sub ClearObject()
+        If propCtrl Is Nothing Then Return
+        propCtrl.SetEnabled(False)
+    End Sub
+
     Public Sub New()
         InitializeComponent()
         Setup()
@@ -53,15 +66,27 @@
 
     Private Sub Setup()
         Init()
+        If propCtrl IsNot Nothing Then
+            ExpandPanel1.Panel1.Controls.Add(propCtrl)
+            ExpandPanel1.expandedHeight = propCtrl.GetHeight
+        End If
         bgBrush = New Drawing2D.LinearGradientBrush(New Rectangle(Point.Empty, New Size(canvas.Width, canvas.Height)), SystemColors.ButtonHighlight, SystemColors.ButtonFace, Drawing2D.LinearGradientMode.Horizontal)
         borderPen = New Pen(Color.FromArgb(132, 172, 221))
         SplitContainer1.Panel2Collapsed = Not hasProperties
         isSetup = True
+        ClearObject()
         UpdateScrollBar()
     End Sub
 
     Public Overridable Sub Init()
 
+    End Sub
+
+    Public Sub SetEditor(ByVal ed As Editor)
+        Me.ed = ed
+        If propCtrl IsNot Nothing Then
+            propCtrl.SetEditor(ed)
+        End If
     End Sub
 
     Protected Sub UpdateScrollBar()
@@ -142,8 +167,7 @@
             rect = New Rectangle(itemRect(l).X - 8, itemRect(l).Y - 8, itemRect(l).Width + 16, itemRect(l).Height + 16)
             If rect.Contains(actualPt) Then
                 SelectedIndex = l + startIdx
-                selectedBrush = New Drawing2D.LinearGradientBrush(rect, Color.FromArgb(236, 245, 255), Color.FromArgb(208, 229, 255), Drawing2D.LinearGradientMode.Vertical)
-                selectedGP = Shrd.GetRoundRect(rect, 7)
+                UpdateSelection()
                 RaiseEvent ValueChanged(Me, EventArgs.Empty)
                 Me.Invalidate(True)
                 Return
@@ -151,8 +175,17 @@
         Next
     End Sub
 
+    Public Sub UpdateSelection()
+        If SelectedIndex = -1 Then Return
+        Dim l As Integer = SelectedIndex - startIdx
+        Dim rect As New Rectangle(itemRect(l).X - 8, itemRect(l).Y - 8, itemRect(l).Width + 16, itemRect(l).Height + 16)
+        selectedBrush = New Drawing2D.LinearGradientBrush(rect, Color.FromArgb(236, 245, 255), Color.FromArgb(208, 229, 255), Drawing2D.LinearGradientMode.Vertical)
+        selectedGP = Shrd.GetRoundRect(rect, 7)
+    End Sub
+
     Public Sub ScollToSelected()
         If itemRect Is Nothing Or SelectedIndex = -1 Then Return
+        UpdateSelection()
         VScrl.Value = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange + 1, itemRect(SelectedIndex - startIdx).Y - (VScrl.LargeChange - itemRect(SelectedIndex - startIdx).Height) \ 2))
         Me.Invalidate(True)
     End Sub

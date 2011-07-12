@@ -28,7 +28,7 @@
         Me.unused = v.unused
         Me.ptr = v.ptr
         Me.num = v.num
-        Me.index = v.index
+        UpdateIdx()
     End Sub
 
     Public Function GetRect(ByVal gfx As LevelGFX) As Rectangle
@@ -37,11 +37,12 @@
 
     Public Sub UpdatePtr()
         If index > 0 Then
-            ptr = LevelGFX.ptrs(index - 1)
+            ptr = LevelGFX.ptrs(index)
         End If
     End Sub
 
     Public Sub UpdateIdx()
-        Me.index = 1 + Array.IndexOf(LevelGFX.ptrs, ptr)
+        Me.index = Array.IndexOf(LevelGFX.ptrs, ptr)
+        If Me.index = -1 Then Me.index = 0
     End Sub
 End Class

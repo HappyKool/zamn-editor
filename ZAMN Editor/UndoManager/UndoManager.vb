@@ -23,11 +23,13 @@
         'Determine if the actions should be merged
         If merge AndAlso UActions.Count > 0 AndAlso UActions.Peek().CanMerge AndAlso UActions.Peek().GetType().Equals(act.GetType()) Then
             act.SetEdControl(EdControl)
+            If act.cancelAction Then Return
             act.DoRedo(False)
             UActions.Peek().Merge(act)
             act = Nothing
         Else
             act.SetEdControl(EdControl)
+            If act.cancelAction Then Return
             UActions.Push(act)
             Dim item As New ToolStripMenuItem(act.ToString())
             AddHandler item.MouseEnter, AddressOf updateActCount
@@ -170,4 +172,5 @@ Public Class Action
         Me.level = EdControl.lvl
         Me.AfterSetEdControl()
     End Sub
+    Public cancelAction As Boolean
 End Class

@@ -8,5 +8,8 @@
     Public Overrides Sub Init()
         itemCt = 19
         startIdx = 20
+        Dim mp As New MonsterProp
+        mp.Dock = DockStyle.Fill
+        propCtrl = mp
     End Sub
 End Class

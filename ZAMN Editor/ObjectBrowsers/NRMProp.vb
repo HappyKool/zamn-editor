@@ -1,8 +1,8 @@
-﻿Public Class VictimProp
+﻿Public Class NRMProp
     Implements IPropCtrl
 
-    Public v As Victim
-    Public vl As List(Of Victim)
+    Public m As NRMonster
+    Public ml As List(Of NRMonster)
     Public ed As Editor
     Public init As Boolean
 
@@ -23,29 +23,29 @@
     End Sub
 
     Public Sub SetObject(ByVal obj As Object) Implements IPropCtrl.SetObject
-        If TypeOf obj Is Victim Then
-            v = obj
-            vl = Shrd.CreateList(v)
+        If TypeOf obj Is NRMonster Then
+            m = obj
+            ml = Shrd.CreateList(m)
             init = True
-            nudX.Value = Math.Max(0, v.x)
-            nudY.Value = Math.Max(0, v.y)
-            addr.Value = v.ptr
+            nudX.Value = m.x
+            nudY.Value = m.y
+            addr.Value = m.ptr
             init = False
         End If
     End Sub
 
     Private Sub nudX_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles nudX.ValueChanged
         If init Then Return
-        ed.EdControl.UndoMgr.Do(New MoveVictimAction(vl, nudX.Value - v.x, 0, 1))
+        ed.EdControl.UndoMgr.Do(New MoveNRMAction(ml, nudX.Value - m.x, 0, 1))
     End Sub
 
     Private Sub nudY_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles nudY.ValueChanged
         If init Then Return
-        ed.EdControl.UndoMgr.Do(New MoveVictimAction(vl, 0, nudY.Value - v.y, 1))
+        ed.EdControl.UndoMgr.Do(New MoveNRMAction(ml, 0, nudY.Value - m.y, 1))
     End Sub
 
     Private Sub addr_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles addr.ValueChanged
         If init Then Return
-        ed.EdControl.UndoMgr.Do(New ChangeVictimTypeAction(vl, addr.Value))
+        ed.EdControl.UndoMgr.Do(New ChangeNRMTypeAction(ml, addr.Value))
     End Sub
 End Class

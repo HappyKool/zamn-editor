@@ -54,7 +54,8 @@
     End Sub
 
     Public Sub Repaint()
-        Me.Invalidate(True)
+        'Me.Invalidate(True)
+        canvas.Invalidate()
     End Sub
 
     Public Sub UpdateSelection()
@@ -273,5 +274,9 @@
             End If
             If HScrl.Value = scrollEnd Then SmoothScroll.Stop()
         End If
+    End Sub
+
+    Private Sub SplitContainer1_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SplitContainer1.GotFocus
+        canvas.Focus()
     End Sub
 End Class

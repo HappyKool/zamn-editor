@@ -2,6 +2,7 @@
 
     Public ed As Editor
     Public SidePanel As SideContentType
+    Public WithEvents Browser As ObjectBrowser
     Public WithEvents TilePicker As TilesetBrowser
     Public WithEvents ItemPicker As ItemBrowser
     Public WithEvents VictimPicker As VictimBrowser
@@ -86,6 +87,24 @@
     End Sub
     Private Sub BMonsterPicker_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles BMonsterPicker.ValueChanged
         If active Then BMonsterChanged()
+    End Sub
+
+    Public Sub SetBrowser(ByVal Browser As ObjectBrowser)
+        Me.Browser = Browser
+        Browser.SetEditor(ed)
+        If TypeOf Browser Is TilesetBrowser Then
+            TilePicker = Browser
+        ElseIf TypeOf Browser Is ItemBrowser Then
+            ItemPicker = Browser
+        ElseIf TypeOf Browser Is VictimBrowser Then
+            VictimPicker = Browser
+        ElseIf TypeOf Browser Is NRMBrowser Then
+            NRMPicker = Browser
+        ElseIf TypeOf Browser Is MonsterBrowser Then
+            MonsterPicker = Browser
+        ElseIf TypeOf Browser Is BMonsterBrowser Then
+            BMonsterPicker = Browser
+        End If
     End Sub
 
     Public Sub Repaint()

@@ -15,6 +15,9 @@
 
     Public Overrides Sub Init()
         itemCt = gfx.ItemImages.Count - 1
+        Dim ip As New ItemProp
+        ip.Dock = DockStyle.Fill
+        propCtrl = ip
     End Sub
 
     Public Overrides Sub PaintObject(ByVal g As System.Drawing.Graphics, ByVal x As Integer, ByVal y As Integer, ByVal num As Integer)

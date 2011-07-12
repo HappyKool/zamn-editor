@@ -258,23 +258,23 @@
         If EdControl Is Nothing Or t Is Nothing Then Return
         Select Case t.SidePanel
             Case SideContentType.Tiles
-                t.TilePicker = EdControl.TilePicker
+                t.SetBrowser(EdControl.TilePicker)
                 EdControl.SetSidePanel(EdControl.TilePicker)
                 EdControl.TilePicker.SetAll()
             Case SideContentType.Items
-                t.ItemPicker = EdControl.ItemPicker
+                t.SetBrowser(EdControl.ItemPicker)
                 EdControl.SetSidePanel(EdControl.ItemPicker)
             Case SideContentType.Victims
-                t.VictimPicker = EdControl.VictimPicker
+                t.SetBrowser(EdControl.VictimPicker)
                 EdControl.SetSidePanel(EdControl.VictimPicker)
             Case SideContentType.NRMonsters
-                t.NRMPicker = EdControl.NRMPicker
+                t.SetBrowser(EdControl.NRMPicker)
                 EdControl.SetSidePanel(EdControl.NRMPicker)
             Case SideContentType.Monsters
-                t.MonsterPicker = EdControl.MonsterPicker
+                t.SetBrowser(EdControl.MonsterPicker)
                 EdControl.SetSidePanel(EdControl.MonsterPicker)
             Case SideContentType.BossMonsters
-                t.BMonsterPicker = EdControl.BMonsterPicker
+                t.SetBrowser(EdControl.BMonsterPicker)
                 EdControl.SetSidePanel(EdControl.BMonsterPicker)
         End Select
         If CurTool IsNot Nothing Then

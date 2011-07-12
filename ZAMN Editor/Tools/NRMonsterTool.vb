@@ -7,6 +7,7 @@
         SidePanel = SideContentType.NRMonsters
         typeName = "non-respawning monster"
         UpdateCaptions()
+        Me.Status = DefaultText
     End Sub
 
     Public Overrides Function CloneT(ByVal o As NRMonster) As NRMonster

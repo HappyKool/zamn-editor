@@ -7,6 +7,7 @@
         SidePanel = SideContentType.Items
         typeName = "item"
         UpdateCaptions()
+        Me.Status = DefaultText
     End Sub
 
     Public Overrides Function CloneT(ByVal o As Item) As Item

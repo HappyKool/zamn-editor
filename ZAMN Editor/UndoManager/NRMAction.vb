@@ -76,6 +76,10 @@ Public Class MoveNRMAction
 
     Public Sub New(ByVal NRMs As List(Of NRMonster), ByVal dx As Integer, ByVal dy As Integer, ByVal stp As Integer)
         MyBase.New(NRMs)
+        If dx = 0 And dy = 0 Then
+            cancelAction = True
+            Return
+        End If
         For Each m As NRMonster In NRMs
             px.Add(m.x)
             py.Add(m.y)

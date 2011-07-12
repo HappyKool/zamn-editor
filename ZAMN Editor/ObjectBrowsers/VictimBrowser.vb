@@ -8,5 +8,8 @@
     Public Overrides Sub Init()
         itemCt = 10
         startIdx = 1
+        Dim vp As New VictimProp
+        vp.Dock = DockStyle.Fill
+        propCtrl = vp
     End Sub
 End Class

@@ -7,6 +7,7 @@
         SidePanel = SideContentType.Monsters
         typeName = "monster"
         UpdateCaptions()
+        Me.Status = DefaultText
     End Sub
 
     Public Overrides Function RectOfT(ByVal obj As Monster) As System.Drawing.Rectangle
@@ -35,8 +36,8 @@
         If MonsterPicker.SelectedIndex = -1 Then Return Nothing
         dragXOff = ed.EdControl.lvl.GFX.VictimImages(MonsterPicker.SelectedIndex).Width / 2
         dragYOff = ed.EdControl.lvl.GFX.VictimImages(MonsterPicker.SelectedIndex).Height / 2
-        Return New Monster(100, x - ed.EdControl.lvl.GFX.VictimImages(MonsterPicker.SelectedIndex).Width / 2,
-                           y - ed.EdControl.lvl.GFX.VictimImages(MonsterPicker.SelectedIndex).Height / 2, 100,
+        Return New Monster(20, x - ed.EdControl.lvl.GFX.VictimImages(MonsterPicker.SelectedIndex).Width / 2,
+                           y - ed.EdControl.lvl.GFX.VictimImages(MonsterPicker.SelectedIndex).Height / 2, 0,
                            LevelGFX.ptrs(MonsterPicker.SelectedIndex))
     End Function
 
