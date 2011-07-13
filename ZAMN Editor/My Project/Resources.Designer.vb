@@ -144,6 +144,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property ErrorImg() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("ErrorImg", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property FirstAidKit() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("FirstAidKit", resourceCulture)

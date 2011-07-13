@@ -307,7 +307,7 @@
 
     Public Overrides Function Copy() As Boolean
         If removable Then
-            Clipboard.SetText(ToText(selectedObjs))
+            Clipboard.SetText(Shrd.FormatCopyStr(pasteChar & ToText(selectedObjs)))
             Return False
         End If
     End Function
@@ -323,8 +323,10 @@
 
     Public Overrides Function Paste() As Boolean
         If removable Then
-            If Not Clipboard.GetText.StartsWith(pasteChar) Then Return False
-            selectedObjs = FromText(Clipboard.GetText)
+            Dim clipTxt As String = Shrd.UnFormatCopyStr(Clipboard.GetText)
+            If Not clipTxt.StartsWith(pasteChar) Then Return False
+            clipTxt = Mid(clipTxt, 2)
+            selectedObjs = FromText(clipTxt)
             Dim MinX As Integer = Integer.MaxValue, MinY As Integer = Integer.MaxValue
             Dim MaxX As Integer = 0, MaxY As Integer = 0
             Dim r As Rectangle

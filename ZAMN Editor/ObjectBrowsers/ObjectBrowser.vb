@@ -7,6 +7,7 @@
     Public SelectedIndex As Integer = -1
     Public itemCt As Integer
     Public startIdx As Integer = 0
+    Public toolTipText As String()
     Public gfx As LevelGFX
     Public ts As Tileset
     Public itemRect As List(Of Rectangle)
@@ -19,6 +20,12 @@
     Public Overridable ReadOnly Property hasProperties As Boolean
         Get
             Return True
+        End Get
+    End Property
+
+    Public Overridable ReadOnly Property hasToolTips As Boolean
+        Get
+            Return False
         End Get
     End Property
 
@@ -173,6 +180,22 @@
                 Return
             End If
         Next
+    End Sub
+
+    Private Sub canvas_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles canvas.MouseMove
+        If Not hasToolTips Then Return
+        For l As Integer = 0 To itemCt
+            If itemRect(l).Contains(e.Location) Then
+                'ToolTips.SetToolTip(canvas, toolTipText(l))
+                'ToolTips.Active = True
+                Return
+            End If
+        Next
+        ToolTips.SetToolTip(canvas, "")
+    End Sub
+
+    Private Sub canvas_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles canvas.MouseHover
+
     End Sub
 
     Public Sub UpdateSelection()

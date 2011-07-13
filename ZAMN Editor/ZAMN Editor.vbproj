@@ -43,6 +43,9 @@
   <PropertyGroup>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>IconB.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -206,6 +209,12 @@
     <Compile Include="RecentFilesList.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SaveMsgBox.Designer.vb">
+      <DependentUpon>SaveMsgBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SaveMsgBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="TitlePage.vb" />
     <Compile Include="TitlePageEdCtrl.Designer.vb">
       <DependentUpon>TitlePageEdCtrl.vb</DependentUpon>
@@ -317,6 +326,9 @@
     <EmbeddedResource Include="PasswordEditor.resx">
       <DependentUpon>PasswordEditor.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SaveMsgBox.resx">
+      <DependentUpon>SaveMsgBox.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TitlePageEdCtrl.resx">
       <DependentUpon>TitlePageEdCtrl.vb</DependentUpon>
     </EmbeddedResource>
@@ -415,6 +427,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DropArrow.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon.ico" />
+    <Content Include="IconB.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

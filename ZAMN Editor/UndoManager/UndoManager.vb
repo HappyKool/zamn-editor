@@ -6,7 +6,7 @@
     Public UActions As New Stack(Of Action)()
     Public RActions As New Stack(Of Action)()
     Public merge As Boolean = True
-    Public dirty As Boolean = False
+    Public savePos As Integer = 0
 
     Private actionCount As Integer
 
@@ -36,6 +36,9 @@
             AddHandler item.Click, AddressOf onUndoActions
             undo.DropDownItems.Insert(0, item)
         End If
+        If UActions.Count <= savePos Then
+            savePos = -1
+        End If
         If redo.DropDownItems.Count > 0 Then
             redo.DropDownItems.Clear()
             RActions.Clear()
@@ -46,15 +49,20 @@
             act.DoRedo(False)
         End If
         merge = True
-        dirty = True
     End Sub
     Public Sub Perform(ByVal act As Action)
         act.SetEdControl(EdControl)
+        If act.cancelAction Then Return
         act.DoRedo(False)
     End Sub
     Public Sub Clean()
-        dirty = False
+        savePos = UActions.Count
     End Sub
+    Public ReadOnly Property Dirty
+        Get
+            Return savePos <> UActions.Count
+        End Get
+    End Property
     Private Sub onUndoLast(ByVal sender As Object, ByVal e As EventArgs)
         UndoLast(False)
     End Sub
@@ -70,7 +78,6 @@
             RActions.Push(UActions.Pop())
             undo.Enabled = undo.DropDownItems.Count > 0
             redo.Enabled = True
-            dirty = undo.Enabled
         End If
     End Sub
 
@@ -99,7 +106,6 @@
             UActions.Push(RActions.Pop())
             redo.Enabled = redo.DropDownItems.Count > 0
             undo.Enabled = True
-            dirty = True
         End If
     End Sub
 

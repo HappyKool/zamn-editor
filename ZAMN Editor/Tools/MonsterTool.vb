@@ -3,7 +3,7 @@
 
     Public Sub New(ByVal ed As Editor)
         MyBase.New(ed)
-        pasteChar = "3"
+        pasteChar = "M"
         SidePanel = SideContentType.Monsters
         typeName = "monster"
         UpdateCaptions()

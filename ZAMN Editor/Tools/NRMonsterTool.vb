@@ -3,7 +3,7 @@
 
     Public Sub New(ByVal ed As Editor)
         MyBase.New(ed)
-        pasteChar = "2"
+        pasteChar = "N"
         SidePanel = SideContentType.NRMonsters
         typeName = "non-respawning monster"
         UpdateCaptions()

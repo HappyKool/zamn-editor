@@ -255,6 +255,20 @@ Public Class Shrd
         Return Mid(result, 1, result.Length - 1) & "}"
     End Function
 
+    Public Shared Function FormatCopyStr(ByVal str As String) As String
+        Return "ZAMNClip|" & str & "|EndClip"
+    End Function
+
+    Public Shared Function IsZAMNClip(ByVal str As String) As Boolean
+        str = Trim(str)
+        Return str.StartsWith("ZAMNClip|") And (InStr(10, str, "|") > 0)
+    End Function
+
+    Public Shared Function UnFormatCopyStr(ByVal str As String) As String
+        str = Trim(str)
+        Return Mid(str, 10, InStr(10, str, "|") - 10)
+    End Function
+
     Public Shared Function GetBytes(ByVal value As Integer) As Byte()
         Dim result As Byte() = BitConverter.GetBytes(value)
         If result(3) = 0 Then

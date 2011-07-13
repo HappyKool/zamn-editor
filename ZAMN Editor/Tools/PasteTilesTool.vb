@@ -30,19 +30,20 @@
 
     Public Overrides Function Paste() As Boolean
         pasting = False
-        Dim txt As String = Clipboard.GetText
-        If txt.StartsWith("A") Then
+        Dim txt As String = Shrd.UnFormatCopyStr(Clipboard.GetText)
+        If txt.StartsWith("T") Then
+            txt = Mid(txt, 2)
             ed.SelectAll(False)
-            width = CInt("&H" & Mid(txt, 2, 2))
-            height = CInt("&H" & Mid(txt, 4, 2))
+            width = CInt("&H" & Mid(txt, 1, 2))
+            height = CInt("&H" & Mid(txt, 3, 2))
             ReDim NewTiles(width - 1, height - 1)
             selection = New Selection(width, height)
             For l As Integer = 0 To txt.Length - 6 Step 2
                 Dim l2 As Integer = l \ 2
-                If txt(l + 6) = "-" Then
+                If txt(l + 5) = "-" Then
                     NewTiles(l2 Mod width, l2 \ width) = -1
                 Else
-                    NewTiles(l2 Mod width, l2 \ width) = CInt("&H" & Mid(txt, l + 6, 2))
+                    NewTiles(l2 Mod width, l2 \ width) = CInt("&H" & Mid(txt, l + 5, 2))
                     selection.selectPts(l2 Mod width, l2 \ width) = True
                 End If
             Next

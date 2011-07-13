@@ -22,9 +22,11 @@ Partial MustInherit Class ObjectBrowser
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.VScrl = New System.Windows.Forms.VScrollBar()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.canvas = New System.Windows.Forms.PictureBox()
+        Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
         Me.ExpandPanel1 = New ZAMNEditor.ExpandPanel()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -74,6 +76,10 @@ Partial MustInherit Class ObjectBrowser
         Me.canvas.TabIndex = 2
         Me.canvas.TabStop = False
         '
+        'ToolTips
+        '
+        Me.ToolTips.ShowAlways = True
+        '
         'ExpandPanel1
         '
         Me.ExpandPanel1.Dock = System.Windows.Forms.DockStyle.Fill
@@ -102,5 +108,6 @@ Partial MustInherit Class ObjectBrowser
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents canvas As System.Windows.Forms.PictureBox
     Friend WithEvents ExpandPanel1 As ZAMNEditor.ExpandPanel
+    Friend WithEvents ToolTips As System.Windows.Forms.ToolTip
 
 End Class

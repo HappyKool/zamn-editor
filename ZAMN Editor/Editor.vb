@@ -29,6 +29,12 @@
         End If
     End Sub
 
+    Private Sub Editor_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        If SaveMsgBox.ShowDialog(Me) = Windows.Forms.DialogResult.Cancel Then
+            e.Cancel = True
+        End If
+    End Sub
+
     Private Sub Editor_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         My.Settings.Initialized = True
         My.Settings.Maximized = Me.WindowState = FormWindowState.Maximized
@@ -50,6 +56,9 @@
     End Sub
 
     Public Sub LoadROM(ByVal path As String)
+        If SaveMsgBox.ShowDialog(Me) = Windows.Forms.DialogResult.Cancel Then
+            Return
+        End If
         If path = "D:\DEBUG.SMC" Then
             LevelDebugTools.Visible = True
         End If
@@ -59,6 +68,7 @@
         OpenLevelTool.Enabled = True
         EditPasswords.Enabled = True
         OpenLevel.LoadROM(r)
+        Tabs.CloseAll()
     End Sub
 
     Private Sub FileOpenLevel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FileOpenLevel.Click, OpenLevelTool.Click
@@ -73,6 +83,11 @@
                 tp.Controls.Add(EdControl)
                 EdControl.Dock = DockStyle.Fill
                 EdControl.LoadLevel(l)
+                EdControl.UndoMgr = New UndoManager(UndoTool, RedoTool, EdControl)
+                UndoTool.Enabled = False
+                RedoTool.Enabled = False
+                UndoTool.DropDownItems.Clear()
+                RedoTool.DropDownItems.Clear()
             Next
             If EdControl IsNot Nothing Then
                 SetTool(CurTool)
@@ -90,6 +105,7 @@
 
     Private Sub FileSave_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles FileSave.Click, SaveTool.Click
         r.SaveLevel(EdControl.lvl)
+        EdControl.UndoMgr.Clean()
     End Sub
 
     Private Sub FileExit_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles FileExit.Click
@@ -113,20 +129,23 @@
     End Sub
 
     Private Sub EditCopy_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditCopy.Click, CopyTool.Click
+        If EdControl Is Nothing Then Return
         If CurTool.Copy() Then
-            Clipboard.SetText(CopyTiles())
+            Clipboard.SetText(Shrd.FormatCopyStr(CopyTiles()))
         End If
     End Sub
 
     Private Sub EditCut_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditCut.Click, CutTool.Click
+        If EdControl Is Nothing Then Return
         If CurTool.Cut() Then
-            Clipboard.SetText(CopyTiles())
+            Clipboard.SetText(Shrd.FormatCopyStr(CopyTiles()))
         End If
         EdControl.Repaint()
     End Sub
 
     Private Sub EditPaste_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditPaste.Click, PasteTool.Click
-        If CurTool Is Nothing Then Return
+        If EdControl Is Nothing or CurTool is Nothing then Return
+        If Not Shrd.IsZAMNClip(Clipboard.GetText) Then Return
         If CurTool.Paste() Then
             PTool = CurTool
             SetTool(TilePaste)
@@ -199,11 +218,14 @@
     End Sub
 
     Private Sub LevelCopy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LevelCopy.Click
-        Clipboard.SetText(Shrd.ToText(EdControl.lvl.ToFile()))
+        Clipboard.SetText(Shrd.FormatCopyStr("L" & Shrd.ToText(EdControl.lvl.ToFile())))
     End Sub
 
     Private Sub LevelPaste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LevelPaste.Click
-        Dim data As Byte() = Shrd.FromText(Clipboard.GetText)
+        If Not Shrd.IsZAMNClip(Clipboard.GetText) Then Return
+        Dim txt As String = Shrd.UnFormatCopyStr(Clipboard.GetText)
+        If Not txt.StartsWith("L") Then Return
+        Dim data As Byte() = Shrd.FromText(Mid(txt, 2))
         Dim fs As New ByteArrayStream(data)
         fs.Seek(14, IO.SeekOrigin.Begin)
         EdControl.lvl = New Level(fs, EdControl.lvl.name, EdControl.lvl.num, True, New IO.FileStream(r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read))
@@ -216,6 +238,19 @@
 
     Private Sub LevelSettingsM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LevelSettingsM.Click
         LevelSettings.ShowDialog(Me)
+    End Sub
+
+    Private Sub HelpContents_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HelpContents.Click
+        Dim path As String = My.Application.Info.DirectoryPath & "\Help\index.html"
+        If My.Computer.FileSystem.FileExists(path) Then
+            System.Diagnostics.Process.Start(path)
+        Else
+            MsgBox("Help file could not be found.")
+        End If
+    End Sub
+
+    Private Sub HelpAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HelpAbout.Click
+        MsgBox("ZAMN Editor Beta v0.8" & Environment.NewLine & "Icons are from or modified from Silk Icon set. http://www.famfamfam.com/lab/icons/silk/" & Environment.NewLine & Environment.NewLine & "Copyright © 2010 Piranhaplant")
     End Sub
 
     Private Sub Tools_ItemClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles Tools.ItemClicked
@@ -296,15 +331,7 @@
         EdControl.UpdateScrollBars()
         EdControl.Focus()
         EdControl.Repaint()
-        If EdControl.UndoMgr Is Nothing Then
-            EdControl.UndoMgr = New UndoManager(UndoTool, RedoTool, EdControl)
-            UndoTool.Enabled = False
-            RedoTool.Enabled = False
-            UndoTool.DropDownItems.Clear()
-            RedoTool.DropDownItems.Clear()
-        Else
-            EdControl.UndoMgr.ReAddItems()
-        End If
+        EdControl.UndoMgr.ReAddItems()
     End Sub
 
     Public Sub SetCopy(ByVal enabled As Boolean)
@@ -327,6 +354,10 @@
     End Sub
 
     Private Sub Tabs_TabClosed(ByVal sender As Object, ByVal e As TabEventArgs) Handles Tabs.TabClosed
+        If (Not e.closeAll) AndAlso SaveMsgBox.ShowDialog(Me, True) = Windows.Forms.DialogResult.Cancel Then
+            e.cancel = True
+            Return
+        End If
         For Each t As Tool In EditingTools
             t.RemoveEdCtrl(e.Tab.Controls(0))
         Next
@@ -342,6 +373,8 @@
         RedoTool.DropDownItems.Clear()
         UndoTool.Enabled = False
         RedoTool.Enabled = False
+        CopyTool.Enabled = False
+        CutTool.Enabled = False
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -415,7 +448,7 @@
                 End If
             Next
         Next
-        str = "A" & Shrd.HexL(xEnd - xStart + 1, 2) & Shrd.HexL(yEnd - yStart + 1, 2)
+        str = "T" & Shrd.HexL(xEnd - xStart + 1, 2) & Shrd.HexL(yEnd - yStart + 1, 2)
         For y As Integer = yStart To yEnd
             For x As Integer = xStart To xEnd
                 If EdControl.selection.selectPts(x, y) Then

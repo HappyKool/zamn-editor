@@ -3,7 +3,7 @@
 
     Public Sub New(ByVal ed As Editor)
         MyBase.New(ed)
-        pasteChar = "0"
+        pasteChar = "I"
         SidePanel = SideContentType.Items
         typeName = "item"
         UpdateCaptions()

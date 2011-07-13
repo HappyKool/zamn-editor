@@ -1,7 +1,7 @@
 ﻿Public Class Tabs
     Inherits Control
 
-    Private WithEvents tabctrl As TabControl
+    Public WithEvents tabctrl As TabControl
     Public SelectedTab As TabPage
     Public Event TabSelected(ByVal sender As Object, ByVal e As EventArgs)
     Public Event TabsClosed(ByVal sender As Object, ByVal e As EventArgs)
@@ -41,7 +41,8 @@
 
     Private Sub TabClosing(ByVal sender As Object, ByVal e As TabEventArgs)
         RaiseEvent TabClosed(sender, e)
-        If tabctrl.TabPages.Count = 0 Then
+        If e.cancel Then Return
+        If tabctrl.TabPages.Count = 1 Then
             RaiseEvent TabsClosed(Me, EventArgs.Empty)
         End If
     End Sub
@@ -50,6 +51,17 @@
         For l As Integer = 0 To Me.Controls.Count - 2
             CType(Me.Controls(l), XButton).ReAlign()
         Next
+    End Sub
+
+    Public Sub CloseAll()
+        For l As Integer = 0 To tabctrl.TabPages.Count - 1
+            Dim e As New TabEventArgs(tabctrl.TabPages(0))
+            e.closeAll = True
+            RaiseEvent TabClosed(Me, e)
+            tabctrl.TabPages.RemoveAt(0)
+            Me.Controls.RemoveAt(0)
+        Next
+        RaiseEvent TabsClosed(Me, EventArgs.Empty)
     End Sub
 End Class
 
@@ -91,11 +103,14 @@ Public Class XButton
 
     Private Sub XButton_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseUp
         If e.X >= 0 And e.Y >= 0 And e.X <= 12 And e.Y <= 12 Then
+            CType(page.Parent, TabControl).SelectTab(page)
+            Dim tabE As New TabEventArgs(page)
+            RaiseEvent Closing(Me, tabE)
+            If tabE.cancel Then Return
             page.Parent.Controls.Remove(page)
             Dim p As Control = Me.Parent
             Me.Parent.Controls.Remove(Me)
             CType(p, Tabs).ReAlignAll()
-            RaiseEvent Closing(Me, New TabEventArgs(page))
         End If
         curImg = My.Resources.X2
         Me.Invalidate()
@@ -116,6 +131,8 @@ Public Class TabEventArgs
     Inherits EventArgs
 
     Public Tab As TabPage
+    Public cancel As Boolean = False
+    Public closeAll As Boolean = False
 
     Public Sub New(ByVal tp As TabPage)
         Me.Tab = tp

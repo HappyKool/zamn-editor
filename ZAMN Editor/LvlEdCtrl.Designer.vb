@@ -108,8 +108,8 @@ Partial Class LvlEdCtrl
         'Status
         '
         Me.Status.Name = "Status"
-        Me.Status.Size = New System.Drawing.Size(100, 17)
-        Me.Status.Text = "ZAMN Editor v1.0"
+        Me.Status.Size = New System.Drawing.Size(126, 17)
+        Me.Status.Text = "ZAMN Editor Beta v0.8"
         '
         'SmoothScroll
         '

@@ -24,9 +24,11 @@ Partial Class Editor
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Editor))
         Me.TSContainer = New System.Windows.Forms.ToolStripContainer()
+        Me.Tabs = New ZAMNEditor.Tabs()
         Me.MainMenu = New System.Windows.Forms.MenuStrip()
         Me.FileMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.FileOpen = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentROMs = New ZAMNEditor.RecentFilesList()
         Me.FileOpenLevel = New System.Windows.Forms.ToolStripMenuItem()
         Me.toolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.FileSave = New System.Windows.Forms.ToolStripMenuItem()
@@ -74,6 +76,10 @@ Partial Class Editor
         Me.ToolsNRMonsters = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsMonsters = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsBossMonsters = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpContents = New System.Windows.Forms.ToolStripMenuItem()
+        Me.toolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
+        Me.HelpAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.Tools = New System.Windows.Forms.ToolStrip()
         Me.OpenTool = New System.Windows.Forms.ToolStripButton()
         Me.OpenLevelTool = New System.Windows.Forms.ToolStripButton()
@@ -85,6 +91,10 @@ Partial Class Editor
         Me.UndoTool = New System.Windows.Forms.ToolStripSplitButton()
         Me.RedoTool = New System.Windows.Forms.ToolStripSplitButton()
         Me.toolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Zoom = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.Zoom100Tool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Zoom75Tool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Zoom50Tool = New System.Windows.Forms.ToolStripMenuItem()
         Me.toolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.BrushTool = New System.Windows.Forms.ToolStripButton()
         Me.DropperTool = New System.Windows.Forms.ToolStripButton()
@@ -100,12 +110,6 @@ Partial Class Editor
         Me.OpenROM = New System.Windows.Forms.OpenFileDialog()
         Me.ImportLevel = New System.Windows.Forms.OpenFileDialog()
         Me.ExportLevel = New System.Windows.Forms.SaveFileDialog()
-        Me.Tabs = New ZAMNEditor.Tabs()
-        Me.RecentROMs = New ZAMNEditor.RecentFilesList()
-        Me.Zoom100Tool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Zoom75Tool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Zoom50Tool = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Zoom = New System.Windows.Forms.ToolStripDropDownButton()
         Me.TSContainer.ContentPanel.SuspendLayout()
         Me.TSContainer.TopToolStripPanel.SuspendLayout()
         Me.TSContainer.SuspendLayout()
@@ -146,11 +150,21 @@ Partial Class Editor
         Me.TSContainer.TopToolStripPanel.Controls.Add(Me.Tools)
         Me.TSContainer.TopToolStripPanel.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         '
+        'Tabs
+        '
+        Me.Tabs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Tabs.Location = New System.Drawing.Point(0, 0)
+        Me.Tabs.Name = "Tabs"
+        Me.Tabs.Size = New System.Drawing.Size(625, 386)
+        Me.Tabs.TabIndex = 1
+        Me.Tabs.Text = "Tabs1"
+        Me.Tabs.Visible = False
+        '
         'MainMenu
         '
         Me.MainMenu.Dock = System.Windows.Forms.DockStyle.None
         Me.MainMenu.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible
-        Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileMenu, Me.EditMenu, Me.ViewMenu, Me.LevelMenu, Me.ToolsMenu})
+        Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileMenu, Me.EditMenu, Me.ViewMenu, Me.LevelMenu, Me.ToolsMenu, Me.HelpMenu})
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
         Me.MainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
@@ -173,6 +187,16 @@ Partial Class Editor
         Me.FileOpen.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
         Me.FileOpen.Size = New System.Drawing.Size(173, 22)
         Me.FileOpen.Text = "&Open"
+        '
+        'RecentROMs
+        '
+        Me.RecentROMs.Enabled = False
+        Me.RecentROMs.Items = CType(resources.GetObject("RecentROMs.Items"), System.Collections.Generic.List(Of String))
+        Me.RecentROMs.MaxItems = 5
+        Me.RecentROMs.MaxLength = 60
+        Me.RecentROMs.Name = "RecentROMs"
+        Me.RecentROMs.Size = New System.Drawing.Size(173, 22)
+        Me.RecentROMs.Text = "&Recent ROMs"
         '
         'FileOpenLevel
         '
@@ -509,6 +533,30 @@ Partial Class Editor
         Me.ToolsBossMonsters.Size = New System.Drawing.Size(218, 22)
         Me.ToolsBossMonsters.Text = "&Boss Monsters"
         '
+        'HelpMenu
+        '
+        Me.HelpMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpContents, Me.toolStripSeparator11, Me.HelpAbout})
+        Me.HelpMenu.Name = "HelpMenu"
+        Me.HelpMenu.Size = New System.Drawing.Size(44, 20)
+        Me.HelpMenu.Text = "&Help"
+        '
+        'HelpContents
+        '
+        Me.HelpContents.Name = "HelpContents"
+        Me.HelpContents.Size = New System.Drawing.Size(131, 22)
+        Me.HelpContents.Text = "&Contents..."
+        '
+        'toolStripSeparator11
+        '
+        Me.toolStripSeparator11.Name = "toolStripSeparator11"
+        Me.toolStripSeparator11.Size = New System.Drawing.Size(128, 6)
+        '
+        'HelpAbout
+        '
+        Me.HelpAbout.Name = "HelpAbout"
+        Me.HelpAbout.Size = New System.Drawing.Size(131, 22)
+        Me.HelpAbout.Text = "&About"
+        '
         'Tools
         '
         Me.Tools.Dock = System.Windows.Forms.DockStyle.None
@@ -607,6 +655,36 @@ Partial Class Editor
         '
         Me.toolStripSeparator1.Name = "toolStripSeparator1"
         Me.toolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        '
+        'Zoom
+        '
+        Me.Zoom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.Zoom.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Zoom100Tool, Me.Zoom75Tool, Me.Zoom50Tool})
+        Me.Zoom.Image = Global.ZAMNEditor.My.Resources.Resources.MagnifyingGlass
+        Me.Zoom.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.Zoom.Name = "Zoom"
+        Me.Zoom.Size = New System.Drawing.Size(29, 22)
+        Me.Zoom.Text = "Zoom Level"
+        '
+        'Zoom100Tool
+        '
+        Me.Zoom100Tool.Checked = True
+        Me.Zoom100Tool.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.Zoom100Tool.Name = "Zoom100Tool"
+        Me.Zoom100Tool.Size = New System.Drawing.Size(102, 22)
+        Me.Zoom100Tool.Text = "100%"
+        '
+        'Zoom75Tool
+        '
+        Me.Zoom75Tool.Name = "Zoom75Tool"
+        Me.Zoom75Tool.Size = New System.Drawing.Size(102, 22)
+        Me.Zoom75Tool.Text = "75%"
+        '
+        'Zoom50Tool
+        '
+        Me.Zoom50Tool.Name = "Zoom50Tool"
+        Me.Zoom50Tool.Size = New System.Drawing.Size(102, 22)
+        Me.Zoom50Tool.Text = "50%"
         '
         'toolStripSeparator8
         '
@@ -725,62 +803,13 @@ Partial Class Editor
         '
         Me.ExportLevel.Filter = "ZAMN Level Files (*.zl)|*.zl"
         '
-        'Tabs
-        '
-        Me.Tabs.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Tabs.Location = New System.Drawing.Point(0, 0)
-        Me.Tabs.Name = "Tabs"
-        Me.Tabs.Size = New System.Drawing.Size(625, 386)
-        Me.Tabs.TabIndex = 1
-        Me.Tabs.Text = "Tabs1"
-        Me.Tabs.Visible = False
-        '
-        'RecentROMs
-        '
-        Me.RecentROMs.Enabled = False
-        Me.RecentROMs.Items = CType(resources.GetObject("RecentROMs.Items"), System.Collections.Generic.List(Of String))
-        Me.RecentROMs.MaxItems = 5
-        Me.RecentROMs.MaxLength = 60
-        Me.RecentROMs.Name = "RecentROMs"
-        Me.RecentROMs.Size = New System.Drawing.Size(173, 22)
-        Me.RecentROMs.Text = "&Recent ROMs"
-        '
-        'Zoom100Tool
-        '
-        Me.Zoom100Tool.Checked = True
-        Me.Zoom100Tool.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.Zoom100Tool.Name = "Zoom100Tool"
-        Me.Zoom100Tool.Size = New System.Drawing.Size(152, 22)
-        Me.Zoom100Tool.Text = "100%"
-        '
-        'Zoom75Tool
-        '
-        Me.Zoom75Tool.Name = "Zoom75Tool"
-        Me.Zoom75Tool.Size = New System.Drawing.Size(152, 22)
-        Me.Zoom75Tool.Text = "75%"
-        '
-        'Zoom50Tool
-        '
-        Me.Zoom50Tool.Name = "Zoom50Tool"
-        Me.Zoom50Tool.Size = New System.Drawing.Size(152, 22)
-        Me.Zoom50Tool.Text = "50%"
-        '
-        'Zoom
-        '
-        Me.Zoom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.Zoom.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Zoom100Tool, Me.Zoom75Tool, Me.Zoom50Tool})
-        Me.Zoom.Image = Global.ZAMNEditor.My.Resources.Resources.MagnifyingGlass
-        Me.Zoom.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.Zoom.Name = "Zoom"
-        Me.Zoom.Size = New System.Drawing.Size(29, 22)
-        Me.Zoom.Text = "Zoom Level"
-        '
         'Editor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(625, 435)
         Me.Controls.Add(Me.TSContainer)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Editor"
         Me.Text = "ZAMN Level Editor"
         Me.TSContainer.ContentPanel.ResumeLayout(False)
@@ -878,5 +907,9 @@ Partial Class Editor
     Friend WithEvents Zoom100Tool As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Zoom75Tool As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Zoom50Tool As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents HelpMenu As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents HelpContents As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents toolStripSeparator11 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents HelpAbout As System.Windows.Forms.ToolStripMenuItem
 
 End Class
