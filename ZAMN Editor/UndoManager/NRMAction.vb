@@ -133,6 +133,10 @@ Public Class ChangeNRMTypeAction
 
     Public Sub New(ByVal NRMs As List(Of NRMonster), ByVal ptr As Integer)
         MyBase.New(NRMs)
+        If NRMs.Count = 1 And NRMs(0).ptr = newptr Then
+            cancelAction = True
+            Return
+        End If
         For Each m As NRMonster In NRMs
             prevptr.Add(m.ptr)
         Next

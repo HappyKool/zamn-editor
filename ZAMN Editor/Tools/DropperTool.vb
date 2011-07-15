@@ -15,11 +15,12 @@
     Public Overrides Sub MouseDown(ByVal e As MouseEventArgs)
         Me.MouseMove(e)
 
-        Dim nx As Integer = e.X \ 64
-        Dim ny As Integer = e.Y \ 64
+        'Dim nx As Integer = e.X \ 64
+        'Dim ny As Integer = e.Y \ 64
 
         'With ed.EdControl.lvl
-        '    MsgBox(Hex(.tileset.TileTiles(.Tiles(nx, ny))(nx \ 8, nx \ 9)))
+        '    Dim tilenum As Integer = .tileset.TileTiles(.Tiles(nx, ny))(nx \ 8, nx \ 9)
+        '    MsgBox(Hex(tilenum) & Environment.NewLine & Convert.ToString(.tileset.collision(tilenum * 2), 2) & " " & Convert.ToString(.tileset.collision(tilenum * 2 + 1), 2))
         'End With
     End Sub
 

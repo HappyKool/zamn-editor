@@ -77,10 +77,14 @@ Public Class ChangeVictimTypeAction
 
     Public Sub New(ByVal victims As List(Of Victim), ByVal newPtr As Integer)
         MyBase.New(victims)
-        Me.newPtr = newPtr
+        If victims.Count = 1 And victims(0).ptr = newPtr Then
+            cancelAction = True
+            Return
+        End If
         For Each v As Victim In victims
             prevPtr.Add(v.ptr)
         Next
+        newPtr = newPtr
     End Sub
 
     Public Overrides Sub Undo()

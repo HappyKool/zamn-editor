@@ -201,10 +201,25 @@
     End Sub
 
     Public Overrides Sub KeyDown(ByVal e As System.Windows.Forms.KeyEventArgs)
-        If e.KeyCode = Keys.Delete And selectedObjs.Count > 0 Then
+        If e.KeyCode = Keys.Delete And selectedObjs.Count > 0 And removable Then
             ed.EdControl.UndoMgr.Do(GetRemoveAction(selectedObjs))
             selectedObjs.Clear()
             Repaint()
+        End If
+        If selectedObjs.Count > 0 Then
+            If e.KeyCode = Keys.Up Then
+                ed.EdControl.UndoMgr.Do(GetMoveAction(selectedObjs, 0, -1, 1))
+                UpdateProperties()
+            ElseIf e.KeyCode = Keys.Right Then
+                ed.EdControl.UndoMgr.Do(GetMoveAction(selectedObjs, 1, 0, 1))
+                UpdateProperties()
+            ElseIf e.KeyCode = Keys.Down Then
+                ed.EdControl.UndoMgr.Do(GetMoveAction(selectedObjs, 0, 1, 1))
+                UpdateProperties()
+            ElseIf e.KeyCode = Keys.Left Then
+                ed.EdControl.UndoMgr.Do(GetMoveAction(selectedObjs, -1, 0, 1))
+                UpdateProperties()
+            End If
         End If
         ResetStatus()
     End Sub

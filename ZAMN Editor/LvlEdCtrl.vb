@@ -208,6 +208,12 @@
         forceMove = False
     End Sub
 
+    Protected Overrides Function ProcessCmdKey(ByRef msg As System.Windows.Forms.Message, ByVal keyData As System.Windows.Forms.Keys) As Boolean
+        If t Is Nothing Then Return False
+        t.KeyDown(New KeyEventArgs(keyData))
+        Return True
+    End Function
+
     Private Sub canvas_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles canvas.KeyDown
         If t Is Nothing Then Return
         t.KeyDown(e)

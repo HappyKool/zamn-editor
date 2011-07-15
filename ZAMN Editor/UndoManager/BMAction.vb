@@ -133,6 +133,10 @@ Public Class ChangeBMTypeAction
 
     Public Sub New(ByVal bossmonsters As List(Of BossMonster), ByVal newPtr As Integer)
         MyBase.New(bossmonsters)
+        If bossmonsters.Count = 1 And bossmonsters(0).ptr = newPtr Then
+            cancelAction = True
+            Return
+        End If
         For Each m As BossMonster In bossmonsters
             prevPtr.Add(m.ptr)
         Next

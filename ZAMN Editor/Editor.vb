@@ -193,7 +193,9 @@
     End Sub
 
     Private Sub ViewGrid_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewGrid.Click
-        UpdateEdControl()
+        EdControl.Grid = ViewGrid.Checked
+        EdControl.Focus()
+        EdControl.Repaint()
     End Sub
 
     Private Sub ViewPriority_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewPriority.Click
@@ -250,7 +252,7 @@
     End Sub
 
     Private Sub HelpAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HelpAbout.Click
-        MsgBox("ZAMN Editor Beta v0.8" & Environment.NewLine & "Icons are from or modified from Silk Icon set. http://www.famfamfam.com/lab/icons/silk/" & Environment.NewLine & Environment.NewLine & "Copyright © 2010 Piranhaplant")
+        MsgBox("ZAMN Editor Beta v0.8" & Environment.NewLine & "Icons are from or modified from Silk Icon set. http://www.famfamfam.com/lab/icons/silk/" & Environment.NewLine & Environment.NewLine & "Copyright © 2011 Piranhaplant")
     End Sub
 
     Private Sub Tools_ItemClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles Tools.ItemClicked
