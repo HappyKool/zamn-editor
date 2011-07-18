@@ -40,7 +40,7 @@
             If Not allProps.Contains(p) Then
                 allProps.Add(p)
             End If
-            Shrd.DrawTile(data, x, y, p, LinGFX(t + &H100 * (p And 1)))
+            Shrd.DrawTile(data, x, y, p, t, LinGFX)
             'g.FillRectangle(brshs(Array.IndexOf(values, p)), x, y, 8, 8)
             x += 8
             If x = imgWidth.Value * 8 Then

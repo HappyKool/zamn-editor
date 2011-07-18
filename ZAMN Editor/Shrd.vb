@@ -125,8 +125,9 @@ Public Class Shrd
         DrawTile(bmp, x, y, gfx, 0, palette, palIndex, xFlip, yFlip)
     End Sub
 
-    Public Shared Sub DrawTile(ByVal bmp As BitmapData, ByVal x As Integer, ByVal y As Integer, ByVal data As Byte, ByVal tile As Byte(,))
+    Public Shared Sub DrawTile(ByVal bmp As BitmapData, ByVal x As Integer, ByVal y As Integer, ByVal data As Byte, ByVal tileIndex As Integer, ByVal tiles As Byte()(,))
         Dim palIndex As Byte = &H10 * ((data \ 4) And 7)
+        If (data And 1) = 1 Then tileIndex += &H100
         Dim xFlip As Boolean = (data And &H40) > 1
         Dim yFlip As Boolean = (data And &H80) > 1
         Dim xStep As Integer = 1, yStep As Integer = 1
@@ -141,7 +142,7 @@ Public Class Shrd
         End If
         For l As Integer = 0 To 7
             For m As Integer = 0 To 7
-                Marshal.WriteByte(bmp.Scan0, y * bmp.Stride + x, palIndex + tile(l, m))
+                Marshal.WriteByte(bmp.Scan0, y * bmp.Stride + x, palIndex + tiles(tileIndex)(l, m))
                 x += xStep
             Next
             y += yStep
@@ -332,4 +333,9 @@ Public Class Shrd
         l.Add(item)
         Return l
     End Function
+
+    Public Shared Sub DrawWithPlt(ByVal g As Graphics, ByVal x As Integer, ByVal y As Integer, ByVal bmp As Bitmap, ByVal plts As Color()(), ByVal pltNum As Integer)
+        FillPalette(bmp, plts(pltNum))
+        g.DrawImage(bmp, x, y)
+    End Sub
 End Class

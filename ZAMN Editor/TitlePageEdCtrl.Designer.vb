@@ -22,27 +22,31 @@ Partial Class TitlePageEdCtrl
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.lstWords = New System.Windows.Forms.ListBox()
+        Me.canvas = New System.Windows.Forms.PictureBox()
+        CType(Me.canvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'lstWords
+        'canvas
         '
-        Me.lstWords.FormattingEnabled = True
-        Me.lstWords.Location = New System.Drawing.Point(3, 3)
-        Me.lstWords.Name = "lstWords"
-        Me.lstWords.Size = New System.Drawing.Size(120, 108)
-        Me.lstWords.TabIndex = 0
+        Me.canvas.BackColor = System.Drawing.Color.Black
+        Me.canvas.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.canvas.Location = New System.Drawing.Point(0, 0)
+        Me.canvas.Name = "canvas"
+        Me.canvas.Size = New System.Drawing.Size(256, 224)
+        Me.canvas.TabIndex = 0
+        Me.canvas.TabStop = False
         '
         'TitlePageEdCtrl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.Controls.Add(Me.lstWords)
+        Me.Controls.Add(Me.canvas)
         Me.Name = "TitlePageEdCtrl"
-        Me.Size = New System.Drawing.Size(126, 114)
+        Me.Size = New System.Drawing.Size(256, 224)
+        CType(Me.canvas, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents lstWords As System.Windows.Forms.ListBox
+    Friend WithEvents canvas As System.Windows.Forms.PictureBox
 
 End Class

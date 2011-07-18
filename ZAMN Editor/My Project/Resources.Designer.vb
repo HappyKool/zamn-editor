@@ -67,6 +67,20 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property Align_center() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Align_center", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property Align_middle() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Align_middle", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property Arrow() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Arrow", resourceCulture)
@@ -231,6 +245,13 @@ Namespace My.Resources
         Friend ReadOnly Property Redo() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Redo", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property Refresh() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Refresh", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

@@ -215,6 +215,7 @@
     <Compile Include="SaveMsgBox.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="TitleGFX.vb" />
     <Compile Include="TitlePage.vb" />
     <Compile Include="TitlePageEdCtrl.Designer.vb">
       <DependentUpon>TitlePageEdCtrl.vb</DependentUpon>
@@ -434,6 +435,9 @@
   <ItemGroup>
     <Content Include="Icon.ico" />
     <Content Include="IconB.ico" />
+    <None Include="Resources\Align_middle.PNG" />
+    <None Include="Resources\Align_center.PNG" />
+    <None Include="Resources\Refresh.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

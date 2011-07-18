@@ -134,9 +134,9 @@ Public Class Tileset
                 If (map16(m + 1) And 1) = 1 Then
                     g += &H100
                 End If
-                Shrd.DrawTile(data, x, y, map16(m + 1), LinGFX(g))
+                Shrd.DrawTile(data, x, y, map16(m + 1), map16(m), LinGFX)
                 If (collision(g * 2) = 0 And collision(g * 2 + 1) = 0) Then
-                    Shrd.DrawTile(dataPr, x, y, map16(m + 1), LinGFX(g))
+                    Shrd.DrawTile(dataPr, x, y, map16(m + 1), map16(m), LinGFX)
                 End If
                 'Testing
                 TileTiles(i)(x \ 8, y \ 8) = (map16(m + 1) And 1) * &H100 + map16(m)
