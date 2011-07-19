@@ -87,7 +87,7 @@ Public Class TitlePageEdCtrl
         For l As Integer = 0 To w.chars.Count - 1
             Dim idx As Integer = w.chars(l) - &H20
             If idx >= 0 And idx <= &H5F Then
-                Shrd.DrawWithPlt(g, curX, w.y * 8, gfx.LetterImgs(idx), gfx.plt, w.font)
+                Shrd.DrawWithPlt(g, curX, w.y * 8, gfx.LetterImgs(idx), gfx.plt, w.font * &H10, &H20)
                 curX += gfx.LetterImgs(idx).Width
             End If
         Next

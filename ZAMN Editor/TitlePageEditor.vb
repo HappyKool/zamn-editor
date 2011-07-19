@@ -7,10 +7,22 @@
 
     Public Overloads Function ShowDialog(ByVal ed As Editor) As DialogResult
         Me.ed = ed
-        TitlePageEdCtrl1.LoadTP(ed.EdControl.lvl.page1, ed.r.TitlePageGFX)
-        TitlePageEdCtrl2.LoadTP(ed.EdControl.lvl.page2, ed.r.TitlePageGFX)
+        TitlePageEdCtrl1.LoadTP(New TitlePage(ed.EdControl.lvl.page1), ed.r.TitlePageGFX)
+        TitlePageEdCtrl2.LoadTP(New TitlePage(ed.EdControl.lvl.page2), ed.r.TitlePageGFX)
         Return Me.ShowDialog
     End Function
+
+    Private Sub btnCancel_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnCancel.Click
+        Me.Close()
+    End Sub
+
+    Private Sub btnSave_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnSave.Click
+        ed.EdControl.lvl.page1 = TitlePageEdCtrl1.tp
+        ed.EdControl.lvl.page1.Sort()
+        ed.EdControl.lvl.page2 = TitlePageEdCtrl2.tp
+        ed.EdControl.lvl.page2.Sort()
+        Me.Close()
+    End Sub
 
     Private Sub TitlePageEdCtrl1_WordSelected(ByVal sender As Object, ByVal w As Word) Handles TitlePageEdCtrl1.WordSelected
         curCtrl = TitlePageEdCtrl1
@@ -47,6 +59,10 @@
     End Sub
 
     Private Sub nudPlt_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nudPlt.ValueChanged
+        If nudPlt.Value = 8 Then
+            nudPlt.Value = 6
+            Return
+        End If
         If updating Then Return
         If chkPltAll.Checked Then
             For Each w As Word In TitlePageEdCtrl1.tp.words

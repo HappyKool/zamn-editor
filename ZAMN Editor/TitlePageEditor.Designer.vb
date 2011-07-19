@@ -36,6 +36,8 @@ Partial Class TitlePageEditor
         Me.chkPltAll = New System.Windows.Forms.CheckBox()
         Me.TitlePageEdCtrl2 = New ZAMNEditor.TitlePageEdCtrl()
         Me.TitlePageEdCtrl1 = New ZAMNEditor.TitlePageEdCtrl()
+        Me.btnSave = New System.Windows.Forms.Button()
+        Me.btnCancel = New System.Windows.Forms.Button()
         CType(Me.nudPlt, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -144,8 +146,9 @@ Partial Class TitlePageEditor
         '
         'nudPlt
         '
+        Me.nudPlt.Increment = New Decimal(New Integer() {2, 0, 0, 0})
         Me.nudPlt.Location = New System.Drawing.Point(429, 285)
-        Me.nudPlt.Maximum = New Decimal(New Integer() {7, 0, 0, 0})
+        Me.nudPlt.Maximum = New Decimal(New Integer() {8, 0, 0, 0})
         Me.nudPlt.Name = "nudPlt"
         Me.nudPlt.Size = New System.Drawing.Size(38, 20)
         Me.nudPlt.TabIndex = 11
@@ -185,11 +188,33 @@ Partial Class TitlePageEditor
         Me.TitlePageEdCtrl1.Size = New System.Drawing.Size(256, 224)
         Me.TitlePageEdCtrl1.TabIndex = 0
         '
+        'btnSave
+        '
+        Me.btnSave.Location = New System.Drawing.Point(455, 338)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(75, 23)
+        Me.btnSave.TabIndex = 14
+        Me.btnSave.Text = "Save"
+        Me.btnSave.UseVisualStyleBackColor = True
+        '
+        'btnCancel
+        '
+        Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnCancel.Location = New System.Drawing.Point(374, 338)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(75, 23)
+        Me.btnCancel.TabIndex = 15
+        Me.btnCancel.Text = "Cancel"
+        Me.btnCancel.UseVisualStyleBackColor = True
+        '
         'TitlePageEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(542, 348)
+        Me.CancelButton = Me.btnCancel
+        Me.ClientSize = New System.Drawing.Size(542, 368)
+        Me.Controls.Add(Me.btnCancel)
+        Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.chkPltAll)
         Me.Controls.Add(Me.lblPalette)
         Me.Controls.Add(Me.nudPlt)
@@ -228,4 +253,6 @@ Partial Class TitlePageEditor
     Friend WithEvents nudPlt As System.Windows.Forms.NumericUpDown
     Friend WithEvents lblPalette As System.Windows.Forms.Label
     Friend WithEvents chkPltAll As System.Windows.Forms.CheckBox
+    Friend WithEvents btnSave As System.Windows.Forms.Button
+    Friend WithEvents btnCancel As System.Windows.Forms.Button
 End Class

@@ -3,14 +3,12 @@
 Public Class TitleGFX
 
     Public LetterImgs(&H5F) As Bitmap
-    Public plt(7)() As Color
+    Public plt(&H80) As Color
     Private widths As Integer() = {3, 2, 6}
 
     Public Sub New(ByVal fs As IO.FileStream)
         fs.Seek(&H1F28C, IO.SeekOrigin.Begin)
-        For l As Integer = 0 To 7
-            plt(l) = Shrd.ReadPalette(fs, &H10, False)
-        Next
+        plt = Shrd.ReadPalette(fs, &H80, False)
         fs.Seek(&H95180, IO.SeekOrigin.Begin)
         Dim GFX As Byte() = Tileset.DecompressMap16(fs)
         Dim LinGFX(511)(,) As Byte
