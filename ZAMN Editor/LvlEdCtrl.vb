@@ -208,10 +208,14 @@
         forceMove = False
     End Sub
 
+    Private ArrowKeys As Keys() = {Keys.Up, Keys.Right, Keys.Down, Keys.Left}
+
     Protected Overrides Function ProcessCmdKey(ByRef msg As System.Windows.Forms.Message, ByVal keyData As System.Windows.Forms.Keys) As Boolean
-        If t Is Nothing Then Return False
-        t.KeyDown(New KeyEventArgs(keyData))
-        Return True
+        If t IsNot Nothing And canvas.Focused And ArrowKeys.Contains(keyData) Then
+            t.KeyDown(New KeyEventArgs(keyData))
+            Return True
+        End If
+        Return MyBase.ProcessCmdKey(msg, keyData)
     End Function
 
     Private Sub canvas_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles canvas.KeyDown
