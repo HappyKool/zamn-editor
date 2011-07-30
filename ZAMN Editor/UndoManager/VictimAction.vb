@@ -84,7 +84,7 @@ Public Class ChangeVictimTypeAction
         For Each v As Victim In victims
             prevPtr.Add(v.ptr)
         Next
-        newPtr = newPtr
+        Me.newPtr = newPtr
     End Sub
 
     Public Overrides Sub Undo()

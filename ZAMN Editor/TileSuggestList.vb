@@ -1,9 +1,11 @@
 ﻿Public Class TileSuggestList
     Public Shared TilesetAddresses As Integer() = {&HD8200, &HE38EF} ', &HD4200, &HE0200, &HDBEB5}
-    Public Shared Lists As Byte()() = {My.Resources.Grass, My.Resources.Mall}
+    Public Shared Lists As Byte()() = {My.Resources.Grass, My.Resources.Mall, My.Resources.GrassR}
     Public Shared Data As New List(Of List(Of List(Of List(Of Byte))))
     Public Shared ConnectsTo As New List(Of List(Of List(Of List(Of Integer))))
     Public Shared AllDataLists As New List(Of List(Of List(Of Byte)))
+    Public Shared ProbFiles As Byte()() = {My.Resources.GrassProb}
+    Public Shared Probability As Double()()
 
     Public Shared Sub LoadAll()
         Dim s As IO.BinaryReader
@@ -28,6 +30,7 @@
                 Next
             Next
         Next
+        LoadProbs()
     End Sub
 
     Public Shared Function GetList(ByVal tilesetNum As Integer, ByVal startTileNum As Byte, ByVal direction As Integer) As List(Of Byte)
@@ -45,6 +48,26 @@
             Next
         End If
         Return l
+    End Function
+
+    Public Shared Sub LoadProbs()
+        Dim s As IO.BinaryReader
+        ReDim Probability(ProbFiles.Length - 1)
+        For l As Integer = 0 To ProbFiles.Length - 1
+            ReDim Probability(l)(511)
+            s = New IO.BinaryReader(New ByteArrayStream(ProbFiles(l)))
+            For m As Integer = 0 To 511
+                Probability(l)(m) = s.ReadDouble
+            Next
+        Next
+    End Sub
+
+    Public Shared Function GetProbList(ByVal tilesetNum As Integer, ByVal direction As Integer, ByVal lst As List(Of Byte)) As List(Of Double)
+        Dim probList As New List(Of Double)
+        For Each b As Byte In lst
+            probList.Add(Probability(tilesetNum Mod TilesetAddresses.Length)(b + (direction Mod 2) * 256))
+        Next
+        Return probList
     End Function
 End Class
 

@@ -15,7 +15,7 @@
     End Sub
 
     Public Overrides Function ItemWidth(ByVal index As Integer) As Integer
-        Return 64
+        Return 72
     End Function
 
     Public Overrides Function ItemHeight(ByVal index As Integer) As Integer
@@ -30,7 +30,8 @@
 
     Public Overrides Sub PaintObject(ByVal g As System.Drawing.Graphics, ByVal x As Integer, ByVal y As Integer, ByVal num As Integer)
         g.DrawImage(ts.images(tiles(num)), x, y)
-        'g.DrawString(tiles(num).ToString(), Me.Font, Brushes.Black, x + 64, y + 8)
+        g.DrawString(Hex(tiles(num) \ &H10), Shrd.PxFont, Brushes.Black, x + 68, y)
+        g.DrawString(Hex(tiles(num) Mod &H10), Shrd.PxFont, Brushes.Black, x + 68, y + 12)
     End Sub
 
     Public Sub LoadTileset(ByVal ts As Tileset)

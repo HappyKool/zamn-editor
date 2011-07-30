@@ -18,7 +18,7 @@
                 Me.WindowState = FormWindowState.Maximized
             End If
         End If
-        EditingTools = New Tool() {New PaintbrushTool(Me), New DropperTool(Me), New TileSuggestTool(Me), New RectangleSelectTool(Me), New PencilSelectTool(Me), _
+        EditingTools = New Tool() {New PaintbrushTool(Me), New TileSuggestTool(Me), New RectangleSelectTool(Me), New PencilSelectTool(Me), _
                                    New TileSelectTool(Me), New ItemTool(Me), New VictimTool(Me), New NRMonsterTool(Me), New MonsterTool(Me), New BossMonsterTool(Me)}
         LevelItems = New ToolStripItem() {FileSave, SaveTool, EditPaste, PasteTool, EditSelectAll, EditSelectNone, ViewGrid, ViewPriority, _
                                           LevelExport, LevelImport, LevelCopy, LevelPaste, LevelEditTitle, LevelSettingsM}
@@ -475,5 +475,97 @@
             Next
         End Using
         Clipboard.SetImage(img)
+    End Sub
+
+    Private Function DebugCommonElements(Of T)(ByVal List1 As List(Of T), ByVal List2 As List(Of T)) As List(Of T)
+        Dim nl As New List(Of T)
+        For Each i As T In List1
+            If List2.Contains(i) Then
+                nl.Add(i)
+            End If
+        Next
+        Return nl
+    End Function
+
+    Private Function DebugCommonElements(Of T)(ByVal List1 As List(Of T), ByVal List2 As List(Of T), ByRef freqList1 As List(Of Double), ByVal freqList2 As List(Of Double)) As List(Of T)
+        Dim nl As New List(Of T)
+        Dim nfreql As New List(Of Double)
+        Dim idx As Integer
+        For l As Integer = 0 To List1.Count - 1
+            idx = List2.IndexOf(List1(l))
+            If idx > -1 Then
+                nl.Add(List1(l))
+                nfreql.Add((freqList1(l) + freqList2(idx)) / 2)
+            End If
+        Next
+        freqList1 = nfreql
+        Return nl
+    End Function
+
+    Private Function DebugRandFromList(Of T)(ByVal lst As List(Of T), ByVal freqList As List(Of Double), ByVal r As Random) As T
+        Dim sum As Double = 0
+        For Each n As Double In freqList
+            sum += n
+        Next
+        Dim randNum As Double = r.NextDouble * sum
+        sum = 0
+        For l As Integer = 0 To lst.Count - 1
+            If randNum > sum And randNum < sum + freqList(l) Then
+                Return lst(l)
+            End If
+            sum += freqList(l)
+        Next
+        Return lst.Last
+    End Function
+
+    Private Sub DebugFillSelection_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DebugFillSelection.Click
+        Dim r As New Random
+        Dim sugList As List(Of Byte)
+        Dim tempSugList As List(Of Byte)
+        Dim probList As List(Of Double)
+        Dim fails As Integer = 0
+        With EdControl.lvl
+            Dim tilesetNum As Integer = Array.IndexOf(TileSuggestList.TilesetAddresses, .tileset.address) + TileSuggestList.TilesetAddresses.Length
+            For y As Integer = 0 To .Height - 1
+                For x As Integer = 0 To .Width - 1
+                    If EdControl.selection.selectPts(x, y) Then
+                        sugList = New List(Of Byte)
+                        For l As Integer = 0 To 255
+                            sugList.Add(l)
+                        Next
+                        probList = TileSuggestList.GetProbList(tilesetNum, 0, sugList)
+                        If x > 0 Then
+                            tempSugList = TileSuggestList.GetList(tilesetNum, .Tiles(x - 1, y), 2)
+                            sugList = DebugCommonElements(sugList, tempSugList, probList, TileSuggestList.GetProbList(tilesetNum, 2, tempSugList))
+                        End If
+                        If y > 0 Then
+                            tempSugList = TileSuggestList.GetList(tilesetNum, .Tiles(x, y - 1), 3)
+                            sugList = DebugCommonElements(sugList, tempSugList, probList, TileSuggestList.GetProbList(tilesetNum, 3, tempSugList))
+                        End If
+                        If x < .Width - 1 AndAlso Not EdControl.selection.selectPts(x + 1, y) Then
+                            tempSugList = TileSuggestList.GetList(tilesetNum, .Tiles(x + 1, y), 0)
+                            sugList = DebugCommonElements(sugList, tempSugList, probList, TileSuggestList.GetProbList(tilesetNum, 0, tempSugList))
+                        End If
+                        If y < .Height - 1 AndAlso Not EdControl.selection.selectPts(x, y + 1) Then
+                            tempSugList = TileSuggestList.GetList(tilesetNum, .Tiles(x, y + 1), 1)
+                            sugList = DebugCommonElements(sugList, tempSugList, probList, TileSuggestList.GetProbList(tilesetNum, 1, tempSugList))
+                        End If
+                        If sugList.Count > 0 Then
+                            .Tiles(x, y) = DebugRandFromList(sugList, probList, r)
+                        Else
+                            x -= 2
+                            fails += 1
+                            If fails Mod 100 = 0 Then
+                                x = -1
+                            End If
+                            If fails Mod 1000 = 0 Then
+                                y -= 1
+                            End If
+                        End If
+                    End If
+                Next
+            Next
+        End With
+        EdControl.Repaint()
     End Sub
 End Class

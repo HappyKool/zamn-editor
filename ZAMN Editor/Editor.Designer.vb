@@ -64,9 +64,9 @@ Partial Class Editor
         Me.LevelDebugTools = New System.Windows.Forms.ToolStripMenuItem()
         Me.DebugFontHacker = New System.Windows.Forms.ToolStripMenuItem()
         Me.DebugCopyTileset = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DebugFillSelection = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolsDropper = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsTileSuggest = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsRectangleSelect = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsPencilSelect = New System.Windows.Forms.ToolStripMenuItem()
@@ -97,7 +97,6 @@ Partial Class Editor
         Me.Zoom50Tool = New System.Windows.Forms.ToolStripMenuItem()
         Me.toolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.BrushTool = New System.Windows.Forms.ToolStripButton()
-        Me.DropperTool = New System.Windows.Forms.ToolStripButton()
         Me.TileSgstTool = New System.Windows.Forms.ToolStripButton()
         Me.RectangleTool = New System.Windows.Forms.ToolStripButton()
         Me.PencilTool = New System.Windows.Forms.ToolStripButton()
@@ -431,7 +430,7 @@ Partial Class Editor
         '
         'LevelDebugTools
         '
-        Me.LevelDebugTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DebugFontHacker, Me.DebugCopyTileset})
+        Me.LevelDebugTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DebugFontHacker, Me.DebugCopyTileset, Me.DebugFillSelection})
         Me.LevelDebugTools.Name = "LevelDebugTools"
         Me.LevelDebugTools.Size = New System.Drawing.Size(156, 22)
         Me.LevelDebugTools.Text = "Debug Tools"
@@ -440,18 +439,24 @@ Partial Class Editor
         'DebugFontHacker
         '
         Me.DebugFontHacker.Name = "DebugFontHacker"
-        Me.DebugFontHacker.Size = New System.Drawing.Size(175, 22)
+        Me.DebugFontHacker.Size = New System.Drawing.Size(188, 22)
         Me.DebugFontHacker.Text = "Font Hacker"
         '
         'DebugCopyTileset
         '
         Me.DebugCopyTileset.Name = "DebugCopyTileset"
-        Me.DebugCopyTileset.Size = New System.Drawing.Size(175, 22)
+        Me.DebugCopyTileset.Size = New System.Drawing.Size(188, 22)
         Me.DebugCopyTileset.Text = "Copy Tileset Image"
+        '
+        'DebugFillSelection
+        '
+        Me.DebugFillSelection.Name = "DebugFillSelection"
+        Me.DebugFillSelection.Size = New System.Drawing.Size(188, 22)
+        Me.DebugFillSelection.Text = "Random Fill Selection"
         '
         'ToolsMenu
         '
-        Me.ToolsMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2, Me.ToolsDropper, Me.ToolsTileSuggest, Me.ToolsRectangleSelect, Me.ToolsPencilSelect, Me.ToolsTileSelect, Me.ToolsItem, Me.ToolsVictims, Me.ToolsNRMonsters, Me.ToolsMonsters, Me.ToolsBossMonsters})
+        Me.ToolsMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2, Me.ToolsTileSuggest, Me.ToolsRectangleSelect, Me.ToolsPencilSelect, Me.ToolsTileSelect, Me.ToolsItem, Me.ToolsVictims, Me.ToolsNRMonsters, Me.ToolsMonsters, Me.ToolsBossMonsters})
         Me.ToolsMenu.Name = "ToolsMenu"
         Me.ToolsMenu.Size = New System.Drawing.Size(48, 20)
         Me.ToolsMenu.Text = "&Tools"
@@ -462,13 +467,6 @@ Partial Class Editor
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
         Me.ToolStripMenuItem2.Size = New System.Drawing.Size(218, 22)
         Me.ToolStripMenuItem2.Text = "Paint &Brush"
-        '
-        'ToolsDropper
-        '
-        Me.ToolsDropper.Image = Global.ZAMNEditor.My.Resources.Resources.Dropper
-        Me.ToolsDropper.Name = "ToolsDropper"
-        Me.ToolsDropper.Size = New System.Drawing.Size(218, 22)
-        Me.ToolsDropper.Text = "&Dropper"
         '
         'ToolsTileSuggest
         '
@@ -560,11 +558,11 @@ Partial Class Editor
         'Tools
         '
         Me.Tools.Dock = System.Windows.Forms.DockStyle.None
-        Me.Tools.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.OpenLevelTool, Me.SaveTool, Me.toolStripSeparator, Me.CutTool, Me.CopyTool, Me.PasteTool, Me.UndoTool, Me.RedoTool, Me.toolStripSeparator1, Me.Zoom, Me.toolStripSeparator8, Me.BrushTool, Me.DropperTool, Me.TileSgstTool, Me.RectangleTool, Me.PencilTool, Me.TileSlctTool, Me.ItemTool, Me.VictimTool, Me.NRMTool, Me.MonTool, Me.BMonTool})
+        Me.Tools.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenTool, Me.OpenLevelTool, Me.SaveTool, Me.toolStripSeparator, Me.CutTool, Me.CopyTool, Me.PasteTool, Me.UndoTool, Me.RedoTool, Me.toolStripSeparator1, Me.Zoom, Me.toolStripSeparator8, Me.BrushTool, Me.TileSgstTool, Me.RectangleTool, Me.PencilTool, Me.TileSlctTool, Me.ItemTool, Me.VictimTool, Me.NRMTool, Me.MonTool, Me.BMonTool})
         Me.Tools.Location = New System.Drawing.Point(3, 24)
         Me.Tools.Name = "Tools"
         Me.Tools.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.Tools.Size = New System.Drawing.Size(514, 25)
+        Me.Tools.Size = New System.Drawing.Size(491, 25)
         Me.Tools.TabIndex = 1
         '
         'OpenTool
@@ -699,15 +697,6 @@ Partial Class Editor
         Me.BrushTool.Name = "BrushTool"
         Me.BrushTool.Size = New System.Drawing.Size(23, 22)
         Me.BrushTool.Text = "Paint Brush"
-        '
-        'DropperTool
-        '
-        Me.DropperTool.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.DropperTool.Image = Global.ZAMNEditor.My.Resources.Resources.Dropper
-        Me.DropperTool.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.DropperTool.Name = "DropperTool"
-        Me.DropperTool.Size = New System.Drawing.Size(23, 22)
-        Me.DropperTool.Text = "Dropper"
         '
         'TileSgstTool
         '
@@ -855,8 +844,6 @@ Partial Class Editor
     Friend WithEvents BrushTool As System.Windows.Forms.ToolStripButton
     Friend WithEvents ViewMenu As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ViewGrid As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolsDropper As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents DropperTool As System.Windows.Forms.ToolStripButton
     Friend WithEvents Tabs As ZAMNEditor.Tabs
     Friend WithEvents ToolsRectangleSelect As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RectangleTool As System.Windows.Forms.ToolStripButton
@@ -911,5 +898,6 @@ Partial Class Editor
     Friend WithEvents HelpContents As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents toolStripSeparator11 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents HelpAbout As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DebugFillSelection As System.Windows.Forms.ToolStripMenuItem
 
 End Class

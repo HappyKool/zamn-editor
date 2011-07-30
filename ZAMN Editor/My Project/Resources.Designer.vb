@@ -144,13 +144,6 @@ Namespace My.Resources
             End Get
         End Property
         
-        Friend ReadOnly Property Dropper() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Dropper", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
         Friend ReadOnly Property DrTongue() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("DrTongue", resourceCulture)
@@ -182,6 +175,20 @@ Namespace My.Resources
         Friend ReadOnly Property Grass() As Byte()
             Get
                 Dim obj As Object = ResourceManager.GetObject("Grass", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        Friend ReadOnly Property GrassProb() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("GrassProb", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        Friend ReadOnly Property GrassR() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("GrassR", resourceCulture)
                 Return CType(obj,Byte())
             End Get
         End Property

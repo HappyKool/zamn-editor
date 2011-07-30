@@ -3,6 +3,8 @@ Imports System.Drawing.Imaging
 
 Public Class Shrd
 
+    Public Shared PxFont As New Font("Small Fonts", 9)
+
     Public Shared Function ReadFileAddr(ByVal s As IO.Stream) As Integer
         Dim part2 As Integer = s.ReadByte() + s.ReadByte() * &H100
         Dim Banknum As Integer = s.ReadByte()

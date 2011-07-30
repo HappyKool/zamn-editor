@@ -135,6 +135,7 @@
             itemsOnRow += 1
         Next
         totalHeight = y + rowHeight + 8
+        UpdateSelection()
     End Sub
 
     Public Sub ResetScrollBar()
@@ -199,7 +200,7 @@
     End Sub
 
     Public Sub UpdateSelection()
-        If SelectedIndex = -1 Then Return
+        If SelectedIndex = -1 Or SelectedIndex > itemCt + startIdx Then Return
         Dim l As Integer = SelectedIndex - startIdx
         Dim rect As New Rectangle(itemRect(l).X - 8, itemRect(l).Y - 8, itemRect(l).Width + 16, itemRect(l).Height + 16)
         selectedBrush = New Drawing2D.LinearGradientBrush(rect, Color.FromArgb(236, 245, 255), Color.FromArgb(208, 229, 255), Drawing2D.LinearGradientMode.Vertical)
