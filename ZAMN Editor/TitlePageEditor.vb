@@ -9,6 +9,14 @@
         Me.ed = ed
         TitlePageEdCtrl1.LoadTP(New TitlePage(ed.EdControl.lvl.page1), ed.r.TitlePageGFX)
         TitlePageEdCtrl2.LoadTP(New TitlePage(ed.EdControl.lvl.page2), ed.r.TitlePageGFX)
+        TitlePageEdCtrl1.SelectNone()
+        TitlePageEdCtrl2.SelectNone()
+        curWord = Nothing
+        curCtrl = Nothing
+        AnyWordSelected()
+        updating = True
+        txtWord.Text = ""
+        updating = False
         Return Me.ShowDialog
     End Function
 
