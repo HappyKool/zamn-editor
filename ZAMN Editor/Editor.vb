@@ -6,6 +6,7 @@
     Public PTool As Tool
     Public WithEvents TilePaste As PasteTilesTool
     Public zoomLevel As Single = 1
+    Public openLevels As New List(Of Integer)
     Private updateTab As Boolean = True
     Private EditingTools As Tool()
     Private LevelItems As ToolStripItem()
@@ -76,18 +77,21 @@
             EdControl = Nothing
             LoadingLevel.Start(r, OpenLevel.levelNums, OpenLevel.levelNames)
             For Each l As Level In LoadingLevel.lvls
-                EdControl = New LvlEdCtrl
-                updateTab = False
-                Dim tp As TabPage = Tabs.AddXPage(If(l.name.StartsWith("Level"), Mid(l.name, 1, Shrd.InStrN(l.name, " ", 2) - 2), _
-                                                  If(l.name.StartsWith("ERROR:"), "ERROR", l.name)))
-                tp.Controls.Add(EdControl)
-                EdControl.Dock = DockStyle.Fill
-                EdControl.LoadLevel(l)
-                EdControl.UndoMgr = New UndoManager(UndoTool, RedoTool, EdControl)
-                UndoTool.Enabled = False
-                RedoTool.Enabled = False
-                UndoTool.DropDownItems.Clear()
-                RedoTool.DropDownItems.Clear()
+                If Not openLevels.Contains(l.num) Then
+                    EdControl = New LvlEdCtrl
+                    updateTab = False
+                    Dim tp As TabPage = Tabs.AddXPage(If(l.name.StartsWith("Level"), Mid(l.name, 1, Shrd.InStrN(l.name, " ", 2) - 2), _
+                                                      If(l.name.StartsWith("ERROR:"), "ERROR", l.name)))
+                    tp.Controls.Add(EdControl)
+                    EdControl.Dock = DockStyle.Fill
+                    EdControl.LoadLevel(l)
+                    EdControl.UndoMgr = New UndoManager(UndoTool, RedoTool, EdControl)
+                    UndoTool.Enabled = False
+                    RedoTool.Enabled = False
+                    UndoTool.DropDownItems.Clear()
+                    RedoTool.DropDownItems.Clear()
+                    openLevels.Add(l.num)
+                End If
             Next
             If EdControl IsNot Nothing Then
                 SetTool(CurTool)
@@ -360,6 +364,7 @@
             e.cancel = True
             Return
         End If
+        openLevels.Remove(DirectCast(e.Tab.Controls(0), LvlEdCtrl).lvl.num)
         For Each t As Tool In EditingTools
             t.RemoveEdCtrl(e.Tab.Controls(0))
         Next
@@ -560,6 +565,10 @@
                             End If
                             If fails Mod 1000 = 0 Then
                                 y -= 1
+                            End If
+                            If x < -1 Then
+                                y -= 1
+                                x = -1
                             End If
                         End If
                     End If

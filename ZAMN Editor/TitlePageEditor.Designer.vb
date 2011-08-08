@@ -34,10 +34,10 @@ Partial Class TitlePageEditor
         Me.nudPlt = New System.Windows.Forms.NumericUpDown()
         Me.lblPalette = New System.Windows.Forms.Label()
         Me.chkPltAll = New System.Windows.Forms.CheckBox()
-        Me.TitlePageEdCtrl2 = New ZAMNEditor.TitlePageEdCtrl()
-        Me.TitlePageEdCtrl1 = New ZAMNEditor.TitlePageEdCtrl()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
+        Me.TitlePageEdCtrl2 = New ZAMNEditor.TitlePageEdCtrl()
+        Me.TitlePageEdCtrl1 = New ZAMNEditor.TitlePageEdCtrl()
         CType(Me.nudPlt, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -174,20 +174,6 @@ Partial Class TitlePageEditor
         Me.chkPltAll.Text = "Apply to all"
         Me.chkPltAll.UseVisualStyleBackColor = True
         '
-        'TitlePageEdCtrl2
-        '
-        Me.TitlePageEdCtrl2.Location = New System.Drawing.Point(274, 12)
-        Me.TitlePageEdCtrl2.Name = "TitlePageEdCtrl2"
-        Me.TitlePageEdCtrl2.Size = New System.Drawing.Size(256, 224)
-        Me.TitlePageEdCtrl2.TabIndex = 1
-        '
-        'TitlePageEdCtrl1
-        '
-        Me.TitlePageEdCtrl1.Location = New System.Drawing.Point(12, 12)
-        Me.TitlePageEdCtrl1.Name = "TitlePageEdCtrl1"
-        Me.TitlePageEdCtrl1.Size = New System.Drawing.Size(256, 224)
-        Me.TitlePageEdCtrl1.TabIndex = 0
-        '
         'btnSave
         '
         Me.btnSave.Location = New System.Drawing.Point(455, 338)
@@ -206,6 +192,20 @@ Partial Class TitlePageEditor
         Me.btnCancel.TabIndex = 15
         Me.btnCancel.Text = "Cancel"
         Me.btnCancel.UseVisualStyleBackColor = True
+        '
+        'TitlePageEdCtrl2
+        '
+        Me.TitlePageEdCtrl2.Location = New System.Drawing.Point(274, 12)
+        Me.TitlePageEdCtrl2.Name = "TitlePageEdCtrl2"
+        Me.TitlePageEdCtrl2.Size = New System.Drawing.Size(256, 224)
+        Me.TitlePageEdCtrl2.TabIndex = 1
+        '
+        'TitlePageEdCtrl1
+        '
+        Me.TitlePageEdCtrl1.Location = New System.Drawing.Point(12, 12)
+        Me.TitlePageEdCtrl1.Name = "TitlePageEdCtrl1"
+        Me.TitlePageEdCtrl1.Size = New System.Drawing.Size(256, 224)
+        Me.TitlePageEdCtrl1.TabIndex = 0
         '
         'TitlePageEditor
         '

@@ -22,9 +22,9 @@ Partial Class OpenLevel
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.levels = New System.Windows.Forms.ListBox
-        Me.OK = New System.Windows.Forms.Button
-        Me.Cancel = New System.Windows.Forms.Button
+        Me.levels = New System.Windows.Forms.ListBox()
+        Me.OK = New System.Windows.Forms.Button()
+        Me.Cancel = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'levels

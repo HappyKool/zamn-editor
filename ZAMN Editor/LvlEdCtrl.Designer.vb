@@ -102,6 +102,7 @@ Partial Class LvlEdCtrl
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         Me.StatusStrip1.Size = New System.Drawing.Size(644, 22)
+        Me.StatusStrip1.SizingGrip = False
         Me.StatusStrip1.TabIndex = 4
         Me.StatusStrip1.Text = "StatusStrip1"
         '
