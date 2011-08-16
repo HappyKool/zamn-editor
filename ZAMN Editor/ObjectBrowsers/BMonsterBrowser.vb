@@ -27,6 +27,6 @@
     End Sub
 
     Public Overrides Sub PaintObject(ByVal g As System.Drawing.Graphics, ByVal x As Integer, ByVal y As Integer, ByVal num As Integer)
-        g.DrawString(BossMonster.names(num), BossMonster.dispfont, Brushes.Black, x, y)
+        g.DrawString(Ptr.BossMonsterNames(num), BossMonster.dispfont, Brushes.Black, x, y)
     End Sub
 End Class

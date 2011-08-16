@@ -34,12 +34,12 @@
 
     Public Sub UpdatePtr()
         If index > 0 Then
-            ptr = LevelGFX.ptrs(index)
+            ptr = ZAMNEditor.Ptr.SpritePtrs(index)
         End If
     End Sub
 
     Public Sub UpdateIdx()
-        Me.index = Array.IndexOf(LevelGFX.ptrs, ptr)
+        Me.index = Array.IndexOf(ZAMNEditor.Ptr.SpritePtrs, ptr)
         If Me.index = -1 Then Me.index = 0
     End Sub
 End Class

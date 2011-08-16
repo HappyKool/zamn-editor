@@ -21,8 +21,8 @@
         End If
         EditingTools = New Tool() {New PaintbrushTool(Me), New TileSuggestTool(Me), New RectangleSelectTool(Me), New PencilSelectTool(Me), _
                                    New TileSelectTool(Me), New ItemTool(Me), New VictimTool(Me), New NRMonsterTool(Me), New MonsterTool(Me), New BossMonsterTool(Me)}
-        LevelItems = New ToolStripItem() {FileSave, SaveTool, EditPaste, PasteTool, EditSelectAll, EditSelectNone, ViewGrid, ViewPriority, _
-                                          LevelExport, LevelImport, LevelCopy, LevelPaste, LevelEditTitle, LevelSettingsM}
+        LevelItems = New ToolStripItem() {FileSave, SaveTool, EditPaste, PasteTool, EditSelectAll, EditSelectNone, ViewGrid, _
+                                          ViewPriority, LevelExport, LevelImport, LevelCopy, LevelPaste, LevelEditTitle, LevelSettingsM}
         TilePaste = New PasteTilesTool(Me)
         TileSuggestList.LoadAll()
         If My.Settings.RecentROMs <> "" Then
@@ -60,7 +60,7 @@
         If SaveMsgBox.ShowDialog(Me) = Windows.Forms.DialogResult.Cancel Then
             Return
         End If
-        If path = "D:\DEBUG.SMC" Then
+        If path = "D:\Debug.sfc" Then
             LevelDebugTools.Visible = True
         End If
         r = New ROM(path)
@@ -68,6 +68,7 @@
         FileOpenLevel.Enabled = True
         OpenLevelTool.Enabled = True
         EditPasswords.Enabled = True
+        EmulatorRunROM.Enabled = (My.Settings.Emulator <> "")
         OpenLevel.LoadROM(r)
         Tabs.CloseAll()
     End Sub
@@ -101,6 +102,7 @@
                 For Each item As ToolStripItem In LevelItems
                     item.Enabled = True
                 Next
+                EmulatorFromLevel.Enabled = EmulatorRunROM.Enabled
                 Tabs.Visible = True
                 EdControl.Focus()
             End If
@@ -114,6 +116,31 @@
 
     Private Sub FileExit_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles FileExit.Click
         Me.Close()
+    End Sub
+
+    Private Sub EmulatorRunROM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EmulatorRunROM.Click
+        Process.Start(My.Settings.Emulator, r.path)
+    End Sub
+
+    Private Sub EmulatorFromLevel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EmulatorFromLevel.Click
+        Dim emuName As String = LCase(Mid(My.Settings.Emulator, InStrRev(My.Settings.Emulator, "\") + 1))
+        Dim outputFile As String = Mid(r.path, 1, InStrRev(r.path, ".") - 1)
+        If emuName.Contains("bsnes") Then
+            Dim fs As New IO.FileStream(outputFile & "-1.bst", IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.Read)
+            fs.Write(My.Resources.BSNES, 0, My.Resources.BSNES.Length)
+            fs.Seek(&H2A65 + &H1E7C, IO.SeekOrigin.Begin)
+            fs.WriteByte(CByte(EdControl.lvl.num))
+            fs.Close()
+            Process.Start(My.Settings.Emulator, r.path)
+        End If
+    End Sub
+
+    Private Sub EmulatorSetup_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EmulatorSetup.Click
+        If OpenEmulator.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            My.Settings.Emulator = OpenEmulator.FileName
+            EmulatorRunROM.Enabled = r IsNot Nothing
+            EmulatorFromLevel.Enabled = Tabs.tabctrl.TabCount > 0
+        End If
     End Sub
 
     Private Sub EditUndo_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditUndo.Click
@@ -270,8 +297,10 @@
 
     Private Sub ToolsMenu_DropDownItemClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles ToolsMenu.DropDownItemClicked
         Dim indx As Integer = ToolsMenu.DropDownItems.IndexOf(e.ClickedItem)
-        Dim indx2 As Integer = indx + Tools.Items.IndexOf(BrushTool)
-        SwitchToTool(e.ClickedItem, Tools.Items(indx2), EditingTools(indx))
+        If indx < EditingTools.Length Then
+            Dim indx2 As Integer = indx + Tools.Items.IndexOf(BrushTool)
+            SwitchToTool(e.ClickedItem, Tools.Items(indx2), EditingTools(indx))
+        End If
     End Sub
 
     Private Sub UncheckTools()
@@ -530,7 +559,7 @@
         Dim probList As List(Of Double)
         Dim fails As Integer = 0
         With EdControl.lvl
-            Dim tilesetNum As Integer = Array.IndexOf(TileSuggestList.TilesetAddresses, .tileset.address) + TileSuggestList.TilesetAddresses.Length
+            Dim tilesetNum As Integer = Array.IndexOf(Ptr.SuggestTilesets, .tileset.address) + Ptr.SuggestTilesets.Length
             For y As Integer = 0 To .Height - 1
                 For x As Integer = 0 To .Width - 1
                     If EdControl.selection.selectPts(x, y) Then

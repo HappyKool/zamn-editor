@@ -38,7 +38,7 @@
         dragYOff = ed.EdControl.lvl.GFX.VictimImages(MonsterPicker.SelectedIndex).Height / 2
         Return New Monster(20, x - ed.EdControl.lvl.GFX.VictimImages(MonsterPicker.SelectedIndex).Width / 2,
                            y - ed.EdControl.lvl.GFX.VictimImages(MonsterPicker.SelectedIndex).Height / 2, 0,
-                           LevelGFX.ptrs(MonsterPicker.SelectedIndex))
+                           Ptr.SpritePtrs(MonsterPicker.SelectedIndex))
     End Function
 
     Public Overrides Function CloneT(ByVal o As Monster) As Monster

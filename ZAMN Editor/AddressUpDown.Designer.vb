@@ -135,7 +135,6 @@ Partial Class AddressUpDown
         Me.nudHex.Hexadecimal = True
         Me.nudHex.Location = New System.Drawing.Point(18, 0)
         Me.nudHex.Maximum = New Decimal(New Integer() {4194815, 0, 0, 0})
-        Me.nudHex.Minimum = New Decimal(New Integer() {512, 0, 0, 0})
         Me.nudHex.Name = "nudHex"
         Me.nudHex.Size = New System.Drawing.Size(112, 20)
         Me.nudHex.TabIndex = 5

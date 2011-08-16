@@ -7,16 +7,16 @@ Public Class TitleGFX
     Private widths As Integer() = {3, 2, 6}
 
     Public Sub New(ByVal fs As IO.FileStream)
-        fs.Seek(&H1F28C, IO.SeekOrigin.Begin)
+        fs.Seek(Ptr.TitlePalette, IO.SeekOrigin.Begin)
         plt = Shrd.ReadPalette(fs, &H80, False)
-        fs.Seek(&H95180, IO.SeekOrigin.Begin)
+        fs.Seek(Ptr.TitleGraphics, IO.SeekOrigin.Begin)
         Dim GFX As Byte() = Tileset.DecompressMap16(fs)
         Dim LinGFX(511)(,) As Byte
         For l As Integer = 0 To 511
             LinGFX(l) = Shrd.PlanarToLinear(GFX, l * &H20)
         Next
         Dim tilePos(&H5F) As Point
-        fs.Seek(&H13137, IO.SeekOrigin.Begin)
+        fs.Seek(Ptr.TitleCharWidth, IO.SeekOrigin.Begin)
         For l As Integer = 0 To &H5F
             tilePos(l) = New Point(fs.ReadByte, fs.ReadByte)
             If tilePos(l).X = 255 Then
@@ -25,7 +25,7 @@ Public Class TitleGFX
         Next
         Dim curImg As Bitmap
         For l As Integer = 0 To &H5F
-            Dim index As Integer = &HB5841 + tilePos(l).Y * &H600
+            Dim index As Integer = Ptr.TitleTileMap + tilePos(l).Y * &H600
             Dim width As Integer
             If tilePos(l).Y < 3 Then
                 width = widths(tilePos(l).Y)

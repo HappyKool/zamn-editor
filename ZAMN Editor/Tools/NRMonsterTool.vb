@@ -51,7 +51,7 @@
         dragYOff = ed.EdControl.lvl.GFX.VictimImages(NRMPicker.SelectedIndex).Height / 2
         Return New NRMonster(x - ed.EdControl.lvl.GFX.VictimImages(NRMPicker.SelectedIndex).Width / 2,
                              y - ed.EdControl.lvl.GFX.VictimImages(NRMPicker.SelectedIndex).Height / 2, 0, 0,
-                             LevelGFX.ptrs(NRMPicker.SelectedIndex))
+                             Ptr.SpritePtrs(NRMPicker.SelectedIndex))
     End Function
 
     Public Overrides Function RectOfT(ByVal obj As NRMonster) As System.Drawing.Rectangle

@@ -81,7 +81,7 @@
     Public Overrides Sub Refresh()
         XStart = -1
         Direction = -1
-        TilesetNum = Array.IndexOf(TileSuggestList.TilesetAddresses, ed.EdControl.lvl.tileset.address)
+        TilesetNum = Array.IndexOf(Ptr.SuggestTilesets, ed.EdControl.lvl.tileset.address)
     End Sub
 
     Public Overrides Sub TileChanged()

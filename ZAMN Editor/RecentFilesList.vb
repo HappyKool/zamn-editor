@@ -2,7 +2,7 @@
     Inherits ToolStripMenuItem
 
     Private _Items As New List(Of String)
-    Private _MaxItems As Integer = 5
+    Private _MaxItems As Integer = 10
     Private _MaxLength As Integer = 60
 
     Property Items() As List(Of String)

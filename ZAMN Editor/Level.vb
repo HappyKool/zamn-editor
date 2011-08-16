@@ -71,8 +71,8 @@
             For n As Integer = 1 To 10
                 Dim vic As New Victim(s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100, _
                                       s.ReadByte + s.ReadByte * &H100, Shrd.ReadFileAddr(s))
-                vic.x -= LevelGFX.offsets(vic.index * 2)
-                vic.y -= LevelGFX.offsets(vic.index * 2 + 1)
+                vic.x -= Ptr.SpriteOffsets(vic.index * 2)
+                vic.y -= Ptr.SpriteOffsets(vic.index * 2 + 1)
                 victims.Add(vic)
             Next
             victims.Add(New Victim(p1Start.X - 8, p1Start.Y - 39, 0, 0, 1))
@@ -82,8 +82,8 @@
                 If x = 0 Then Exit Do
                 Dim mon As New NRMonster(x, s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100, _
                                          s.ReadByte + s.ReadByte * &H100, Shrd.ReadFileAddr(s))
-                mon.x -= LevelGFX.offsets(mon.index * 2)
-                mon.y -= LevelGFX.offsets(mon.index * 2 + 1)
+                mon.x -= Ptr.SpriteOffsets(mon.index * 2)
+                mon.y -= Ptr.SpriteOffsets(mon.index * 2 + 1)
                 NRMonsters.Add(mon)
             Loop
         End If
@@ -101,8 +101,8 @@
                 If x1 = 0 And radius = 0 Then Exit Do
                 Dim mon As New Monster(radius, x1 + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100, _
                                        s.ReadByte, Shrd.ReadFileAddr(s))
-                mon.x -= LevelGFX.offsets(mon.index * 2)
-                mon.y -= LevelGFX.offsets(mon.index * 2 + 1)
+                mon.x -= Ptr.SpriteOffsets(mon.index * 2)
+                mon.y -= Ptr.SpriteOffsets(mon.index * 2 + 1)
                 Monsters.Add(mon)
             Loop
         End If
@@ -141,10 +141,26 @@
         Do
             Dim ptr As Integer = Shrd.ReadFileAddr(s)
             If ptr = -1 Then Exit Do
-            If ptr = &H12D95 Then 'Palette fade
+            If ZAMNEditor.Ptr.SpBossMonsters.Contains(ptr) Then
                 Dim curaddr As Integer = s.Position
                 Shrd.GoToPointer(s)
-                bossMonsters.Add(New BossMonster(ptr, Shrd.ReadFileAddr(s), Shrd.ReadFileAddr(s), False))
+                Select Case ptr
+                    Case ZAMNEditor.Ptr.SpBossMonsters(0)
+                        bossMonsters.Add(New BossMonster(ptr, s, 8))
+                    Case ZAMNEditor.Ptr.SpBossMonsters(1)
+                        Dim value As Integer, count As Integer, passed As Boolean = False
+                        Dim newData As New List(Of Byte)
+                        Do
+                            value = s.ReadByte + s.ReadByte * &H100
+                            If value = 0 Then passed = True
+                            If passed And (value = &HFFFF Or value = &HFFFE) Then count -= 1
+                            If Not passed Then count += 1
+                            newData.Add(value Mod &H100)
+                            newData.Add(value \ &H100)
+                            If passed And count = 0 Then Exit Do
+                        Loop
+                        bossMonsters.Add(New BossMonster(ptr, newData.ToArray()))
+                End Select
                 s.Seek(curaddr + 4, IO.SeekOrigin.Begin)
             Else
                 bossMonsters.Add(New BossMonster(ptr, s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100))
@@ -174,12 +190,13 @@
         p2Start = New Point(victims(11).x + 16, victims(11).y + 42)
         Dim file As New List(Of Byte)
         Dim addrOffsets(5) As Integer
+        Dim bossPtrs As New List(Of Integer)
         file.AddRange(Shrd.ConvertAddr(tileset.address))
         file.AddRange(New Byte() {0, 0, 0, 0})
         file.AddRange(Shrd.ConvertAddr(tileset.collisionAddr))
         file.AddRange(Shrd.ConvertAddr(tileset.gfxAddr))
         file.AddRange(Shrd.ConvertAddr(tileset.paletteAddr))
-        file.AddRange(New Byte() {&H76, &H8F, &H9E, 0})
+        file.AddRange(Shrd.ConvertAddr(spritePal))
         file.AddRange(Shrd.ConvertAddr(tileset.pltAnimAddr))
         file.AddRange(New Byte() {0, 0, 0, 0, 0, 0, _
                                   Width Mod &H100, Width \ &H100, _
@@ -191,34 +208,23 @@
                                   music Mod &H100, music \ &H100, _
                                   unknown2 Mod &H100, unknown2 \ &H100, _
                                   0, 0, 0, 0, 0, 0})
-        Dim fadeM As BossMonster = Nothing
-        Dim bm As Integer = 0
-        Do Until bm = bossMonsters.Count
-            If bossMonsters(bm).ptr = &H12D95 Then
-                fadeM = bossMonsters(bm)
-                bossMonsters.RemoveAt(bm)
-            Else
-                bm += 1
-            End If
-        Loop
-        If fadeM IsNot Nothing Then
-            bossMonsters.Add(fadeM)
-        End If
         For Each m As BossMonster In bossMonsters
             file.AddRange(Shrd.ConvertAddr(m.ptr))
             file.AddRange(New Byte() {m.x Mod &H100, m.x \ &H100, m.y Mod &H100, m.y \ &H100})
         Next
         file.AddRange(New Byte() {0, 0, 0, 0})
-        If bossMonsters.Count > 0 AndAlso bossMonsters.Last.ptr = &H12D95 Then
-            file.AddRange(Shrd.ConvertAddr(bossMonsters.Last.bgPlt))
-            file.AddRange(Shrd.ConvertAddr(bossMonsters.Last.sPlt))
-        End If
+        For Each m As BossMonster In bossMonsters
+            If Ptr.SpBossMonsters.Contains(m.ptr) Then
+                bossPtrs.Add(file.Count)
+                file.AddRange(m.exData)
+            End If
+        Next
         Dim x As Integer, y As Integer
         'Monster data
         addrOffsets(0) = file.Count
         For Each m As Monster In Monsters
-            x = m.x + LevelGFX.offsets(m.index * 2)
-            y = m.y + LevelGFX.offsets(m.index * 2 + 1)
+            x = m.x + Ptr.SpriteOffsets(m.index * 2)
+            y = m.y + Ptr.SpriteOffsets(m.index * 2 + 1)
             file.AddRange(New Byte() {m.radius, x Mod &H100, x \ &H100, y Mod &H100, y \ &H100, m.delay})
             file.AddRange(Shrd.ConvertAddr(m.ptr))
         Next
@@ -227,8 +233,8 @@
         addrOffsets(1) = file.Count
         For Each v As Victim In victims
             If v.ptr > 2 Then
-                x = v.x + LevelGFX.offsets(v.index * 2)
-                y = v.y + LevelGFX.offsets(v.index * 2 + 1)
+                x = v.x + Ptr.SpriteOffsets(v.index * 2)
+                y = v.y + Ptr.SpriteOffsets(v.index * 2 + 1)
                 file.AddRange(New Byte() {x Mod &H100, x \ &H100, y Mod &H100, y \ &H100, v.unused Mod &H100, v.unused \ &H100, _
                                           IIf(v.num = 10, 16, v.num), 0})
                 file.AddRange(Shrd.ConvertAddr(v.ptr))
@@ -236,8 +242,8 @@
         Next
         'NRMonster data
         For Each m As NRMonster In NRMonsters
-            x = m.x + LevelGFX.offsets(m.index * 2)
-            y = m.y + LevelGFX.offsets(m.index * 2 + 1)
+            x = m.x + Ptr.SpriteOffsets(m.index * 2)
+            y = m.y + Ptr.SpriteOffsets(m.index * 2 + 1)
             file.AddRange(New Byte() {x Mod &H100, x \ &H100, y Mod &H100, y \ &H100, m.unused1 Mod &H100, m.unused1 \ &H100, _
                                       m.unused2 Mod &H100, m.unused2 \ &H100})
             file.AddRange(Shrd.ConvertAddr(m.ptr))
@@ -262,7 +268,7 @@
             file.AddRange(New Byte() {b Mod &H100, b \ &H100})
         Next
         file.AddRange(New Byte() {0, 0})
-        Return New LevelWriteData(file, addrOffsets)
+        Return New LevelWriteData(file, addrOffsets, bossPtrs)
     End Function
 
     Public Function ToFile() As Byte()

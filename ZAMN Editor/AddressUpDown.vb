@@ -12,18 +12,17 @@
             If curType Then
                 Return nudHex.Value
             Else
-                Return (Bank.Value - &H80) * &H8000 + Part2.Value - &H7E00
+                Return (Bank.Value - &H80) * &H8000 + Part2.Value - &H8000
             End If
         End Get
         Set(ByVal value As Integer)
-            If value < 512 Then
-                Me.Value = 512
+            If value < 0 Then
+                Me.Value = 0
                 Return
             End If
             If curType Then
                 nudHex.Value = value
             Else
-                value -= &H200
                 Dim bnk As Integer = value \ &H8000
                 Bank.Value = bnk + &H80
                 Part2.Value = value - bnk * &H8000 + &H8000

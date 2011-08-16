@@ -238,4 +238,7 @@
   <data name="GrassR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Suggest Lists\GrassR.zsl;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="BSNES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Save States\BSNES.bst;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

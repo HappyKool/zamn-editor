@@ -59,7 +59,7 @@
     End Sub
 
     Private Sub addr_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles addr.ValueChanged
-        If init Then Return
+        If init Or ed Is Nothing Then Return
         ed.EdControl.UndoMgr.Do(New ChangeMonsterTypeAction(ml, addr.Value))
     End Sub
 End Class

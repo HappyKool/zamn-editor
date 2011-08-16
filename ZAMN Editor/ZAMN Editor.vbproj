@@ -44,7 +44,7 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>IconB.ico</ApplicationIcon>
+    <ApplicationIcon>Secret.ICO</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -206,6 +206,7 @@
     <Compile Include="PasswordEditor.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Ptr.vb" />
     <Compile Include="RecentFilesList.vb">
       <SubType>Component</SubType>
     </Compile>
@@ -213,6 +214,12 @@
       <DependentUpon>SaveMsgBox.vb</DependentUpon>
     </Compile>
     <Compile Include="SaveMsgBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SaveStateEditor.Designer.vb">
+      <DependentUpon>SaveStateEditor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SaveStateEditor.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TitleGFX.vb" />
@@ -329,6 +336,9 @@
     <EmbeddedResource Include="SaveMsgBox.resx">
       <DependentUpon>SaveMsgBox.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SaveStateEditor.resx">
+      <DependentUpon>SaveStateEditor.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TitlePageEdCtrl.resx">
       <DependentUpon>TitlePageEdCtrl.vb</DependentUpon>
     </EmbeddedResource>
@@ -352,6 +362,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Save States\BSNES.bst" />
     <None Include="Resources\Suggest Lists\GrassR.zsl" />
     <None Include="Resources\Suggest Lists\GrassR.zsl.prob" />
     <None Include="Resources\Suggest Lists\Mall.zsl" />
@@ -425,20 +436,18 @@
     <None Include="Resources\Undo.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Backgrounds\Victims.PNG" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\DropArrow.PNG" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Error.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icon.ico" />
-    <Content Include="IconB.ico" />
     <None Include="Resources\Align_middle.PNG" />
     <None Include="Resources\Align_center.PNG" />
     <None Include="Resources\Refresh.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Secret.ICO" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -246,7 +246,7 @@
 
     Public Overrides Sub BMonsterChanged()
         If selectedObjs.Count > 0 And SidePanel = SideContentType.BossMonsters Then
-            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, BossMonster.ptrs(BMonsterPicker.SelectedIndex)))
+            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.BossMonsters(BMonsterPicker.SelectedIndex)))
             UpdateProperties()
             Repaint()
         End If
@@ -262,7 +262,7 @@
 
     Public Overrides Sub MonsterChanged()
         If selectedObjs.Count > 0 And SidePanel = SideContentType.Monsters Then
-            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, LevelGFX.ptrs(MonsterPicker.SelectedIndex)))
+            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.SpritePtrs(MonsterPicker.SelectedIndex)))
             UpdateProperties()
             Repaint()
         End If
@@ -270,7 +270,7 @@
 
     Public Overrides Sub NRMChanged()
         If selectedObjs.Count > 0 And SidePanel = SideContentType.NRMonsters Then
-            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, LevelGFX.ptrs(NRMPicker.SelectedIndex)))
+            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.SpritePtrs(NRMPicker.SelectedIndex)))
             UpdateProperties()
             Repaint()
         End If
@@ -278,7 +278,7 @@
 
     Public Overrides Sub VictimChanged()
         If selectedObjs.Count > 0 And SidePanel = SideContentType.Victims Then
-            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, LevelGFX.ptrs(VictimPicker.SelectedIndex)))
+            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.SpritePtrs(VictimPicker.SelectedIndex)))
             UpdateProperties()
             Repaint()
         End If

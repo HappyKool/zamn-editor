@@ -13,17 +13,19 @@ Public Class ROM
     Public hacked As Boolean = False
 
     Private Shared offsetPos As Integer() = {&H1C, &H1E, &H20, &H36, &H38, &H3A}
-    Public Const lvlPtrs As Integer = &HF8200
-    Public Const bonusLvlNums As Integer = &H1537E
 
     Public Sub New(ByVal path As String)
         Try
             Me.path = path
             Dim s As New FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read)
-            s.Seek(lvlPtrs, SeekOrigin.Begin)
+            If Shrd.HasHeader(s) Then
+                Shrd.RemoveHeader(s)
+                MsgBox("This ROM had a header which was automatically removed")
+            End If
+            s.Seek(Ptr.LevelPointers, SeekOrigin.Begin)
             regLvlCount = s.ReadByte() + s.ReadByte() * &H100 - 1
             maxLvlNum = regLvlCount
-            s.Seek(bonusLvlNums, SeekOrigin.Begin)
+            s.Seek(Ptr.BonusLvlNums, SeekOrigin.Begin)
             Dim num As Integer
             Dim curLvl As Integer = 0
             For l As Integer = 0 To maxLvlNum
@@ -56,7 +58,7 @@ Public Class ROM
 
             's.Seek(0, SeekOrigin.Begin)
             'If s.ReadByte <> 159 Then
-            '    s.Seek(lvlPtrs + 2, SeekOrigin.Begin)
+            '    s.Seek(Ptr.LevelPointers + 2, SeekOrigin.Begin)
             '    Dim lenDiff As Integer = (maxLvlNum + 1) * 2
             '    Shrd.InsertBytes(s, lenDiff)
             '    'Dim ptrs As DList(Of Integer, Integer) = GetAllLvlPtrs(s)
@@ -92,11 +94,11 @@ Public Class ROM
 
     Public Function GetLvlPtr(ByVal num As Integer, ByVal s As Stream) As Integer
         If hacked Then
-            s.Seek(&HF8202 + num * 4, SeekOrigin.Begin)
+            s.Seek(Ptr.LevelPointers + 2 + num * 4, SeekOrigin.Begin)
             Return Shrd.ReadFileAddr(s)
         Else
-            s.Seek(&HF8202 + num * 2, SeekOrigin.Begin)
-            Return s.ReadByte() + s.ReadByte * &H100 + &HF0200
+            s.Seek(Ptr.LevelPointers + 2 + num * 2, SeekOrigin.Begin)
+            Return Shrd.ReadRelativeFileAddr(s, &H9F)
         End If
     End Function
 
@@ -156,13 +158,14 @@ Public Class ROM
         fs.Seek(lvlPtr, SeekOrigin.Begin)
         fs.Write(data.data, 0, data.data.Length)
         fs.Seek(lvlPtr + &H3C, SeekOrigin.Begin)
-        Dim ptr As Integer
-        Do 'set the position for the palette fade
-            ptr = Shrd.ReadFileAddr(fs)
-            If ptr = &H12D95 Then
-                fs.Write(Shrd.ConvertAddr(fs.Position + 8), 0, 4)
-                Exit Do
-            ElseIf ptr = -1 Then
+        Dim tempptr As Integer
+        Dim bossIndex As Integer = 0
+        Do 'set pointers for special boss monsters
+            tempptr = Shrd.ReadFileAddr(fs)
+            If Ptr.SpBossMonsters.Contains(tempptr) Then
+                fs.Write(Shrd.ConvertAddr(data.bossDataPtr(bossIndex) + lvlPtr), 0, 4)
+                bossIndex += 1
+            ElseIf tempptr = -1 Then
                 Exit Do
             Else
                 fs.Seek(4, SeekOrigin.Current)
@@ -170,14 +173,14 @@ Public Class ROM
         Loop
         Dim donePtrs As New List(Of Integer)
         For l As Integer = ptrs.L2.IndexOf(lvlPtr) + 1 To ptrs.L2.Count - 1 'update level pointers
-            fs.Seek(lvlPtrs + 2 + ptrs.L1(l) * 2, SeekOrigin.Begin)
+            fs.Seek(Ptr.LevelPointers + 2 + ptrs.L1(l) * 2, SeekOrigin.Begin)
             Dim NewPtr As Integer = fs.ReadByte + fs.ReadByte * &H100 + lenDiff
             fs.Seek(-2, SeekOrigin.Current)
             fs.WriteByte(NewPtr Mod &H100)
             fs.WriteByte(NewPtr \ &H100)
             If Not donePtrs.Contains(NewPtr) Then
                 donePtrs.Add(NewPtr)
-                NewPtr += &HF0200
+                NewPtr += &HF0000
                 fs.Seek(NewPtr, SeekOrigin.Begin)
                 Dim NewPtr2 As Integer
                 For m As Integer = 0 To 5 'Update pointers within level files
@@ -190,9 +193,9 @@ Public Class ROM
                     End If
                 Next
                 fs.Seek(NewPtr + &H3C, SeekOrigin.Begin)
-                Do 'Update palette fade boss monsters
+                Do 'Update special boss monsters
                     NewPtr2 = Shrd.ReadFileAddr(fs)
-                    If NewPtr2 = &H12D95 Then
+                    If Ptr.SpBossMonsters.Contains(NewPtr2) Then
                         NewPtr2 = Shrd.ReadFileAddr(fs) + lenDiff
                         fs.Seek(-4, SeekOrigin.Current)
                         fs.Write(Shrd.ConvertAddr(NewPtr2), 0, 4)
@@ -202,7 +205,7 @@ Public Class ROM
                 Loop
             End If
         Next
-        fs.SetLength(&H100200)
+        fs.SetLength(&H100000)
         fs.Close()
     End Sub
 End Class

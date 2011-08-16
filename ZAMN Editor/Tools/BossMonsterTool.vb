@@ -45,7 +45,7 @@
 
     Public Overrides Function NewOfT(ByVal x As Integer, ByVal y As Integer) As BossMonster
         If BMonsterPicker.SelectedIndex = -1 Then Return Nothing
-        Dim m As New BossMonster(BossMonster.ptrs(BMonsterPicker.SelectedIndex), x, y)
+        Dim m As New BossMonster(Ptr.BossMonsters(BMonsterPicker.SelectedIndex), x, y)
         Dim rect As Rectangle = m.GetRect
         dragXOff = rect.Width \ 2
         dragYOff = rect.Height \ 2

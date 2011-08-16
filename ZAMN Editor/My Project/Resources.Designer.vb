@@ -102,6 +102,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property BSNES() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("BSNES", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
         Friend ReadOnly Property Chainsaw() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Chainsaw", resourceCulture)

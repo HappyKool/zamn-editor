@@ -12,7 +12,7 @@ Public Class Shrd
         If Banknum < &H80 Or part2 < &H8000 Then
             Return -1
         End If
-        Return (Banknum - &H80) * &H8000 + part2 - &H7E00
+        Return (Banknum - &H80) * &H8000 + part2 - &H8000
     End Function
 
     Public Shared Sub GoToPointer(ByVal s As IO.Stream)
@@ -24,12 +24,21 @@ Public Class Shrd
         End If
     End Sub
 
+    Public Shared Function GetFileAddr(ByVal arr As Byte(), ByVal idx As Integer) As Integer
+        Dim part2 As Integer = arr(idx) + arr(idx + 1) * &H100
+        Dim Banknum As Integer = arr(idx + 2)
+        If Banknum < &H80 Or part2 < &H8000 Then
+            Return -1
+        End If
+        Return (Banknum - &H80) * &H8000 + part2 - &H8000
+    End Function
+
     Public Shared Function ReadRelativeFileAddr(ByVal s As IO.Stream, ByVal bank As Byte) As Integer
         Dim part2 As Integer = s.ReadByte + s.ReadByte * &H100
         If bank < &H80 Or part2 < &H8000 Then
             Return -1
         End If
-        Return (bank - &H80) * &H8000 + part2 - &H7E00
+        Return (bank - &H80) * &H8000 + part2 - &H8000
     End Function
 
     Public Shared Sub GoToRelativePointer(ByVal s As IO.Stream, ByVal bank As Byte)
@@ -45,7 +54,6 @@ Public Class Shrd
         If address = 0 Or address = -1 Then
             Return New Byte() {0, 0, 0, 0}
         End If
-        address -= &H200 'don't include header
         Dim bank As Integer = address \ &H8000
         Dim part2 As Integer = address - bank * &H8000 + &H8000
         Return New Byte() {part2 Mod &H100, part2 \ &H100, bank + &H80, 0}
@@ -343,5 +351,17 @@ Public Class Shrd
         Next
         bmp.Palette = pal
         g.DrawImage(bmp, x, y)
+    End Sub
+
+    Public Shared Function HasHeader(ByVal s As IO.Stream) As Boolean
+        Dim extraBytes As Integer = s.Length Mod &H20000L
+        Return extraBytes <> 0
+    End Function
+
+    Public Shared Sub RemoveHeader(ByVal s As IO.Stream)
+        Dim extraBytes As Integer = s.Length Mod &H20000L
+        s.Seek(0, IO.SeekOrigin.Begin)
+        Shrd.InsertBytes(s, -extraBytes)
+        s.SetLength(s.Length - extraBytes)
     End Sub
 End Class

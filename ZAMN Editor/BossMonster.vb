@@ -4,11 +4,8 @@
     Public ptr As Integer
     Public name As String
 
-    Public bgPlt As Integer
-    Public sPlt As Integer
+    Public exData As Byte()
 
-    Public Shared names As String() = {"UFO", "Giant Baby", "Desert Snakeoid", "Grass Snakeoid", "Unknown", "Giant Spider"}
-    Public Shared ptrs As Integer() = {&H1093C, &H11769, &H12ABB, &H12AC3, &H159CF, &H1AF33}
     Public Shared dispfont As New Font("Microsoft Sans Serif", 8.25, FontStyle.Regular, GraphicsUnit.Point)
 
     Public Sub New()
@@ -22,15 +19,18 @@
         UpdateName()
     End Sub
 
-    Public Sub New(ByVal ptr As Integer, ByVal pal As Integer, ByVal spal As Integer, ByVal empty As Boolean)
+    Public Sub New(ByVal ptr As Integer, ByVal s As IO.Stream, ByVal dataLen As Integer)
         Me.ptr = ptr
-        Me.bgPlt = pal
-        Me.sPlt = spal
-        Me.x = &HFFFF
-        Me.y = &HFFFF
-        UpdateName()
+        ReDim exData(dataLen - 1)
+        For l As Integer = 0 To dataLen - 1
+            exData(l) = s.ReadByte
+        Next
     End Sub
 
+    Public Sub New(ByVal ptr As Integer, ByVal exData As Byte())
+        Me.ptr = ptr
+        Me.exData = exData
+    End Sub
 
     Public Sub New(ByVal m As BossMonster)
         Me.ptr = m.ptr
@@ -44,11 +44,19 @@
     End Function
 
     Public Sub UpdateName()
-        Dim indx As Integer = Array.IndexOf(ptrs, ptr)
+        Dim indx As Integer = Array.IndexOf(ZAMNEditor.Ptr.BossMonsters, ptr)
         If indx > -1 Then
-            name = names(indx)
+            name = ZAMNEditor.Ptr.BossMonsterNames(indx)
         Else
             name = "Unknown: 0x" & Hex(ptr)
         End If
     End Sub
+
+    Public Function GetBGPalette() As Integer
+        Return Shrd.GetFileAddr(exData, 0)
+    End Function
+
+    Public Function GetSpritePalette() As Integer
+        Return Shrd.GetFileAddr(exData, 4)
+    End Function
 End Class

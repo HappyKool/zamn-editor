@@ -1,5 +1,4 @@
 ﻿Public Class TileSuggestList
-    Public Shared TilesetAddresses As Integer() = {&HD8200, &HE38EF} ', &HD4200, &HE0200, &HDBEB5}
     Public Shared Lists As Byte()() = {My.Resources.Grass, My.Resources.Mall, My.Resources.GrassR}
     Public Shared Data As New List(Of List(Of List(Of List(Of Byte))))
     Public Shared ConnectsTo As New List(Of List(Of List(Of List(Of Integer))))
@@ -65,7 +64,7 @@
     Public Shared Function GetProbList(ByVal tilesetNum As Integer, ByVal direction As Integer, ByVal lst As List(Of Byte)) As List(Of Double)
         Dim probList As New List(Of Double)
         For Each b As Byte In lst
-            probList.Add(Probability(tilesetNum Mod TilesetAddresses.Length)(b + (direction Mod 2) * 256))
+            probList.Add(Probability(tilesetNum Mod Ptr.SuggestTilesets.Length)(b + (direction Mod 2) * 256))
         Next
         Return probList
     End Function

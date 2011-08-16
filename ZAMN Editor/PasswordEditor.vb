@@ -32,7 +32,7 @@
     Private Sub btnGenerate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGenerate.Click
         Dim s As New IO.FileStream(path, IO.FileMode.Open, IO.FileAccess.ReadWrite, IO.FileShare.Read)
         Do
-            s.Seek(&H1334A, IO.SeekOrigin.Begin)
+            s.Seek(Ptr.Passwords, IO.SeekOrigin.Begin)
             Dim rand As New Random()
             For l As Integer = 0 To 25
                 s.WriteByte(CByte(rand.Next(0, 20)))
@@ -62,7 +62,7 @@
         Dim table3(25) As Byte
         Dim c(20) As Byte
         Dim Chars(20) As Char
-        s.Seek(&H1334A, IO.SeekOrigin.Begin)
+        s.Seek(Ptr.Passwords, IO.SeekOrigin.Begin)
         s.Read(table1, 0, 26)
         s.Read(table2, 0, 20)
         s.Read(c, 0, 21)

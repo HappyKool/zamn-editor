@@ -24,13 +24,20 @@ Partial Class Editor
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Editor))
         Me.TSContainer = New System.Windows.Forms.ToolStripContainer()
+        Me.Tabs = New ZAMNEditor.Tabs()
         Me.MainMenu = New System.Windows.Forms.MenuStrip()
         Me.FileMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.FileOpen = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentROMs = New ZAMNEditor.RecentFilesList()
         Me.FileOpenLevel = New System.Windows.Forms.ToolStripMenuItem()
         Me.toolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.FileSave = New System.Windows.Forms.ToolStripMenuItem()
         Me.toolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.FileEmulator = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EmulatorRunROM = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EmulatorFromLevel = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EmulatorSetup = New System.Windows.Forms.ToolStripMenuItem()
+        Me.toolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.FileExit = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditUndo = New System.Windows.Forms.ToolStripMenuItem()
@@ -107,8 +114,7 @@ Partial Class Editor
         Me.OpenROM = New System.Windows.Forms.OpenFileDialog()
         Me.ImportLevel = New System.Windows.Forms.OpenFileDialog()
         Me.ExportLevel = New System.Windows.Forms.SaveFileDialog()
-        Me.Tabs = New ZAMNEditor.Tabs()
-        Me.RecentROMs = New ZAMNEditor.RecentFilesList()
+        Me.OpenEmulator = New System.Windows.Forms.OpenFileDialog()
         Me.TSContainer.ContentPanel.SuspendLayout()
         Me.TSContainer.TopToolStripPanel.SuspendLayout()
         Me.TSContainer.SuspendLayout()
@@ -149,6 +155,16 @@ Partial Class Editor
         Me.TSContainer.TopToolStripPanel.Controls.Add(Me.Tools)
         Me.TSContainer.TopToolStripPanel.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         '
+        'Tabs
+        '
+        Me.Tabs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Tabs.Location = New System.Drawing.Point(0, 0)
+        Me.Tabs.Name = "Tabs"
+        Me.Tabs.Size = New System.Drawing.Size(625, 386)
+        Me.Tabs.TabIndex = 1
+        Me.Tabs.Text = "Tabs1"
+        Me.Tabs.Visible = False
+        '
         'MainMenu
         '
         Me.MainMenu.Dock = System.Windows.Forms.DockStyle.None
@@ -163,7 +179,7 @@ Partial Class Editor
         '
         'FileMenu
         '
-        Me.FileMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileOpen, Me.RecentROMs, Me.FileOpenLevel, Me.toolStripSeparator2, Me.FileSave, Me.toolStripSeparator4, Me.FileExit})
+        Me.FileMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileOpen, Me.RecentROMs, Me.FileOpenLevel, Me.toolStripSeparator2, Me.FileSave, Me.toolStripSeparator4, Me.FileEmulator, Me.toolStripSeparator3, Me.FileExit})
         Me.FileMenu.Name = "FileMenu"
         Me.FileMenu.Size = New System.Drawing.Size(37, 20)
         Me.FileMenu.Text = "&File"
@@ -176,6 +192,16 @@ Partial Class Editor
         Me.FileOpen.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
         Me.FileOpen.Size = New System.Drawing.Size(173, 22)
         Me.FileOpen.Text = "&Open"
+        '
+        'RecentROMs
+        '
+        Me.RecentROMs.Enabled = False
+        Me.RecentROMs.Items = CType(resources.GetObject("RecentROMs.Items"), System.Collections.Generic.List(Of String))
+        Me.RecentROMs.MaxItems = 5
+        Me.RecentROMs.MaxLength = 60
+        Me.RecentROMs.Name = "RecentROMs"
+        Me.RecentROMs.Size = New System.Drawing.Size(173, 22)
+        Me.RecentROMs.Text = "&Recent ROMs"
         '
         'FileOpenLevel
         '
@@ -205,6 +231,38 @@ Partial Class Editor
         '
         Me.toolStripSeparator4.Name = "toolStripSeparator4"
         Me.toolStripSeparator4.Size = New System.Drawing.Size(170, 6)
+        '
+        'FileEmulator
+        '
+        Me.FileEmulator.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EmulatorRunROM, Me.EmulatorFromLevel, Me.EmulatorSetup})
+        Me.FileEmulator.Name = "FileEmulator"
+        Me.FileEmulator.Size = New System.Drawing.Size(173, 22)
+        Me.FileEmulator.Text = "&Emulator"
+        '
+        'EmulatorRunROM
+        '
+        Me.EmulatorRunROM.Enabled = False
+        Me.EmulatorRunROM.Name = "EmulatorRunROM"
+        Me.EmulatorRunROM.Size = New System.Drawing.Size(156, 22)
+        Me.EmulatorRunROM.Text = "&Run ROM"
+        '
+        'EmulatorFromLevel
+        '
+        Me.EmulatorFromLevel.Enabled = False
+        Me.EmulatorFromLevel.Name = "EmulatorFromLevel"
+        Me.EmulatorFromLevel.Size = New System.Drawing.Size(156, 22)
+        Me.EmulatorFromLevel.Text = "Run From &Level"
+        '
+        'EmulatorSetup
+        '
+        Me.EmulatorSetup.Name = "EmulatorSetup"
+        Me.EmulatorSetup.Size = New System.Drawing.Size(156, 22)
+        Me.EmulatorSetup.Text = "&Setup Emulator"
+        '
+        'toolStripSeparator3
+        '
+        Me.toolStripSeparator3.Name = "toolStripSeparator3"
+        Me.toolStripSeparator3.Size = New System.Drawing.Size(170, 6)
         '
         'FileExit
         '
@@ -521,18 +579,18 @@ Partial Class Editor
         'HelpContents
         '
         Me.HelpContents.Name = "HelpContents"
-        Me.HelpContents.Size = New System.Drawing.Size(152, 22)
+        Me.HelpContents.Size = New System.Drawing.Size(131, 22)
         Me.HelpContents.Text = "&Contents..."
         '
         'toolStripSeparator11
         '
         Me.toolStripSeparator11.Name = "toolStripSeparator11"
-        Me.toolStripSeparator11.Size = New System.Drawing.Size(149, 6)
+        Me.toolStripSeparator11.Size = New System.Drawing.Size(128, 6)
         '
         'HelpAbout
         '
         Me.HelpAbout.Name = "HelpAbout"
-        Me.HelpAbout.Size = New System.Drawing.Size(152, 22)
+        Me.HelpAbout.Size = New System.Drawing.Size(131, 22)
         Me.HelpAbout.Text = "&About"
         '
         'Tools
@@ -762,7 +820,7 @@ Partial Class Editor
         'OpenROM
         '
         Me.OpenROM.DefaultExt = "smc"
-        Me.OpenROM.Filter = "SNES ROM Files (*.smc)|*.smc|All Files (*.*)|*.*"
+        Me.OpenROM.Filter = "SNES ROM Files (*.sfc;*.smc)|*.sfc;*.smc|All Files (*.*)|*.*"
         '
         'ImportLevel
         '
@@ -772,25 +830,9 @@ Partial Class Editor
         '
         Me.ExportLevel.Filter = "ZAMN Level Files (*.zl)|*.zl"
         '
-        'Tabs
+        'OpenEmulator
         '
-        Me.Tabs.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Tabs.Location = New System.Drawing.Point(0, 0)
-        Me.Tabs.Name = "Tabs"
-        Me.Tabs.Size = New System.Drawing.Size(625, 386)
-        Me.Tabs.TabIndex = 1
-        Me.Tabs.Text = "Tabs1"
-        Me.Tabs.Visible = False
-        '
-        'RecentROMs
-        '
-        Me.RecentROMs.Enabled = False
-        Me.RecentROMs.Items = CType(resources.GetObject("RecentROMs.Items"), System.Collections.Generic.List(Of String))
-        Me.RecentROMs.MaxItems = 5
-        Me.RecentROMs.MaxLength = 60
-        Me.RecentROMs.Name = "RecentROMs"
-        Me.RecentROMs.Size = New System.Drawing.Size(173, 22)
-        Me.RecentROMs.Text = "&Recent ROMs"
+        Me.OpenEmulator.Filter = "Executable Files (*.exe)|*.exe|All Files (*.*)|*.*"
         '
         'Editor
         '
@@ -899,5 +941,11 @@ Partial Class Editor
     Friend WithEvents toolStripSeparator11 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents HelpAbout As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DebugFillSelection As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents FileEmulator As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EmulatorRunROM As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EmulatorFromLevel As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EmulatorSetup As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents toolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents OpenEmulator As System.Windows.Forms.OpenFileDialog
 
 End Class

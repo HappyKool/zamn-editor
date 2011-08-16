@@ -30,17 +30,21 @@ Partial Class LevelSettings
         Me.pnlCol = New System.Windows.Forms.Panel()
         Me.radColAuto = New System.Windows.Forms.RadioButton()
         Me.radColMan = New System.Windows.Forms.RadioButton()
+        Me.addrCol = New ZAMNEditor.AddressUpDown()
         Me.pnlGFX = New System.Windows.Forms.Panel()
         Me.radGFXAuto = New System.Windows.Forms.RadioButton()
         Me.radGFXMan = New System.Windows.Forms.RadioButton()
+        Me.addrGFX = New ZAMNEditor.AddressUpDown()
         Me.pnlPal = New System.Windows.Forms.Panel()
         Me.radPalAuto = New System.Windows.Forms.RadioButton()
         Me.cboPal = New System.Windows.Forms.ComboBox()
         Me.radPalMan = New System.Windows.Forms.RadioButton()
+        Me.addrPal = New ZAMNEditor.AddressUpDown()
         Me.pnlTiles = New System.Windows.Forms.Panel()
         Me.cboTiles = New System.Windows.Forms.ComboBox()
         Me.radTilesAuto = New System.Windows.Forms.RadioButton()
         Me.radTilesMan = New System.Windows.Forms.RadioButton()
+        Me.addrTiles = New ZAMNEditor.AddressUpDown()
         Me.lblUnknown = New System.Windows.Forms.Label()
         Me.lblCollision = New System.Windows.Forms.Label()
         Me.lblGraphics = New System.Windows.Forms.Label()
@@ -65,9 +69,11 @@ Partial Class LevelSettings
         Me.cboPltAnim = New System.Windows.Forms.ComboBox()
         Me.radPAnimAuto = New System.Windows.Forms.RadioButton()
         Me.radPAnimMan = New System.Windows.Forms.RadioButton()
+        Me.addrPAnim = New ZAMNEditor.AddressUpDown()
         Me.pnlSPal = New System.Windows.Forms.Panel()
         Me.radSPalAuto = New System.Windows.Forms.RadioButton()
         Me.radSPalMan = New System.Windows.Forms.RadioButton()
+        Me.addrSPal = New ZAMNEditor.AddressUpDown()
         Me.lblMusic = New System.Windows.Forms.Label()
         Me.lblUnknown3 = New System.Windows.Forms.Label()
         Me.lblPalAnim = New System.Windows.Forms.Label()
@@ -86,21 +92,15 @@ Partial Class LevelSettings
         Me.pnlSPalF = New System.Windows.Forms.Panel()
         Me.radSPalAutoF = New System.Windows.Forms.RadioButton()
         Me.radSPalManF = New System.Windows.Forms.RadioButton()
+        Me.addrSPalF = New ZAMNEditor.AddressUpDown()
         Me.lblSpritePaletteF = New System.Windows.Forms.Label()
         Me.pnlPalF = New System.Windows.Forms.Panel()
         Me.radPalAutoF = New System.Windows.Forms.RadioButton()
         Me.cboPalF = New System.Windows.Forms.ComboBox()
         Me.radPalManF = New System.Windows.Forms.RadioButton()
+        Me.addrPalF = New ZAMNEditor.AddressUpDown()
         Me.lblPaletteF = New System.Windows.Forms.Label()
         Me.chkPltFade = New System.Windows.Forms.CheckBox()
-        Me.addrSPalF = New ZAMNEditor.AddressUpDown()
-        Me.addrPalF = New ZAMNEditor.AddressUpDown()
-        Me.addrPAnim = New ZAMNEditor.AddressUpDown()
-        Me.addrSPal = New ZAMNEditor.AddressUpDown()
-        Me.addrCol = New ZAMNEditor.AddressUpDown()
-        Me.addrGFX = New ZAMNEditor.AddressUpDown()
-        Me.addrPal = New ZAMNEditor.AddressUpDown()
-        Me.addrTiles = New ZAMNEditor.AddressUpDown()
         Me.grpTileset.SuspendLayout()
         Me.pnlUnk.SuspendLayout()
         CType(Me.nudUnk, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -214,6 +214,14 @@ Partial Class LevelSettings
         Me.radColMan.TabStop = True
         Me.radColMan.UseVisualStyleBackColor = True
         '
+        'addrCol
+        '
+        Me.addrCol.Location = New System.Drawing.Point(162, 0)
+        Me.addrCol.Name = "addrCol"
+        Me.addrCol.Size = New System.Drawing.Size(147, 20)
+        Me.addrCol.TabIndex = 17
+        Me.addrCol.Value = 0
+        '
         'pnlGFX
         '
         Me.pnlGFX.Controls.Add(Me.radGFXAuto)
@@ -244,6 +252,14 @@ Partial Class LevelSettings
         Me.radGFXMan.TabIndex = 12
         Me.radGFXMan.TabStop = True
         Me.radGFXMan.UseVisualStyleBackColor = True
+        '
+        'addrGFX
+        '
+        Me.addrGFX.Location = New System.Drawing.Point(162, 0)
+        Me.addrGFX.Name = "addrGFX"
+        Me.addrGFX.Size = New System.Drawing.Size(147, 20)
+        Me.addrGFX.TabIndex = 13
+        Me.addrGFX.Value = 0
         '
         'pnlPal
         '
@@ -285,6 +301,14 @@ Partial Class LevelSettings
         Me.radPalMan.TabStop = True
         Me.radPalMan.UseVisualStyleBackColor = True
         '
+        'addrPal
+        '
+        Me.addrPal.Location = New System.Drawing.Point(162, 0)
+        Me.addrPal.Name = "addrPal"
+        Me.addrPal.Size = New System.Drawing.Size(147, 20)
+        Me.addrPal.TabIndex = 8
+        Me.addrPal.Value = 0
+        '
         'pnlTiles
         '
         Me.pnlTiles.Controls.Add(Me.cboTiles)
@@ -325,6 +349,14 @@ Partial Class LevelSettings
         Me.radTilesMan.TabIndex = 3
         Me.radTilesMan.TabStop = True
         Me.radTilesMan.UseVisualStyleBackColor = True
+        '
+        'addrTiles
+        '
+        Me.addrTiles.Location = New System.Drawing.Point(162, 0)
+        Me.addrTiles.Name = "addrTiles"
+        Me.addrTiles.Size = New System.Drawing.Size(147, 20)
+        Me.addrTiles.TabIndex = 1
+        Me.addrTiles.Value = 0
         '
         'lblUnknown
         '
@@ -571,6 +603,14 @@ Partial Class LevelSettings
         Me.radPAnimMan.TabStop = True
         Me.radPAnimMan.UseVisualStyleBackColor = True
         '
+        'addrPAnim
+        '
+        Me.addrPAnim.Location = New System.Drawing.Point(162, 0)
+        Me.addrPAnim.Name = "addrPAnim"
+        Me.addrPAnim.Size = New System.Drawing.Size(147, 20)
+        Me.addrPAnim.TabIndex = 25
+        Me.addrPAnim.Value = 0
+        '
         'pnlSPal
         '
         Me.pnlSPal.Controls.Add(Me.radSPalAuto)
@@ -601,6 +641,14 @@ Partial Class LevelSettings
         Me.radSPalMan.TabIndex = 20
         Me.radSPalMan.TabStop = True
         Me.radSPalMan.UseVisualStyleBackColor = True
+        '
+        'addrSPal
+        '
+        Me.addrSPal.Location = New System.Drawing.Point(162, 0)
+        Me.addrSPal.Name = "addrSPal"
+        Me.addrSPal.Size = New System.Drawing.Size(147, 20)
+        Me.addrSPal.TabIndex = 21
+        Me.addrSPal.Value = 0
         '
         'lblMusic
         '
@@ -782,6 +830,14 @@ Partial Class LevelSettings
         Me.radSPalManF.TabIndex = 20
         Me.radSPalManF.UseVisualStyleBackColor = True
         '
+        'addrSPalF
+        '
+        Me.addrSPalF.Location = New System.Drawing.Point(162, 0)
+        Me.addrSPalF.Name = "addrSPalF"
+        Me.addrSPalF.Size = New System.Drawing.Size(147, 20)
+        Me.addrSPalF.TabIndex = 21
+        Me.addrSPalF.Value = 0
+        '
         'lblSpritePaletteF
         '
         Me.lblSpritePaletteF.AutoSize = True
@@ -831,6 +887,14 @@ Partial Class LevelSettings
         Me.radPalManF.TabIndex = 7
         Me.radPalManF.UseVisualStyleBackColor = True
         '
+        'addrPalF
+        '
+        Me.addrPalF.Location = New System.Drawing.Point(162, 0)
+        Me.addrPalF.Name = "addrPalF"
+        Me.addrPalF.Size = New System.Drawing.Size(147, 20)
+        Me.addrPalF.TabIndex = 8
+        Me.addrPalF.Value = 0
+        '
         'lblPaletteF
         '
         Me.lblPaletteF.AutoSize = True
@@ -849,70 +913,6 @@ Partial Class LevelSettings
         Me.chkPltFade.TabIndex = 7
         Me.chkPltFade.Text = "Palette Fade"
         Me.chkPltFade.UseVisualStyleBackColor = True
-        '
-        'addrSPalF
-        '
-        Me.addrSPalF.Location = New System.Drawing.Point(162, 0)
-        Me.addrSPalF.Name = "addrSPalF"
-        Me.addrSPalF.Size = New System.Drawing.Size(147, 20)
-        Me.addrSPalF.TabIndex = 21
-        Me.addrSPalF.Value = 512
-        '
-        'addrPalF
-        '
-        Me.addrPalF.Location = New System.Drawing.Point(162, 0)
-        Me.addrPalF.Name = "addrPalF"
-        Me.addrPalF.Size = New System.Drawing.Size(147, 20)
-        Me.addrPalF.TabIndex = 8
-        Me.addrPalF.Value = 512
-        '
-        'addrPAnim
-        '
-        Me.addrPAnim.Location = New System.Drawing.Point(162, 0)
-        Me.addrPAnim.Name = "addrPAnim"
-        Me.addrPAnim.Size = New System.Drawing.Size(147, 20)
-        Me.addrPAnim.TabIndex = 25
-        Me.addrPAnim.Value = 512
-        '
-        'addrSPal
-        '
-        Me.addrSPal.Location = New System.Drawing.Point(162, 0)
-        Me.addrSPal.Name = "addrSPal"
-        Me.addrSPal.Size = New System.Drawing.Size(147, 20)
-        Me.addrSPal.TabIndex = 21
-        Me.addrSPal.Value = 512
-        '
-        'addrCol
-        '
-        Me.addrCol.Location = New System.Drawing.Point(162, 0)
-        Me.addrCol.Name = "addrCol"
-        Me.addrCol.Size = New System.Drawing.Size(147, 20)
-        Me.addrCol.TabIndex = 17
-        Me.addrCol.Value = 512
-        '
-        'addrGFX
-        '
-        Me.addrGFX.Location = New System.Drawing.Point(162, 0)
-        Me.addrGFX.Name = "addrGFX"
-        Me.addrGFX.Size = New System.Drawing.Size(147, 20)
-        Me.addrGFX.TabIndex = 13
-        Me.addrGFX.Value = 512
-        '
-        'addrPal
-        '
-        Me.addrPal.Location = New System.Drawing.Point(162, 0)
-        Me.addrPal.Name = "addrPal"
-        Me.addrPal.Size = New System.Drawing.Size(147, 20)
-        Me.addrPal.TabIndex = 8
-        Me.addrPal.Value = 512
-        '
-        'addrTiles
-        '
-        Me.addrTiles.Location = New System.Drawing.Point(162, 0)
-        Me.addrTiles.Name = "addrTiles"
-        Me.addrTiles.Size = New System.Drawing.Size(147, 20)
-        Me.addrTiles.TabIndex = 1
-        Me.addrTiles.Value = 512
         '
         'LevelSettings
         '

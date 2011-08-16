@@ -4,22 +4,6 @@
     Public ed As Editor
     Public reloadTileset As Boolean
 
-    Public tilesets As Integer() = {&HD8200, &HE38EF, &HD4200, &HE0200, &HDBEB5}
-    Public palettes As Integer() = {&HF1076, &HF1276, &HF1376, &HF1476, 0, _
-                                    &HF1E76, &HF1F76, 0, 0, 0, _
-                                    &HF1A76, &HF1B76, &HF1C76, &HF1D76, 0, _
-                                    &HF2076, &HF2276, &HF2376, &HF2476, &HF2176, _
-                                    &HF1676, &HF1776, &HF1876, &HF1976, 0}
-    Public palNames As String() = {"Standard", "Fall", "Winter", "Night", "", _
-                                   "Mall", "Factory", "", "", "", _
-                                   "Standard", "Night", "Bright", "Dark", "", _
-                                   "Office", "Light Office", "Dark Office", "Cave", "Dark Cave", _
-                                   "Pyramid", "Beach", "Dark Beach", "Cave", ""}
-    Public graphics As Integer() = {&HC0200, &HCC200, &HC8200, &HD0200, &HC4200}
-    Public collision As Integer() = {&HDF6D1, &HE70AB, &HE6CAB, &HE74AB, &HDFAD1}
-    Public unknown As Integer() = {&H70, &H69, &H70, &H57, &H59}
-    Public pltAnim As Integer() = {-1, &H22AD, &H22EF, &H2337, &H2422, &H2464}
-    Public boss As Integer() = {-1, &H1092C, &H11769, &H12ABB, &H12AC3, &H12D95, &H159CF, &H1AF33}
 
     Public Overloads Function ShowDialog(ByVal ed As Editor) As DialogResult
         Me.lvl = ed.EdControl.lvl
@@ -27,7 +11,7 @@
         reloadTileset = False
         'Tiles
         addrTiles.Value = lvl.tileset.address
-        cboTiles.SelectedIndex = Array.IndexOf(tilesets, lvl.tileset.address)
+        cboTiles.SelectedIndex = Array.IndexOf(Ptr.Tilesets, lvl.tileset.address)
         If cboTiles.SelectedIndex <> -1 Then
             radTilesAuto.Checked = True
         Else
@@ -36,7 +20,7 @@
         'Palette
         addrPal.Value = lvl.tileset.paletteAddr
         UpdatePals()
-        Dim palIdx As Integer = Array.IndexOf(palettes, lvl.tileset.paletteAddr)
+        Dim palIdx As Integer = Array.IndexOf(Ptr.Palettes, lvl.tileset.paletteAddr)
         If palIdx >= cboTiles.SelectedIndex * 5 And palIdx <= cboTiles.SelectedIndex * 5 + 4 Then
             cboPal.SelectedIndex = palIdx Mod 5
         End If
@@ -47,35 +31,35 @@
         End If
         'Graphics
         addrGFX.Value = lvl.tileset.gfxAddr
-        If Array.IndexOf(graphics, lvl.tileset.gfxAddr) = cboTiles.SelectedIndex Then
+        If Array.IndexOf(Ptr.Graphics, lvl.tileset.gfxAddr) = cboTiles.SelectedIndex Then
             radGFXAuto.Checked = True
         Else
             radGFXMan.Checked = True
         End If
         'Collision
         addrCol.Value = lvl.tileset.collisionAddr
-        If Array.IndexOf(collision, lvl.tileset.collisionAddr) = cboTiles.SelectedIndex Then
+        If Array.IndexOf(Ptr.Collision, lvl.tileset.collisionAddr) = cboTiles.SelectedIndex Then
             radColAuto.Checked = True
         Else
             radColMan.Checked = True
         End If
         'Unknown
         nudUnk.Value = lvl.unknown
-        If Array.IndexOf(unknown, lvl.unknown) = cboTiles.SelectedIndex Or Array.LastIndexOf(unknown, lvl.unknown) = cboTiles.SelectedIndex Then
+        If Array.IndexOf(Ptr.Unknown, lvl.unknown) = cboTiles.SelectedIndex Or Array.LastIndexOf(Ptr.Unknown, lvl.unknown) = cboTiles.SelectedIndex Then
             radUnkAuto.Checked = True
         Else
             radUnkMan.Checked = True
         End If
         'Sprite palette
         addrSPal.Value = lvl.spritePal
-        If lvl.spritePal = &HF1176 Then
+        If lvl.spritePal = Ptr.SpritePlt Then
             radSPalAuto.Checked = True
         Else
             radSPalMan.Checked = True
         End If
         'Palette Animation
         addrPAnim.Value = lvl.tileset.pltAnimAddr
-        cboPltAnim.SelectedIndex = Array.IndexOf(pltAnim, lvl.tileset.pltAnimAddr)
+        cboPltAnim.SelectedIndex = Array.IndexOf(Ptr.PltAnim, lvl.tileset.pltAnimAddr)
         If cboPltAnim.SelectedIndex <> -1 Then
             radPAnimAuto.Checked = True
         Else
@@ -117,10 +101,10 @@
         'Palette fade
         chkPltFade.Checked = False
         For Each m As BossMonster In lvl.bossMonsters
-            If m.ptr = &H12D95 Then
+            If m.ptr = Ptr.SpBossMonsters(0) Then
                 chkPltFade.Checked = True
-                addrPalF.Value = m.bgPlt
-                palIdx = Array.IndexOf(palettes, m.bgPlt)
+                addrPalF.Value = m.GetBGPalette
+                palIdx = Array.IndexOf(Ptr.Palettes, addrPalF.Value)
                 If palIdx >= cboTiles.SelectedIndex * 5 And palIdx <= cboTiles.SelectedIndex * 5 + 4 Then
                     cboPalF.SelectedIndex = palIdx Mod 5
                 End If
@@ -129,8 +113,8 @@
                 Else
                     radPalManF.Checked = True
                 End If
-                addrSPalF.Value = m.sPlt
-                If m.sPlt = &HF1176 Then
+                addrSPalF.Value = m.GetSpritePalette
+                If addrSPalF.Value = Ptr.SpritePlt Then
                     radSPalAutoF.Checked = True
                 Else
                     radSPalManF.Checked = True
@@ -147,9 +131,9 @@
         If cboTiles.SelectedIndex = -1 Then Return
         Dim startIdx As Integer = cboTiles.SelectedIndex * 5
         For l As Integer = startIdx To startIdx + 4
-            If palettes(l) <> 0 Then
-                cboPal.Items.Add(palNames(l))
-                cboPalF.Items.Add(palNames(l))
+            If Ptr.Palettes(l) <> 0 Then
+                cboPal.Items.Add(Ptr.PalNames(l))
+                cboPalF.Items.Add(Ptr.PalNames(l))
             End If
         Next
     End Sub
@@ -168,18 +152,18 @@
         Next
         'Update values
         If cboTiles.SelectedIndex > -1 Then
-            If radTilesAuto.Checked Then addrTiles.Value = tilesets(cboTiles.SelectedIndex)
-            If cboPal.SelectedIndex > -1 And radPalAuto.Checked Then addrPal.Value = palettes(cboTiles.SelectedIndex * 5 + cboPal.SelectedIndex)
-            If radGFXAuto.Checked Then addrGFX.Value = graphics(cboTiles.SelectedIndex)
-            If radColAuto.Checked Then addrCol.Value = collision(cboTiles.SelectedIndex)
-            If radUnkAuto.Checked Then nudUnk.Value = unknown(cboTiles.SelectedIndex)
-            If cboPalF.SelectedIndex > -1 And radPalAutoF.Checked Then addrPalF.Value = palettes(cboTiles.SelectedIndex * 5 + cboPalF.SelectedIndex)
+            If radTilesAuto.Checked Then addrTiles.Value = Ptr.Tilesets(cboTiles.SelectedIndex)
+            If cboPal.SelectedIndex > -1 And radPalAuto.Checked Then addrPal.Value = Ptr.Palettes(cboTiles.SelectedIndex * 5 + cboPal.SelectedIndex)
+            If radGFXAuto.Checked Then addrGFX.Value = Ptr.Graphics(cboTiles.SelectedIndex)
+            If radColAuto.Checked Then addrCol.Value = Ptr.Collision(cboTiles.SelectedIndex)
+            If radUnkAuto.Checked Then nudUnk.Value = Ptr.Unknown(cboTiles.SelectedIndex)
+            If cboPalF.SelectedIndex > -1 And radPalAutoF.Checked Then addrPalF.Value = Ptr.Palettes(cboTiles.SelectedIndex * 5 + cboPalF.SelectedIndex)
         End If
-        If radSPalAuto.Checked Then addrSPal.Value = &HF1176
-        If cboPltAnim.SelectedIndex > -1 And radPAnimAuto.Checked Then addrPAnim.Value = pltAnim(cboPltAnim.SelectedIndex)
+        If radSPalAuto.Checked Then addrSPal.Value = Ptr.SpritePlt
+        If cboPltAnim.SelectedIndex > -1 And radPAnimAuto.Checked Then addrPAnim.Value = Ptr.PltAnim(cboPltAnim.SelectedIndex)
         If cboMusic.SelectedIndex > -1 And radMusicAuto.Checked Then nudMusic.Value = cboMusic.SelectedIndex + 2
         If radUnk3Auto.Checked Then nudUnk3.Value = 511
-        If radSPalAutoF.Checked Then addrSPalF.Value = &HF1176
+        If radSPalAutoF.Checked Then addrSPalF.Value = Ptr.SpritePlt
     End Sub
 
     Private Sub radMan_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles radColMan.CheckedChanged, radPalManF.CheckedChanged, _
@@ -203,28 +187,28 @@
 
     Private Sub cboPal_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cboPal.SelectedIndexChanged
         If cboPal.SelectedIndex = -1 Then Return
-        addrPal.Value = palettes(cboTiles.SelectedIndex * 5 + cboPal.SelectedIndex)
+        addrPal.Value = Ptr.Palettes(cboTiles.SelectedIndex * 5 + cboPal.SelectedIndex)
     End Sub
 
     Private Sub cboPalF_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cboPalF.SelectedIndexChanged
         If cboPalF.SelectedIndex = -1 Then Return
-        addrPalF.Value = palettes(cboTiles.SelectedIndex * 5 + cboPalF.SelectedIndex)
+        addrPalF.Value = Ptr.Palettes(cboTiles.SelectedIndex * 5 + cboPalF.SelectedIndex)
     End Sub
 
     Private Sub cboPltAnim_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cboPltAnim.SelectedIndexChanged
         If cboPltAnim.SelectedIndex = -1 Then Return
-        addrPAnim.Value = pltAnim(cboPltAnim.SelectedIndex)
+        addrPAnim.Value = Ptr.PltAnim(cboPltAnim.SelectedIndex)
     End Sub
 
     Private Sub cboTiles_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cboTiles.SelectedIndexChanged
         If cboTiles.SelectedIndex = -1 Then Return
-        If radGFXAuto.Checked Then addrGFX.Value = graphics(cboTiles.SelectedIndex)
-        If radColAuto.Checked Then addrCol.Value = collision(cboTiles.SelectedIndex)
-        If radUnkAuto.Checked Then nudUnk.Value = unknown(cboTiles.SelectedIndex)
+        If radGFXAuto.Checked Then addrGFX.Value = Ptr.Graphics(cboTiles.SelectedIndex)
+        If radColAuto.Checked Then addrCol.Value = Ptr.Collision(cboTiles.SelectedIndex)
+        If radUnkAuto.Checked Then nudUnk.Value = Ptr.Unknown(cboTiles.SelectedIndex)
         UpdatePals()
         If radPalMan.Checked = True Then Return
         cboPal.SelectedIndex = 0
-        addrTiles.Value = tilesets(cboTiles.SelectedIndex)
+        addrTiles.Value = Ptr.Tilesets(cboTiles.SelectedIndex)
     End Sub
 
     Private Sub chkPltFade_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkPltFade.CheckedChanged
@@ -262,14 +246,17 @@
         Next
         Dim m As Integer = 0
         Do Until m = lvl.bossMonsters.Count
-            If lvl.bossMonsters(m).ptr = &H12D95 Then
+            If lvl.bossMonsters(m).ptr = Ptr.SpBossMonsters(0) Then
                 lvl.bossMonsters.RemoveAt(m)
             Else
                 m += 1
             End If
         Loop
         If chkPltFade.Checked Then
-            lvl.bossMonsters.Add(New BossMonster(&H12D95, addrPalF.Value, addrSPalF.Value, False))
+            Dim exData(7) As Byte
+            Array.Copy(Shrd.ConvertAddr(addrPalF.Value), 0, exData, 0, 4)
+            Array.Copy(Shrd.ConvertAddr(addrSPalF.Value), 0, exData, 4, 4)
+            lvl.bossMonsters.Add(New BossMonster(Ptr.SpBossMonsters(0), exData))
         End If
         If reloadTileset Then
             Dim s As New IO.FileStream(ed.r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read)
