@@ -67,7 +67,6 @@ Partial Class Editor
         Me.LevelEditTitle = New System.Windows.Forms.ToolStripMenuItem()
         Me.LevelSettingsM = New System.Windows.Forms.ToolStripMenuItem()
         Me.LevelDebugTools = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DebugFontHacker = New System.Windows.Forms.ToolStripMenuItem()
         Me.DebugCopyTileset = New System.Windows.Forms.ToolStripMenuItem()
         Me.DebugFillSelection = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsMenu = New System.Windows.Forms.ToolStripMenuItem()
@@ -376,7 +375,7 @@ Partial Class Editor
         Me.ViewGrid.CheckOnClick = True
         Me.ViewGrid.Enabled = False
         Me.ViewGrid.Name = "ViewGrid"
-        Me.ViewGrid.Size = New System.Drawing.Size(134, 22)
+        Me.ViewGrid.Size = New System.Drawing.Size(152, 22)
         Me.ViewGrid.Text = "&Grid"
         '
         'ViewPriority
@@ -384,32 +383,32 @@ Partial Class Editor
         Me.ViewPriority.CheckOnClick = True
         Me.ViewPriority.Enabled = False
         Me.ViewPriority.Name = "ViewPriority"
-        Me.ViewPriority.Size = New System.Drawing.Size(134, 22)
+        Me.ViewPriority.Size = New System.Drawing.Size(152, 22)
         Me.ViewPriority.Text = "&Tile Priority"
         '
         'toolStripSeparator7
         '
         Me.toolStripSeparator7.Name = "toolStripSeparator7"
-        Me.toolStripSeparator7.Size = New System.Drawing.Size(131, 6)
+        Me.toolStripSeparator7.Size = New System.Drawing.Size(149, 6)
         '
         'View100P
         '
         Me.View100P.Checked = True
         Me.View100P.CheckState = System.Windows.Forms.CheckState.Checked
         Me.View100P.Name = "View100P"
-        Me.View100P.Size = New System.Drawing.Size(134, 22)
+        Me.View100P.Size = New System.Drawing.Size(152, 22)
         Me.View100P.Text = "100%"
         '
         'View75P
         '
         Me.View75P.Name = "View75P"
-        Me.View75P.Size = New System.Drawing.Size(134, 22)
+        Me.View75P.Size = New System.Drawing.Size(152, 22)
         Me.View75P.Text = "75%"
         '
         'View50P
         '
         Me.View50P.Name = "View50P"
-        Me.View50P.Size = New System.Drawing.Size(134, 22)
+        Me.View50P.Size = New System.Drawing.Size(152, 22)
         Me.View50P.Text = "50%"
         '
         'LevelMenu
@@ -468,17 +467,11 @@ Partial Class Editor
         '
         'LevelDebugTools
         '
-        Me.LevelDebugTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DebugFontHacker, Me.DebugCopyTileset, Me.DebugFillSelection})
+        Me.LevelDebugTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DebugCopyTileset, Me.DebugFillSelection})
         Me.LevelDebugTools.Name = "LevelDebugTools"
         Me.LevelDebugTools.Size = New System.Drawing.Size(156, 22)
         Me.LevelDebugTools.Text = "Debug Tools"
         Me.LevelDebugTools.Visible = False
-        '
-        'DebugFontHacker
-        '
-        Me.DebugFontHacker.Name = "DebugFontHacker"
-        Me.DebugFontHacker.Size = New System.Drawing.Size(188, 22)
-        Me.DebugFontHacker.Text = "Font Hacker"
         '
         'DebugCopyTileset
         '
@@ -930,7 +923,6 @@ Partial Class Editor
     Friend WithEvents RedoTool As System.Windows.Forms.ToolStripSplitButton
     Friend WithEvents LevelEditTitle As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LevelDebugTools As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents DebugFontHacker As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DebugCopyTileset As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Zoom As System.Windows.Forms.ToolStripDropDownButton
     Friend WithEvents Zoom100Tool As System.Windows.Forms.ToolStripMenuItem

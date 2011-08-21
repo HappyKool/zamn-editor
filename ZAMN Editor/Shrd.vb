@@ -354,7 +354,7 @@ Public Class Shrd
     End Sub
 
     Public Shared Function HasHeader(ByVal s As IO.Stream) As Boolean
-        Dim extraBytes As Integer = s.Length Mod &H20000L
+        Dim extraBytes As Integer = s.Length Mod &H20000L '0x20000 = 1 Megabit
         Return extraBytes <> 0
     End Function
 

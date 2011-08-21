@@ -8,8 +8,8 @@
     Public Const TitleCharWidth As Integer = &H12F37
     Public Const TitleTileMap As Integer = &HB5641
     Public Const SpritePlt As Integer = &HF0F76
-    Public Shared BossMonsters As Integer() = {&H1073C, &H11569, &H128BB, &H128C3, &H157CF, &H1AD33}
-    Public Shared BossMonsterNames As String() = {"UFO", "Giant Baby", "Desert Snakeoid", "Grass Snakeoid", "Unknown", "Giant Spider"}
+    Public Shared BossMonsters As Integer() = {&H1073C, &H11569, &H128BB, &H128C3, &H1AD33}
+    Public Shared BossMonsterNames As String() = {"UFO", "Giant Baby", "Desert Snakeoid", "Grass Snakeoid", "Giant Spider"}
     Public Shared SpBossMonsters As Integer() = {&H12B95, &H157CF} 'Palette fade, Tile animation
     Public Shared SuggestTilesets As Integer() = {&HD8000, &HE36EF} ', &HD4000, &HE0000, &HDBCB5}
     Public Shared SpritePtrs As Integer() = {-1, &H19FE2, &H19776, &H19C6D, &H19E15, &H19D00, &H19699, &H1993D, &H19843, &H19A89, &H19EBE, &H19BAD, _
@@ -41,4 +41,8 @@
     Public Shared Unknown As Integer() = {&H70, &H69, &H70, &H57, &H59}
     Public Shared PltAnim As Integer() = {-1, &H20AD, &H20EF, &H2137, &H2222, &H2264}
     Public Shared Boss As Integer() = {-1, &H1072C, &H11569, &H128BB, &H128C3, &H12B95, &H157CF, &H1AD33}
+
+    Public Shared RAMStartBsnes As Integer = &H2A65
+    Public Shared RAMLevelNum As Integer = &H1E7C
+    Public Shared RAMWeaponQty As Integer = &H1CCC
 End Class

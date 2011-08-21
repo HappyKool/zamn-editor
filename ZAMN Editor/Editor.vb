@@ -60,9 +60,11 @@
         If SaveMsgBox.ShowDialog(Me) = Windows.Forms.DialogResult.Cancel Then
             Return
         End If
+#If DEBUG Then
         If path = "D:\Debug.sfc" Then
             LevelDebugTools.Visible = True
         End If
+#End If
         r = New ROM(path)
         If r.failed Then Return
         FileOpenLevel.Enabled = True
@@ -126,12 +128,11 @@
         Dim emuName As String = LCase(Mid(My.Settings.Emulator, InStrRev(My.Settings.Emulator, "\") + 1))
         Dim outputFile As String = Mid(r.path, 1, InStrRev(r.path, ".") - 1)
         If emuName.Contains("bsnes") Then
-            Dim fs As New IO.FileStream(outputFile & "-1.bst", IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.Read)
-            fs.Write(My.Resources.BSNES, 0, My.Resources.BSNES.Length)
-            fs.Seek(&H2A65 + &H1E7C, IO.SeekOrigin.Begin)
-            fs.WriteByte(CByte(EdControl.lvl.num))
-            fs.Close()
-            Process.Start(My.Settings.Emulator, r.path)
+            If SaveStateEditor.ShowDialog(EdControl.lvl, My.Resources.BSNES, Ptr.RAMStartBsnes, outputFile & "-1.bst") = vbOK Then
+                EmulatorRunROM_Click(sender, e)
+            End If
+        Else
+            MsgBox("Save state generation is only supported for bsnes v081.")
         End If
     End Sub
 
@@ -496,10 +497,6 @@
         Next
         Return str
     End Function
-
-    Private Sub DebugFontHacker_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DebugFontHacker.Click
-        FontHacker.ShowDialog(r)
-    End Sub
 
     Private Sub DebugCopyTileset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DebugCopyTileset.Click
         Dim img As New Bitmap(64 * 16, 64 * 16)

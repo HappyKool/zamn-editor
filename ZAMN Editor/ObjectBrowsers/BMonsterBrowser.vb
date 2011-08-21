@@ -20,7 +20,7 @@
     End Property
 
     Public Overrides Sub Init()
-        itemCt = 5
+        itemCt = 4
         Dim mp As New BMonsterProp
         mp.Dock = DockStyle.Fill
         propCtrl = mp
