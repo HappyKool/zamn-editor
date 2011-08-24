@@ -106,7 +106,7 @@
                 addrPalF.Value = m.GetBGPalette
                 palIdx = Array.IndexOf(Ptr.Palettes, addrPalF.Value)
                 If palIdx >= cboTiles.SelectedIndex * 5 And palIdx <= cboTiles.SelectedIndex * 5 + 4 Then
-                    cboPalF.SelectedIndex = palIdx Mod 5
+                    cboPalF.SelectedIndex = If((palIdx Mod 5) >= cboPalF.Items.Count, -1, palIdx Mod 5)
                 End If
                 If cboPalF.Items.Count > 0 And cboPalF.SelectedIndex > -1 Then
                     radPalAutoF.Checked = True

@@ -36,4 +36,8 @@
         Me.DialogResult = DialogResult.Cancel
         Me.Close()
     End Sub
+
+    Public Sub SetName(ByVal index As Integer, ByVal name As String)
+        levels.Items(index) = name
+    End Sub
 End Class

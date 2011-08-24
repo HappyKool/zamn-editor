@@ -41,14 +41,7 @@ Public Class ROM
             Dim ptrs As DList(Of Integer, Integer) = GetAllLvlPtrs(s)
             For l As Integer = 0 To ptrs.L1.Count - 1
                 Try
-                    s.Seek(ptrs.L2(l) + &H36, SeekOrigin.Begin)
-                    Shrd.GoToRelativePointer(s, &H9F)
-                    Dim TP1 As New TitlePage(s)
-                    s.Seek(ptrs.L2(l) + &H38, SeekOrigin.Begin)
-                    Shrd.GoToRelativePointer(s, &H9F)
-                    Dim TP2 As New TitlePage(s)
-                    Dim name As String = Shrd.FormatTitleString(TP1.ToString & " " & TP2.ToString)
-                    names.Add(ptrs.L1(l), name)
+                    names.Add(ptrs.L1(l), GetLevelTitle(s, ptrs.L2(l)))
                 Catch ex As Exception
                     names.Add(ptrs.L1(l), "ERROR: " & ex.Message)
                 End Try
@@ -92,6 +85,16 @@ Public Class ROM
         End Try
     End Sub
 
+    Public Function GetLevelTitle(ByVal s As Stream, ByVal ptr As Integer)
+        s.Seek(ptr + &H36, SeekOrigin.Begin)
+        Shrd.GoToRelativePointer(s, &H9F)
+        Dim TP1 As New TitlePage(s)
+        s.Seek(ptr + &H38, SeekOrigin.Begin)
+        Shrd.GoToRelativePointer(s, &H9F)
+        Dim TP2 As New TitlePage(s)
+        Return Shrd.FormatTitleString(TP1.ToString & " " & TP2.ToString)
+    End Function
+
     Public Function GetLvlPtr(ByVal num As Integer, ByVal s As Stream) As Integer
         If hacked Then
             s.Seek(Ptr.LevelPointers + 2 + num * 4, SeekOrigin.Begin)
@@ -125,6 +128,7 @@ Public Class ROM
 
     Public Sub SaveLevel(ByVal lvl As Level)
         Dim fs As New FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read)
+        Dim ROMSize As Long = fs.Length
         Dim data As LevelWriteData = lvl.GetWriteData()
         'Dim fs2 As New FileStream(Application.StartupPath + "\lvl.bin", FileMode.Create)
         'fs2.Write(data.data, 0, data.data.Length)
@@ -205,7 +209,9 @@ Public Class ROM
                 Loop
             End If
         Next
-        fs.SetLength(&H100000)
+        fs.SetLength(ROMSize)
+        names(lvl.num) = GetLevelTitle(fs, lvlPtr)
+        OpenLevel.SetName(Array.IndexOf(names.Keys.ToArray(), lvl.num), names(lvl.num))
         fs.Close()
     End Sub
 End Class

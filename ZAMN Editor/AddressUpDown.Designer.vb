@@ -138,7 +138,6 @@ Partial Class AddressUpDown
         Me.nudHex.Name = "nudHex"
         Me.nudHex.Size = New System.Drawing.Size(112, 20)
         Me.nudHex.TabIndex = 5
-        Me.nudHex.Value = New Decimal(New Integer() {512, 0, 0, 0})
         '
         'AddressUpDown
         '

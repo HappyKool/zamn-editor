@@ -53,10 +53,18 @@
     End Sub
 
     Public Function GetBGPalette() As Integer
-        Return Shrd.GetFileAddr(exData, 0)
+        If exData IsNot Nothing AndAlso exData.Length >= 4 Then
+            Return Shrd.GetFileAddr(exData, 0)
+        Else
+            Return -1
+        End If
     End Function
 
     Public Function GetSpritePalette() As Integer
-        Return Shrd.GetFileAddr(exData, 4)
+        If exData IsNot Nothing AndAlso exData.Length >= 8 Then
+            Return Shrd.GetFileAddr(exData, 4)
+        Else
+            Return -1
+        End If
     End Function
 End Class

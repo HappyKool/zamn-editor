@@ -62,7 +62,7 @@
         Dim addobj As Boolean = False
         For l As Integer = levelList.Count - 1 To 0 Step -1 'Find obj under mouse
             Dim o As T = levelList(l)
-            If RectOfT(o).Contains(e.Location) Then
+            If RectOfT(o).Contains(e.Location) And IsSelectable(o) Then
                 If Control.ModifierKeys = Keys.Alt Then
                     selectedObjs.Remove(o)
                     selecting = False
@@ -122,7 +122,7 @@
             levelList.AddRange(selectedObjs)
             selecting = False
         End If
-        ed.SetCopy((selectedObjs.Count > 0 Or curSelObjs.Count > 0) And removable)
+        ed.SetCopy(CanCopy())
         UpdateProperties()
         Repaint()
     End Sub
@@ -145,7 +145,7 @@
                 Dim selRect As New Rectangle(curX, curY, width, height)
                 curSelObjs.Clear()
                 For Each o As T In levelList 'Find objs in selection rectangle
-                    If selRect.IntersectsWith(RectOfT(o)) Then
+                    If selRect.IntersectsWith(RectOfT(o)) And IsSelectable(o) Then
                         curSelObjs.Add(o)
                     End If
                 Next
@@ -244,6 +244,10 @@
         UpdateStatus()
     End Sub
 
+    Public Overrides Function CanCopy() As Boolean
+        Return (selectedObjs.Count > 0 Or curSelObjs.Count > 0) And removable
+    End Function
+
     Public Overrides Sub BMonsterChanged()
         If selectedObjs.Count > 0 And SidePanel = SideContentType.BossMonsters Then
             ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.BossMonsters(BMonsterPicker.SelectedIndex)))
@@ -314,7 +318,9 @@
         selectedObj = Nothing
         If selected Then
             For Each o As T In levelList
-                selectedObjs.Add(o)
+                If IsSelectable(o) Then
+                    selectedObjs.Add(o)
+                End If
             Next
         End If
         Return False
@@ -386,5 +392,8 @@
     End Function
     Public Overridable Function GetRemoveAction(ByVal objs As List(Of T)) As Action
         Return Nothing
+    End Function
+    Public Overridable Function IsSelectable(ByVal obj As T) As Boolean
+        Return True
     End Function
 End Class

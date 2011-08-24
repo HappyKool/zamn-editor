@@ -87,4 +87,8 @@
             obj.y = value
         End Set
     End Property
+
+    Public Overrides Function IsSelectable(ByVal obj As BossMonster) As Boolean
+        Return Not Ptr.SpBossMonsters.Contains(obj.ptr)
+    End Function
 End Class

@@ -354,12 +354,12 @@ Public Class Shrd
     End Sub
 
     Public Shared Function HasHeader(ByVal s As IO.Stream) As Boolean
-        Dim extraBytes As Integer = s.Length Mod &H20000L '0x20000 = 1 Megabit
-        Return extraBytes <> 0
+        Dim extraBytes As Integer = s.Length Mod &H8000L
+        Return extraBytes = &H200
     End Function
 
     Public Shared Sub RemoveHeader(ByVal s As IO.Stream)
-        Dim extraBytes As Integer = s.Length Mod &H20000L
+        Dim extraBytes As Integer = s.Length Mod &H8000L
         s.Seek(0, IO.SeekOrigin.Begin)
         Shrd.InsertBytes(s, -extraBytes)
         s.SetLength(s.Length - extraBytes)

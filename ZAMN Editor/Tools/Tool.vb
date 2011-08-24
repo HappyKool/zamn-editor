@@ -69,6 +69,9 @@
     Public Overridable Function Paste() As Boolean
         Return True
     End Function
+    Public Overridable Function CanCopy() As Boolean
+        Return True
+    End Function
 
     Private Sub TilePicker_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TilePicker.ValueChanged
         If active Then TileChanged()

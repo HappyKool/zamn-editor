@@ -195,7 +195,7 @@
         If CurTool.SelectAll(True) Then
             SelectAll(True)
         End If
-        SetCopy(True)
+        SetCopy(CurTool.CanCopy())
         EdControl.Repaint()
     End Sub
 

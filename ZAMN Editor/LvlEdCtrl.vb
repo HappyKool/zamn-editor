@@ -69,7 +69,9 @@
     End Sub
 
     Public Sub FillSelection()
-        UndoMgr.Do(New FillSelectionAction(TilePicker.SelectedTile))
+        If selection.FindVisible Then
+            UndoMgr.Do(New FillSelectionAction(TilePicker.selectedTile))
+        End If
     End Sub
 
     Public Sub UpdateScrollBars()
