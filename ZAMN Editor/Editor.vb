@@ -38,10 +38,15 @@
 
     Private Sub Editor_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         My.Settings.Initialized = True
-        My.Settings.Maximized = Me.WindowState = FormWindowState.Maximized
-        Me.WindowState = FormWindowState.Normal
-        My.Settings.Location = Me.Location
-        My.Settings.Size = Me.Size
+        If Me.WindowState = FormWindowState.Maximized Then
+            My.Settings.Maximized = True
+            My.Settings.Location = Me.RestoreBounds.Location
+            My.Settings.Size = Me.RestoreBounds.Size
+        Else
+            My.Settings.Maximized = False
+            My.Settings.Location = Me.Location
+            My.Settings.Size = Me.Size
+        End If
         My.Settings.RecentROMs = ListToString(RecentROMs.Items)
     End Sub
 
@@ -132,7 +137,7 @@
                 EmulatorRunROM_Click(sender, e)
             End If
         Else
-            MsgBox("Save state generation is only supported for bsnes v081.")
+            MsgBox("Save state generation is only supported for bsnes v081-v082.")
         End If
     End Sub
 
@@ -412,6 +417,7 @@
         RedoTool.Enabled = False
         CopyTool.Enabled = False
         CutTool.Enabled = False
+        EmulatorFromLevel.Enabled = False
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
