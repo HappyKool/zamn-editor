@@ -133,7 +133,7 @@
         Dim emuName As String = LCase(Mid(My.Settings.Emulator, InStrRev(My.Settings.Emulator, "\") + 1))
         Dim outputFile As String = Mid(r.path, 1, InStrRev(r.path, ".") - 1)
         If emuName.Contains("bsnes") Then
-            If SaveStateEditor.ShowDialog(EdControl.lvl, My.Resources.BSNES, Ptr.RAMStartBsnes, outputFile & "-1.bst") = vbOK Then
+            If SaveStateEditor.ShowDialog(EdControl.lvl, My.Resources.BSNES, Ptr.RAMStartBsnes, outputFile & "-1.bst") = Windows.Forms.DialogResult.OK Then
                 EmulatorRunROM_Click(sender, e)
             End If
         Else
@@ -289,7 +289,7 @@
     End Sub
 
     Private Sub HelpAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HelpAbout.Click
-        MsgBox("ZAMN Editor Beta v0.8" & Environment.NewLine & "Icons are from or modified from Silk Icon set. http://www.famfamfam.com/lab/icons/silk/" & Environment.NewLine & Environment.NewLine & "Copyright © 2011 Piranhaplant")
+        MsgBox("ZAMN Editor Beta v0.9" & Environment.NewLine & "Icons are from or modified from Silk Icon set. http://www.famfamfam.com/lab/icons/silk/" & Environment.NewLine & Environment.NewLine & "Copyright © 2011 Piranhaplant", MsgBoxStyle.Information, "About")
     End Sub
 
     Private Sub Tools_ItemClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles Tools.ItemClicked
