@@ -28,6 +28,9 @@
         If My.Settings.RecentROMs <> "" Then
             RecentROMs.Items = StringToList(My.Settings.RecentROMs)
         End If
+        If My.Application.CommandLineArgs.Count > 0 Then
+            LoadROM(My.Application.CommandLineArgs(0))
+        End If
     End Sub
 
     Private Sub Editor_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
