@@ -81,11 +81,12 @@
     End Sub
 
     Private Sub FileOpenLevel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FileOpenLevel.Click, OpenLevelTool.Click
+        Dim levelOpened As Boolean = False
         If OpenLevel.ShowDialog = DialogResult.OK Then
-            EdControl = Nothing
             LoadingLevel.Start(r, OpenLevel.levelNums, OpenLevel.levelNames)
             For Each l As Level In LoadingLevel.lvls
                 If Not openLevels.Contains(l.num) Then
+                    levelOpened = True
                     EdControl = New LvlEdCtrl
                     updateTab = False
                     Dim tp As TabPage = Tabs.AddXPage(If(l.name.StartsWith("Level"), Mid(l.name, 1, Shrd.InStrN(l.name, " ", 2) - 2), _
@@ -101,7 +102,7 @@
                     openLevels.Add(l.num)
                 End If
             Next
-            If EdControl IsNot Nothing Then
+            If levelOpened Then
                 SetTool(CurTool)
                 UpdateEdControl()
                 updateTab = True
@@ -126,7 +127,7 @@
     End Sub
 
     Private Sub EmulatorRunROM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EmulatorRunROM.Click
-        Process.Start(My.Settings.Emulator, r.path)
+        Process.Start(My.Settings.Emulator, """" & r.path & """")
     End Sub
 
     Private Sub EmulatorFromLevel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EmulatorFromLevel.Click
