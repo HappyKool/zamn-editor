@@ -33,6 +33,7 @@ Partial Class LvlEdCtrl
         Me.Status = New System.Windows.Forms.ToolStripStatusLabel()
         Me.SmoothScroll = New System.Windows.Forms.Timer(Me.components)
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.SmoothZoom = New System.Windows.Forms.Timer(Me.components)
         CType(Me.canvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.StatusStrip1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -138,6 +139,10 @@ Partial Class LvlEdCtrl
         Me.SplitContainer1.SplitterDistance = 150
         Me.SplitContainer1.TabIndex = 5
         '
+        'SmoothZoom
+        '
+        Me.SmoothZoom.Interval = 1
+        '
         'LvlEdCtrl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -168,5 +173,6 @@ Partial Class LvlEdCtrl
     Friend WithEvents Status As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents SmoothScroll As System.Windows.Forms.Timer
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
+    Friend WithEvents SmoothZoom As System.Windows.Forms.Timer
 
 End Class

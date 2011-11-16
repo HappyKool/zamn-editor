@@ -1,8 +1,8 @@
 ﻿Public Class Monster
-    Public x As Integer
-    Public y As Integer
-    Public radius As Integer
-    Public delay As Integer
+    Public x As UShort
+    Public y As UShort
+    Public radius As Byte
+    Public delay As Byte
     Public ptr As Integer
     Public index As Integer
 
@@ -10,7 +10,7 @@
 
     End Sub
 
-    Public Sub New(ByVal radius As Integer, ByVal x As Integer, ByVal y As Integer, ByVal delay As Integer, ByVal ptr As Integer)
+    Public Sub New(ByVal radius As Byte, ByVal x As UShort, ByVal y As UShort, ByVal delay As Byte, ByVal ptr As Integer)
         Me.radius = radius
         Me.x = x
         Me.y = y

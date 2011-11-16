@@ -434,28 +434,50 @@
         Clipboard.SetImage(b)
     End Sub
 
-    Private ZoomLevels As Single() = {1.0F, 0.75F, 0.5F}
+    Private ZoomLevels As Single() = {0.1F, 0.25F, 0.333F, 0.5F, 0.667F, 0.75F, 1.0F, 2.0F, 3.0F, 4.0F, 6.0F, 8.0F}
+    Private ZoomUpdate As Boolean = False
 
-    Private Sub ViewMenu_DropDownItemClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles ViewMenu.DropDownItemClicked, Zoom.DropDownItemClicked
-        Dim indx As Integer = e.ClickedItem.Owner.Items.IndexOf(e.ClickedItem)
-        Dim indx2 As Integer = 0
-        Dim viewMenuStart As Integer = ViewMenu.DropDownItems.IndexOf(View100P)
-        If e.ClickedItem.Owner.Items Is ViewMenu.DropDownItems Then
-            indx2 = viewMenuStart
-        End If
-        If indx >= indx2 Then
-            indx -= indx2
-            zoomLevel = ZoomLevels(indx)
-            UpdateEdControl()
-        End If
-        For l As Integer = viewMenuStart To ViewMenu.DropDownItems.Count - 1
-            CType(ViewMenu.DropDownItems(l), ToolStripMenuItem).Checked = False
+    Private Sub ViewZoomIn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewZoomIn.Click
+        For l As Integer = 0 To ZoomLevels.Length - 2
+            If zoomLevel >= ZoomLevels(l) And zoomLevel < ZoomLevels(l + 1) Then
+                SetZoom(ZoomLevels(l + 1))
+                Return
+            End If
         Next
-        For Each i As ToolStripMenuItem In Zoom.DropDownItems
-            i.Checked = False
+    End Sub
+
+    Private Sub ViewZoomOut_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewZoomOut.Click
+        For l As Integer = 0 To ZoomLevels.Length - 2
+            If zoomLevel > ZoomLevels(l) And zoomLevel <= ZoomLevels(l + 1) Then
+                SetZoom(ZoomLevels(l))
+                Return
+            End If
         Next
-        CType(ViewMenu.DropDownItems(indx + viewMenuStart), ToolStripMenuItem).Checked = True
-        CType(Zoom.DropDownItems(indx), ToolStripMenuItem).Checked = True
+    End Sub
+
+    Private Sub Zoom1Tool_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Zoom1Tool.Click
+        SetZoom(1.0F)
+    End Sub
+
+    Private Sub Zoom_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Zoom.TextChanged
+        If ZoomUpdate Then Return
+        Dim zoomText As String = Zoom.Text
+        If zoomText.EndsWith("%") Then
+            zoomText = Mid(zoomText, 1, zoomText.Length - 1)
+        End If
+        Dim newZoom As Single
+        If Single.TryParse(zoomText, newZoom) Then
+            SetZoom(newZoom / 100)
+        End If
+    End Sub
+
+    Public Sub SetZoom(ByVal zoomlvl As Single)
+        ZoomUpdate = True
+        zoomLevel = zoomlvl
+        Zoom.Text = (zoomlvl * 100).ToString() & "%"
+        ZoomUpdate = False
+        If EdControl Is Nothing Then Return
+        EdControl.SetZoom(zoomlvl)
     End Sub
 
     Private Function ListToString(ByVal items As List(Of String)) As String

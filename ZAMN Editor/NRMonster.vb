@@ -1,16 +1,16 @@
 ﻿Public Class NRMonster
-    Public x As Integer
-    Public y As Integer
+    Public x As UShort
+    Public y As UShort
+    Public unused1 As UShort
+    Public unused2 As UShort
     Public ptr As Integer
     Public index As Integer
-    Public unused1 As Integer
-    Public unused2 As Integer
 
     Public Sub New()
 
     End Sub
 
-    Public Sub New(ByVal x As Integer, ByVal y As Integer, ByVal unused1 As Integer, ByVal unused2 As Integer, ByVal ptr As Integer)
+    Public Sub New(ByVal x As UShort, ByVal y As UShort, ByVal unused1 As UShort, ByVal unused2 As UShort, ByVal ptr As Integer)
         Me.x = x
         Me.y = y
         Me.unused1 = unused1

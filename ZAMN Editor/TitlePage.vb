@@ -58,9 +58,9 @@ End Class
 
 Public Class Word
 
-    Public x As Integer
-    Public y As Integer
-    Public font As Integer
+    Public x As Byte
+    Public y As Byte
+    Public font As Byte
     Public chars As New List(Of Byte)
     Public last As Boolean
 
@@ -77,7 +77,6 @@ Public Class Word
         Me.x = s.ReadByte
         Me.y = s.ReadByte
         Me.font = s.ReadByte
-        'Me.font = 6
         s.ReadByte() 'skip page number
         Do
             Dim num As Byte = s.ReadByte

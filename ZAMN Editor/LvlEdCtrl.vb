@@ -10,7 +10,7 @@
 
     Public Grid As Boolean
     Public priority As Boolean
-    Public zoom As Single = 1
+    Public zoom As Single = 1.0F
     Public selection As Selection
     Public UndoMgr As UndoManager
 
@@ -22,6 +22,8 @@
     Public forceMove As Boolean = False
     Public scrollEnd As Integer
     Public scrollVert As Boolean
+    Public zoomEnd As Single
+    Public zoomDelta As Single
 
     Public Sub New()
         InitializeComponent()
@@ -51,6 +53,12 @@
 
     Public Sub SetStatusText(ByVal txt As String)
         Status.Text = txt
+    End Sub
+
+    Public Sub SetZoom(ByVal zoomLevel As Single)
+        zoomEnd = zoomLevel
+        zoomDelta = (zoomEnd - zoom) / 5
+        SmoothZoom.Start()
     End Sub
 
     Public Sub Repaint()
@@ -286,6 +294,15 @@
             End If
             If HScrl.Value = scrollEnd Then SmoothScroll.Stop()
         End If
+    End Sub
+
+    Private Sub SmoothZoom_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles SmoothZoom.Tick
+        zoom += zoomDelta
+        If (zoom >= zoomEnd And zoomDelta > 0) Or (zoom <= zoomEnd And zoomDelta < 0) Then
+            zoom = zoomEnd
+            SmoothZoom.Stop()
+        End If
+        UpdateScrollBars()
     End Sub
 
     Private Sub SplitContainer1_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SplitContainer1.GotFocus

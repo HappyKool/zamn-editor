@@ -1,10 +1,10 @@
 ﻿Public Class Victim
-    Public x As Integer
-    Public y As Integer
-    Public num As Integer
+    Public x As UShort
+    Public y As UShort
+    Public num As UShort
+    Public unused As UShort
     Public ptr As Integer
     Public index As Integer
-    Public unused As Integer
 
     Public Sub New()
 

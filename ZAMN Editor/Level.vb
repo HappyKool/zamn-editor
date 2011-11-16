@@ -3,18 +3,18 @@
     Public num As Integer
     Public tileset As Tileset
     Public Tiles As Integer(,)
-    Public Width As Integer
-    Public Height As Integer
+    Public Width As UShort
+    Public Height As UShort
     Public items As New List(Of Item)
     Public victims As New List(Of Victim)
     Public NRMonsters As New List(Of NRMonster)
     Public Monsters As New List(Of Monster)
     Public p1Start As Point
     Public p2Start As Point
-    Public music As Integer
-    Public unknown As Integer
-    Public unknown2 As Integer
-    Public unknown3 As Integer
+    Public music As UShort
+    Public unknown As UShort
+    Public unknown2 As UShort
+    Public unknown3 As UShort
     Public page1 As TitlePage
     Public page2 As TitlePage
     Public bonuses As New List(Of Integer)

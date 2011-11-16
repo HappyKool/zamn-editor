@@ -1,13 +1,13 @@
 ﻿Public Class Item
-    Public x As Integer
-    Public y As Integer
-    Public type As Integer
+    Public x As UShort
+    Public y As UShort
+    Public type As Byte
 
     Public Sub New()
 
     End Sub
 
-    Public Sub New(ByVal x As Integer, ByVal y As Integer, ByVal type As Integer)
+    Public Sub New(ByVal x As UShort, ByVal y As UShort, ByVal type As Byte)
         Me.x = x
         Me.y = y
         Me.type = type
