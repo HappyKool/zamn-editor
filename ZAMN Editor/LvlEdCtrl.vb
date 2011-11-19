@@ -10,7 +10,6 @@
 
     Public Grid As Boolean
     Public priority As Boolean
-    Public zoom As Single = 1.0F
     Public selection As Selection
     Public UndoMgr As UndoManager
 
@@ -22,8 +21,9 @@
     Public forceMove As Boolean = False
     Public scrollEnd As Integer
     Public scrollVert As Boolean
-    Public zoomEnd As Single
-    Public zoomDelta As Single
+
+    Public zoom As Single = 1.0F
+    Public zoomer As SmoothZoom
 
     Public Sub New()
         InitializeComponent()
@@ -56,8 +56,8 @@
     End Sub
 
     Public Sub SetZoom(ByVal zoomLevel As Single)
-        zoomEnd = zoomLevel
-        zoomDelta = (zoomEnd - zoom) / 5
+        If zoom = zoomLevel Then Return
+        zoomer = New SmoothZoom(zoom, zoomLevel, HScrl.Value, VScrl.Value, canvas.Width, canvas.Height, lvl.Width * 64, lvl.Height * 64)
         SmoothZoom.Start()
     End Sub
 
@@ -97,9 +97,9 @@
 
     Private Sub canvas_Paint(ByVal sender As Object, ByVal e As PaintEventArgs) Handles canvas.Paint
         If lvl Is Nothing Then Return
-        If zoom > 1 Then
-            e.Graphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor
-        End If
+        'If zoom > 1 Then
+        e.Graphics.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor
+        'End If
         e.Graphics.TranslateTransform(-HScrl.Value, -VScrl.Value)
         e.Graphics.ScaleTransform(zoom, zoom)
         For l As Integer = HScrl.Value \ (64 * zoom) To Math.Min(lvl.Width - 1, (HScrl.Value + canvas.Width) \ (64 * zoom) + 1)
@@ -197,8 +197,8 @@
     End Sub
 
     Private Sub canvas_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles canvas.MouseDown
-        If t Is Nothing Then Return
         canvas.Focus()
+        If t Is Nothing Then Return
         t.MouseDown(CreateMouseEventArgs(e))
         DragTimer.Start()
     End Sub
@@ -297,9 +297,18 @@
     End Sub
 
     Private Sub SmoothZoom_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles SmoothZoom.Tick
-        zoom += zoomDelta
-        If (zoom >= zoomEnd And zoomDelta > 0) Or (zoom <= zoomEnd And zoomDelta < 0) Then
-            zoom = zoomEnd
+        'Values are stored in a single to reduce round off errors
+        zoomer.HScrollValue = (HScrl.Value / zoom + zoomer.HScrollDelta) * zoom
+        zoomer.VScrollValue = (VScrl.Value / zoom + zoomer.VScrollDelta) * zoom
+        zoomer.HScrollValue *= (zoom + zoomer.zoomDelta) / zoom
+        zoomer.VScrollValue *= (zoom + zoomer.zoomDelta) / zoom
+        HScrl.Value = Math.Max(0, zoomer.HScrollValue)
+        VScrl.Value = Math.Max(0, zoomer.VScrollValue)
+        zoom += zoomer.zoomDelta
+        If zoomer.IsDone(zoom) Then
+            zoom = zoomer.zoomEnd
+            HScrl.Value = zoomer.HScrollEnd * zoom
+            VScrl.Value = zoomer.VScrollEnd * zoom
             SmoothZoom.Stop()
         End If
         UpdateScrollBars()

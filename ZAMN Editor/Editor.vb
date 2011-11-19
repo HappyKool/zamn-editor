@@ -98,6 +98,8 @@
                     EdControl.Dock = DockStyle.Fill
                     EdControl.LoadLevel(l)
                     EdControl.UndoMgr = New UndoManager(UndoTool, RedoTool, EdControl)
+                    'Receive keypresses used for special shortcut keys
+                    AddHandler EdControl.canvas.KeyDown, AddressOf LvlEdCtrl_canvas_KeyDown
                     UndoTool.Enabled = False
                     RedoTool.Enabled = False
                     UndoTool.DropDownItems.Clear()
@@ -434,7 +436,7 @@
         Clipboard.SetImage(b)
     End Sub
 
-    Private ZoomLevels As Single() = {0.1F, 0.25F, 0.333F, 0.5F, 0.667F, 0.75F, 1.0F, 2.0F, 3.0F, 4.0F, 6.0F, 8.0F}
+    Private ZoomLevels As Single() = {0.1F, 0.25F, 1.0F / 3.0F, 0.5F, 2.0F / 3.0F, 0.75F, 1.0F, 1.5F, 2.0F, 3.0F, 4.0F, 6.0F, 8.0F}
     Private ZoomUpdate As Boolean = False
 
     Private Sub ViewZoomIn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewZoomIn.Click
@@ -466,7 +468,7 @@
             zoomText = Mid(zoomText, 1, zoomText.Length - 1)
         End If
         Dim newZoom As Single
-        If Single.TryParse(zoomText, newZoom) Then
+        If Single.TryParse(zoomText, newZoom) AndAlso newZoom >= 1 AndAlso newZoom <= 10000 Then
             SetZoom(newZoom / 100)
         End If
     End Sub
@@ -478,6 +480,21 @@
         ZoomUpdate = False
         If EdControl Is Nothing Then Return
         EdControl.SetZoom(zoomlvl)
+    End Sub
+
+    Private toolKeys As Keys() = {Keys.P, Keys.S, Keys.R, Keys.C, Keys.T, Keys.I, Keys.V, Keys.N, Keys.M, Keys.B}
+
+    Private Sub LvlEdCtrl_canvas_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs)
+        Select Case e.KeyData
+            Case Keys.Control Or Keys.Add
+                ViewZoomIn_Click(sender, e)
+            Case Keys.Control Or Keys.Subtract
+                ViewZoomOut_Click(sender, e)
+        End Select
+        If toolKeys.Contains(e.KeyData) Then
+            Dim indx As Integer = Array.IndexOf(toolKeys, e.KeyData)
+            SwitchToTool(ToolsMenu.DropDownItems(indx), Tools.Items(Tools.Items.IndexOf(BrushTool) + indx), EditingTools(indx))
+        End If
     End Sub
 
     Private Function ListToString(ByVal items As List(Of String)) As String

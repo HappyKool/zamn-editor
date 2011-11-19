@@ -216,6 +216,7 @@
     <Compile Include="SaveStateEditor.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SmoothZoom.vb" />
     <Compile Include="TitleGFX.vb" />
     <Compile Include="TitlePage.vb" />
     <Compile Include="TitlePageEdCtrl.Designer.vb">
