@@ -4,7 +4,6 @@
     Public ed As Editor
     Public reloadTileset As Boolean
 
-
     Public Overloads Function ShowDialog(ByVal ed As Editor) As DialogResult
         Me.lvl = ed.EdControl.lvl
         Me.ed = ed

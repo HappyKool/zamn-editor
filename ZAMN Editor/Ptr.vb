@@ -38,11 +38,11 @@
                                    "Pyramid", "Beach", "Dark Beach", "Cave", ""}
     Public Shared Graphics As Integer() = {&HC0000, &HCC000, &HC8000, &HD0000, &HC4000}
     Public Shared Collision As Integer() = {&HDF4D1, &HE6EAB, &HE6AAB, &HE72AB, &HDF8D1}
-    Public Shared Unknown As Integer() = {&H70, &H69, &H70, &H57, &H59}
+    Public Shared Unknown As UShort() = {&H70US, &H69US, &H70US, &H57US, &H59US}
     Public Shared PltAnim As Integer() = {-1, &H20AD, &H20EF, &H2137, &H2222, &H2264}
     Public Shared Boss As Integer() = {-1, &H1072C, &H11569, &H128BB, &H128C3, &H12B95, &H157CF, &H1AD33}
 
-    Public Shared RAMStartBsnes As Integer = &H2A65
+    Public Shared RAMStartBsnes As Integer = &H2A67
     Public Shared RAMLevelNum As Integer = &H1E7C
     Public Shared RAMWeaponQty As Integer = &H1CCC
 End Class
