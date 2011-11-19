@@ -21,6 +21,8 @@
     Public forceMove As Boolean = False
     Public scrollEnd As Integer
     Public scrollVert As Boolean
+    Public dragViewX As Integer
+    Public dragViewY As Integer
 
     Public zoom As Single = 1.0F
     Public zoomer As SmoothZoom
@@ -198,6 +200,10 @@
 
     Private Sub canvas_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles canvas.MouseDown
         canvas.Focus()
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            dragViewX = HScrl.Value + e.X
+            dragViewY = VScrl.Value + e.Y
+        End If
         If t Is Nothing Then Return
         t.MouseDown(CreateMouseEventArgs(e))
         DragTimer.Start()
@@ -210,6 +216,10 @@
     End Sub
 
     Private Sub canvas_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles canvas.MouseMove
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            HScrl.Value = Math.Max(0, Math.Min(HScrl.Maximum - HScrl.LargeChange, dragViewX - e.X))
+            VScrl.Value = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange, dragViewY - e.Y))
+        End If
         If t Is Nothing Then Return
         t.MouseMove(CreateMouseEventArgs(e))
         If DragTimer.Enabled And Not forceMove Then

@@ -143,7 +143,7 @@
                 EmulatorRunROM_Click(sender, e)
             End If
         Else
-            MsgBox("Save state generation is only supported for bsnes v081-v082.")
+            MsgBox("Save state generation is only supported for bsnes v084.")
         End If
     End Sub
 
