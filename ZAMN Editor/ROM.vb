@@ -211,7 +211,7 @@ Public Class ROM
         Next
         fs.SetLength(ROMSize)
         names(lvl.num) = GetLevelTitle(fs, lvlPtr)
-        OpenLevel.SetName(Array.IndexOf(names.Keys.ToArray(), lvl.num), names(lvl.num))
+        OpenLevel.SetName(lvl.num, names(lvl.num))
         fs.Close()
     End Sub
 End Class

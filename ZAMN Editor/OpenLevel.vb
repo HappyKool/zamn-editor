@@ -2,6 +2,10 @@
 
     Public levelNums As Integer()
     Public levelNames As String()
+    Public allNames As String()
+    Public allNums As Integer()
+    Public curNames As New List(Of String)
+    Public curNums As New List(Of Integer)
     Private r As ROM
 
     Public Sub LoadROM(ByVal r As ROM)
@@ -14,7 +18,11 @@
         'For l As Integer = 0 To r.bonusLvls.Count - 1
         '    levels.Items.Add("Bonus Level " & l.ToString())
         'Next
-        levels.Items.AddRange(r.names.Values.ToArray)
+        allNames = r.names.Values.ToArray()
+        allNums = r.names.Keys.ToArray()
+        curNames.AddRange(allNames)
+        curNums.AddRange(allNums)
+        levels.Items.AddRange(allNames)
     End Sub
 
     Private Sub OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK.Click
@@ -25,8 +33,8 @@
         ReDim levelNums(levels.SelectedIndices.Count - 1)
         ReDim levelNames(levels.SelectedIndices.Count - 1)
         For l As Integer = 0 To levelNames.Length - 1
-            levelNums(l) = r.names.Keys(levels.SelectedIndices(l))
-            levelNames(l) = levels.SelectedItems(l).ToString
+            levelNums(l) = curNums(levels.SelectedIndices(l))
+            levelNames(l) = curNames(levels.SelectedIndices(l))
         Next
         Me.DialogResult = DialogResult.OK
         Me.Close()
@@ -37,7 +45,30 @@
         Me.Close()
     End Sub
 
-    Public Sub SetName(ByVal index As Integer, ByVal name As String)
-        levels.Items(index) = name
+    Public Sub SetName(ByVal num As Integer, ByVal name As String)
+        allNames(Array.IndexOf(allNums, num)) = name
+        If curNums.Contains(num) Then
+            Dim index As Integer = curNums.IndexOf(num)
+            curNames(index) = name
+            levels.Items(index) = name
+        End If
+    End Sub
+
+    Private Sub txtSearch_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtSearch.TextChanged
+        curNames.Clear()
+        curNums.Clear()
+        Dim searchText As String = LCase(txtSearch.Text)
+        For l As Integer = 0 To allNames.Length - 1
+            If LCase(allNames(l)).Contains(searchText) Then
+                curNames.Add(allNames(l))
+                curNums.Add(allNums(l))
+            End If
+        Next
+        levels.Items.Clear()
+        levels.Items.AddRange(curNames.ToArray())
+    End Sub
+
+    Private Sub ClearButton1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ClearButton1.Click
+        txtSearch.Text = ""
     End Sub
 End Class

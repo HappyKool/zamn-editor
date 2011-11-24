@@ -311,10 +311,8 @@
         If zoomer.IsDone() Then
             zoom = zoomer.zoomEnd
             SmoothZoom.Stop()
-            UpdateScrollBars()
-        Else
-            Repaint()
         End If
+        UpdateScrollBars()
     End Sub
 
     Private Sub SplitContainer1_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SplitContainer1.GotFocus

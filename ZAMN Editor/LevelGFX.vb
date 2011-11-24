@@ -48,11 +48,13 @@
                 Next
                 If p = 0 Then s2.BaseStream.Seek(pos, IO.SeekOrigin.Begin)
             Next
+            'TODO: Actually have the copy stored in VictimGFX.bin
             If VictimImages.Count = 16 Then 'Second plant image
                 VictimImages.Add(img)
             End If
             VictimImages.Add(img)
         Loop
+        'Crop Zeke image because it's an extra tile tall
         VictimImages(40) = Crop(VictimImages(40), 16, 40)
         s.Close()
         s2.Close()

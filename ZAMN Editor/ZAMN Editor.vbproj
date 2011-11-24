@@ -85,6 +85,12 @@
     </Compile>
     <Compile Include="BossMonster.vb" />
     <Compile Include="ByteArrayStream.vb" />
+    <Compile Include="ClearButton.Designer.vb">
+      <DependentUpon>ClearButton.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ClearButton.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="DList.vb" />
     <Compile Include="ErrorLog.vb" />
     <Compile Include="ExpandPanel.Designer.vb">
@@ -280,6 +286,9 @@
     <EmbeddedResource Include="AddressUpDown.resx">
       <DependentUpon>AddressUpDown.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ClearButton.resx">
+      <DependentUpon>ClearButton.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ExpandPanel.resx">
       <DependentUpon>ExpandPanel.vb</DependentUpon>
     </EmbeddedResource>
@@ -439,6 +448,8 @@
     <None Include="Resources\Refresh.PNG" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Clear.png" />
+    <None Include="Resources\Clear2.png" />
     <Content Include="Secret.ICO" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
