@@ -260,10 +260,7 @@
 
     Private Sub borderTimer_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles BorderTimer.Tick
         If selection.exists Or TypeOf t Is PasteTilesTool AndAlso DirectCast(t, PasteTilesTool).pasting = True Then
-            borderPen.DashOffset += 1
-            If borderPen.DashOffset = 8 Then
-                borderPen.DashOffset = 0
-            End If
+            borderPen.DashOffset = (borderPen.DashOffset + 1) Mod 8
             canvas.Invalidate()
         End If
     End Sub
@@ -307,21 +304,17 @@
     End Sub
 
     Private Sub SmoothZoom_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles SmoothZoom.Tick
-        'Values are stored in a single to reduce round off errors
-        zoomer.HScrollValue = (HScrl.Value / zoom + zoomer.HScrollDelta) * zoom
-        zoomer.VScrollValue = (VScrl.Value / zoom + zoomer.VScrollDelta) * zoom
-        zoomer.HScrollValue *= (zoom + zoomer.zoomDelta) / zoom
-        zoomer.VScrollValue *= (zoom + zoomer.zoomDelta) / zoom
-        HScrl.Value = Math.Max(0, zoomer.HScrollValue)
-        VScrl.Value = Math.Max(0, zoomer.VScrollValue)
-        zoom += zoomer.zoomDelta
-        If zoomer.IsDone(zoom) Then
+        zoomer.Tick()
+        zoom = zoomer.curZoom
+        HScrl.Value = Math.Min(HScrl.Maximum, Math.Max(0, zoomer.curX * zoom))
+        VScrl.Value = Math.Min(VScrl.Maximum, Math.Max(0, zoomer.curY * zoom))
+        If zoomer.IsDone() Then
             zoom = zoomer.zoomEnd
-            HScrl.Value = zoomer.HScrollEnd * zoom
-            VScrl.Value = zoomer.VScrollEnd * zoom
             SmoothZoom.Stop()
+            UpdateScrollBars()
+        Else
+            Repaint()
         End If
-        UpdateScrollBars()
     End Sub
 
     Private Sub SplitContainer1_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles SplitContainer1.GotFocus
