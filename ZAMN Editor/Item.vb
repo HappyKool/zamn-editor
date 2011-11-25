@@ -1,6 +1,6 @@
 ﻿Public Class Item
-    Public x As UShort
-    Public y As UShort
+    Public x As Integer
+    Public y As Integer
     Public type As Byte
 
     Public Sub New()

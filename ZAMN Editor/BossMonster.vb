@@ -1,6 +1,6 @@
 ﻿Public Class BossMonster
-    Public x As UShort
-    Public y As UShort
+    Public x As Integer
+    Public y As Integer
     Public ptr As Integer
     Public name As String
 
@@ -12,7 +12,7 @@
 
     End Sub
 
-    Public Sub New(ByVal ptr As Integer, ByVal x As UShort, ByVal y As UShort)
+    Public Sub New(ByVal ptr As Integer, ByVal x As Integer, ByVal y As Integer)
         Me.ptr = ptr
         Me.x = x
         Me.y = y

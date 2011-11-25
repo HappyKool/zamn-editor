@@ -219,7 +219,7 @@
                 file.AddRange(m.exData)
             End If
         Next
-        Dim x As Integer, y As Integer
+        Dim x As UShort, y As UShort
         'Monster data
         addrOffsets(0) = file.Count
         For Each m As Monster In Monsters

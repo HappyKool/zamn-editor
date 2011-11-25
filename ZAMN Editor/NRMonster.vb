@@ -1,6 +1,6 @@
 ﻿Public Class NRMonster
-    Public x As UShort
-    Public y As UShort
+    Public x As Integer
+    Public y As Integer
     Public unused1 As UShort
     Public unused2 As UShort
     Public ptr As Integer

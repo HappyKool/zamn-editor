@@ -21,16 +21,22 @@
         Dim args As LoadLevelArgs = CType(e.Argument, LoadLevelArgs)
         Dim lvls As New List(Of Level)
         For l As Integer = 0 To args.names.Length - 1
+#If DEBUG Then
+#Else
             Try
-                Loader.ReportProgress(0)
-                lvls.Add(args.r.GetLevel(args.nums(l), args.names(l)))
-                Loader.ReportProgress(1)
-                If Loader.CancellationPending Then
-                    Exit For
-                End If
+#End If
+            Loader.ReportProgress(0)
+            lvls.Add(args.r.GetLevel(args.nums(l), args.names(l)))
+            Loader.ReportProgress(1)
+            If Loader.CancellationPending Then
+                Exit For
+            End If
+#If DEBUG Then
+#Else
             Catch ex As Exception
                 Loader.ReportProgress(2, args.names(l) & ": " & ex.Message)
             End Try
+#End If
         Next
         e.Result = lvls
     End Sub
