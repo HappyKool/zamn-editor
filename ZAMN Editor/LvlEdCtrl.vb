@@ -20,6 +20,7 @@
     Public eraserRect As Rectangle
     Public forceMove As Boolean = False
     Public scrollEnd As Integer
+    Public scrollDelta As Integer
     Public scrollVert As Boolean
     Public dragViewX As Integer
     Public dragViewY As Integer
@@ -186,15 +187,19 @@
     End Sub
 
     Private Sub LvlEdCtrl_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseWheel
+        Dim startValue As Integer = 0
         If VScrl.Enabled Then
-            scrollEnd = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange + 1, VScrl.Value - 64 * Math.Sign(e.Delta)))
+            scrollEnd = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange + 1, If(SmoothScroll.Enabled, scrollEnd, VScrl.Value) - 64 * Math.Sign(e.Delta)))
             scrollVert = True
+            startValue = VScrl.Value
             SmoothScroll.Start()
         ElseIf HScrl.Enabled Then
-            scrollEnd = Math.Max(0, Math.Min(HScrl.Maximum - HScrl.LargeChange + 1, HScrl.Value - 64 * Math.Sign(e.Delta)))
+            scrollEnd = Math.Max(0, Math.Min(HScrl.Maximum - HScrl.LargeChange + 1, If(SmoothScroll.Enabled, scrollEnd, HScrl.Value) - 64 * Math.Sign(e.Delta)))
             scrollVert = False
+            startValue = HScrl.Value
             SmoothScroll.Start()
         End If
+        scrollDelta = (scrollEnd - startValue) / 8
         DoMouseMove()
     End Sub
 
@@ -288,16 +293,16 @@
     Private Sub SmoothScroll_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles SmoothScroll.Tick
         If scrollVert Then
             If scrollEnd > VScrl.Value Then
-                VScrl.Value = Math.Min(scrollEnd, VScrl.Value + 8)
+                VScrl.Value = Math.Min(scrollEnd, VScrl.Value + scrollDelta)
             Else
-                VScrl.Value = Math.Max(scrollEnd, VScrl.Value - 8)
+                VScrl.Value = Math.Max(scrollEnd, VScrl.Value + scrollDelta)
             End If
             If VScrl.Value = scrollEnd Then SmoothScroll.Stop()
         Else
             If scrollEnd > HScrl.Value Then
-                HScrl.Value = Math.Min(scrollEnd, HScrl.Value + 8)
+                HScrl.Value = Math.Min(scrollEnd, HScrl.Value + scrollDelta)
             Else
-                HScrl.Value = Math.Max(scrollEnd, HScrl.Value - 8)
+                HScrl.Value = Math.Max(scrollEnd, HScrl.Value + scrollDelta)
             End If
             If HScrl.Value = scrollEnd Then SmoothScroll.Stop()
         End If
