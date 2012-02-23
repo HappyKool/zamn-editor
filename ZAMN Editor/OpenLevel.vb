@@ -7,17 +7,12 @@
     Public curNames As New List(Of String)
     Public curNums As New List(Of Integer)
     Private r As ROM
+    Private selectedNums As New List(Of Integer)
+    Private updating As Boolean = False
 
     Public Sub LoadROM(ByVal r As ROM)
         Me.r = r
         levels.Items.Clear()
-        'For l As Integer = 0 To r.regLvlCount - 2
-        '    levels.Items.Add("Level " & l.ToString())
-        'Next
-        'levels.Items.Add("Credit Level")
-        'For l As Integer = 0 To r.bonusLvls.Count - 1
-        '    levels.Items.Add("Bonus Level " & l.ToString())
-        'Next
         allNames = r.names.Values.ToArray()
         allNums = r.names.Keys.ToArray()
         curNames.AddRange(allNames)
@@ -64,11 +59,24 @@
                 curNums.Add(allNums(l))
             End If
         Next
+        updating = True
         levels.Items.Clear()
         levels.Items.AddRange(curNames.ToArray())
+        For Each i As Integer In selectedNums
+            levels.SelectedIndices.Add(curNums.IndexOf(i))
+        Next
+        updating = False
     End Sub
 
     Private Sub ClearButton1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ClearButton1.Click
         txtSearch.Text = ""
+    End Sub
+
+    Private Sub levels_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles levels.SelectedIndexChanged
+        If updating Then Return
+        selectedNums.Clear()
+        For Each i As Integer In levels.SelectedIndices
+            selectedNums.Add(curNums(i))
+        Next
     End Sub
 End Class
