@@ -68,13 +68,13 @@
 
     Public Overrides Sub Paint(ByVal g As Graphics)
         If XStart > -1 Then
-            g.FillEllipse(Brushes.White, XStart * 64 + 28, YStart * 64 + 28, 8, 8)
+            g.DrawImage(My.Resources.Circle, XStart * 64 + 28, YStart * 64 + 28, 8, 8)
         End If
         If Direction > -1 Then
             g.DrawLine(linePen, XStart * 64 + 32, YStart * 64 + 32, XEnd * 64 + 32, YEnd * 64 + 32)
             Dim b As Bitmap = My.Resources.Arrow
             b.RotateFlip(Direction)
-            g.DrawImage(b, XEnd * 64 + 28, YEnd * 64 + 28, 8, 8)
+            g.DrawImage(b, XEnd * 64 + 26, YEnd * 64 + 26, 12, 12)
         End If
     End Sub
 

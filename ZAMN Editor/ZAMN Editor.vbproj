@@ -450,6 +450,7 @@
   <ItemGroup>
     <None Include="Resources\Clear.png" />
     <None Include="Resources\Clear2.png" />
+    <None Include="Resources\Circle.PNG" />
     <Content Include="Secret.ICO" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

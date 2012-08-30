@@ -38,6 +38,7 @@ Partial Class TitlePageEditor
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.TitlePageEdCtrl2 = New ZAMNEditor.TitlePageEdCtrl()
         Me.TitlePageEdCtrl1 = New ZAMNEditor.TitlePageEdCtrl()
+        Me.Label1 = New System.Windows.Forms.Label()
         CType(Me.nudPlt, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -207,12 +208,23 @@ Partial Class TitlePageEditor
         Me.TitlePageEdCtrl1.Size = New System.Drawing.Size(256, 224)
         Me.TitlePageEdCtrl1.TabIndex = 0
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.ForeColor = System.Drawing.Color.Gray
+        Me.Label1.Location = New System.Drawing.Point(75, 342)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(166, 13)
+        Me.Label1.TabIndex = 16
+        Me.Label1.Text = "(E, I, O, R, and S are randomized)"
+        '
         'TitlePageEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnCancel
         Me.ClientSize = New System.Drawing.Size(542, 368)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.chkPltAll)
@@ -255,4 +267,5 @@ Partial Class TitlePageEditor
     Friend WithEvents chkPltAll As System.Windows.Forms.CheckBox
     Friend WithEvents btnSave As System.Windows.Forms.Button
     Friend WithEvents btnCancel As System.Windows.Forms.Button
+    Friend WithEvents Label1 As System.Windows.Forms.Label
 End Class
