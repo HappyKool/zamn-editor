@@ -46,7 +46,7 @@
     Public Overrides Function NewOfT(ByVal x As Integer, ByVal y As Integer) As BossMonster
         If BMonsterPicker.SelectedIndex = -1 Then Return Nothing
         Dim m As New BossMonster(Ptr.BossMonsters(BMonsterPicker.SelectedIndex), x, y)
-        Dim rect As Rectangle = m.GetRect
+        Dim rect As Rectangle = m.Rect(Nothing)
         dragXOff = rect.Width \ 2
         dragYOff = rect.Height \ 2
         m.x -= dragXOff
@@ -55,11 +55,11 @@
     End Function
 
     Public Overrides Function RectOfT(ByVal obj As BossMonster) As System.Drawing.Rectangle
-        Return obj.GetRect
+        Return obj.Rect(Nothing)
     End Function
 
     Public Overrides Sub RefreshList()
-        levelList = ed.EdControl.lvl.bossMonsters
+        levelList = ed.EdControl.lvl.objects.BossMonsters
     End Sub
 
     Public Overrides Function ToText(ByVal Objs As System.Collections.Generic.List(Of BossMonster)) As String

@@ -11,7 +11,7 @@
     End Sub
 
     Public Overrides Function RectOfT(ByVal obj As Monster) As System.Drawing.Rectangle
-        Return obj.GetRect(ed.EdControl.lvl.GFX)
+        Return obj.Rect(ed.EdControl.lvl.GFX)
     End Function
 
     Public Overrides Property X(ByVal obj As Monster) As Integer
@@ -46,7 +46,7 @@
     End Function
 
     Public Overrides Sub RefreshList()
-        Me.levelList = ed.EdControl.lvl.Monsters
+        Me.levelList = ed.EdControl.lvl.objects.Monsters
     End Sub
 
     Public Overrides Function GetMoveAction(ByVal objs As System.Collections.Generic.List(Of Monster), ByVal dx As Integer, ByVal dy As Integer, ByVal stp As Integer) As Action

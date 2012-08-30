@@ -19,13 +19,13 @@ Public Class AddNRMAction
 
     Public Overrides Sub Undo()
         For Each m As NRMonster In NRMs
-            level.NRMonsters.Remove(m)
+            level.objects.Remove(m)
         Next
     End Sub
 
     Public Overrides Sub Redo()
         For Each m As NRMonster In NRMs
-            level.NRMonsters.Add(m)
+            level.objects.Add(m)
         Next
     End Sub
 
@@ -47,13 +47,13 @@ Public Class RemoveNRMAction
 
     Public Overrides Sub Undo()
         For Each m As NRMonster In NRMs
-            level.NRMonsters.Add(m)
+            level.objects.Add(m)
         Next
     End Sub
 
     Public Overrides Sub Redo()
         For Each m As NRMonster In NRMs
-            level.NRMonsters.Remove(m)
+            level.objects.Remove(m)
         Next
     End Sub
 
@@ -146,14 +146,12 @@ Public Class ChangeNRMTypeAction
     Public Overrides Sub Undo()
         For l As Integer = 0 To NRMs.Count - 1
             NRMs(l).ptr = prevptr(l)
-            NRMs(l).UpdateIdx()
         Next
     End Sub
 
     Public Overrides Sub Redo()
         For Each m As NRMonster In NRMs
             m.ptr = newptr
-            m.UpdateIdx()
         Next
     End Sub
 

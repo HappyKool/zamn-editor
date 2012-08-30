@@ -1,7 +1,5 @@
 ﻿Public Class Item
-    Public x As Integer
-    Public y As Integer
-    Public type As Byte
+    Inherits LevelObj
 
     Public Sub New()
 
@@ -19,7 +17,15 @@
         Me.type = i.type
     End Sub
 
-    Public Function GetRect() As Rectangle
-        Return New Rectangle(x, y, 15, 15)
+    Public Overrides Function Width(ByVal gfx As LevelGFX) As Integer
+        Return 16
+    End Function
+
+    Public Overrides Function Height(ByVal gfx As LevelGFX) As Integer
+        Return 16
+    End Function
+
+    Public Overrides Function Clone() As LevelObj
+        Return New Item(Me)
     End Function
 End Class

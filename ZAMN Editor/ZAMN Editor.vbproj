@@ -101,6 +101,8 @@
     </Compile>
     <Compile Include="Item.vb" />
     <Compile Include="LevelGFX.vb" />
+    <Compile Include="LevelObj.vb" />
+    <Compile Include="LevelObjList.vb" />
     <Compile Include="LevelSettings.Designer.vb">
       <DependentUpon>LevelSettings.vb</DependentUpon>
     </Compile>
@@ -263,6 +265,7 @@
     <Compile Include="Tools\PasteTilesTool.vb" />
     <Compile Include="Tools\PencilSelectTool.vb" />
     <Compile Include="Tools\RectangleSelectTool.vb" />
+    <Compile Include="Tools\SpriteTool.vb" />
     <Compile Include="Tools\TileSelectTool.vb" />
     <Compile Include="Tools\TileSuggestTool.vb" />
     <Compile Include="Tools\Tool.vb" />

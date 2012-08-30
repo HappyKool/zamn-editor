@@ -99,7 +99,7 @@
         Next
         'Palette fade
         chkPltFade.Checked = False
-        For Each m As BossMonster In lvl.bossMonsters
+        For Each m As BossMonster In lvl.objects.BossMonsters
             If m.ptr = Ptr.SpBossMonsters(0) Then
                 chkPltFade.Checked = True
                 addrPalF.Value = m.GetBGPalette
@@ -244,9 +244,9 @@
             lvl.bonuses.Add(CInt("&H" & i))
         Next
         Dim m As Integer = 0
-        Do Until m = lvl.bossMonsters.Count
-            If lvl.bossMonsters(m).ptr = Ptr.SpBossMonsters(0) Then
-                lvl.bossMonsters.RemoveAt(m)
+        Do Until m = lvl.objects.BossMonsters.Count
+            If lvl.objects.BossMonsters(m).ptr = Ptr.SpBossMonsters(0) Then
+                lvl.objects.BossMonsters.RemoveAt(m)
             Else
                 m += 1
             End If
@@ -255,7 +255,7 @@
             Dim exData(7) As Byte
             Array.Copy(Shrd.ConvertAddr(addrPalF.Value), 0, exData, 0, 4)
             Array.Copy(Shrd.ConvertAddr(addrSPalF.Value), 0, exData, 4, 4)
-            lvl.bossMonsters.Add(New BossMonster(Ptr.SpBossMonsters(0), exData))
+            lvl.objects.BossMonsters.Add(New BossMonster(Ptr.SpBossMonsters(0), exData))
         End If
         If reloadTileset Then
             Dim s As New IO.FileStream(ed.r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read)

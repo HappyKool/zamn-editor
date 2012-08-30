@@ -19,13 +19,13 @@ Public Class AddBMAction
 
     Public Overrides Sub Undo()
         For Each m As BossMonster In BossMonsters
-            level.bossMonsters.Remove(m)
+            level.objects.Remove(m)
         Next
     End Sub
 
     Public Overrides Sub Redo()
         For Each m As BossMonster In BossMonsters
-            level.bossMonsters.Add(m)
+            level.objects.Add(m)
         Next
     End Sub
 
@@ -47,13 +47,13 @@ Public Class RemoveBMAction
 
     Public Overrides Sub Undo()
         For Each m As BossMonster In BossMonsters
-            level.bossMonsters.Add(m)
+            level.objects.Add(m)
         Next
     End Sub
 
     Public Overrides Sub Redo()
         For Each m As BossMonster In BossMonsters
-            level.bossMonsters.Remove(m)
+            level.objects.Remove(m)
         Next
     End Sub
 
@@ -146,14 +146,12 @@ Public Class ChangeBMTypeAction
     Public Overrides Sub Undo()
         For l As Integer = 0 To BossMonsters.Count - 1
             BossMonsters(l).ptr = prevPtr(l)
-            BossMonsters(l).UpdateName()
         Next
     End Sub
 
     Public Overrides Sub Redo()
         For Each m As BossMonster In BossMonsters
             m.ptr = newPtr
-            m.UpdateName()
         Next
     End Sub
 

@@ -52,11 +52,11 @@
     End Function
 
     Public Overrides Function RectOfT(ByVal obj As Item) As System.Drawing.Rectangle
-        Return obj.GetRect
+        Return obj.Rect(Nothing)
     End Function
 
     Public Overrides Sub RefreshList()
-        levelList = ed.EdControl.lvl.items
+        levelList = ed.EdControl.lvl.objects.Items
     End Sub
 
     Public Overrides Function ToText(ByVal Objs As System.Collections.Generic.List(Of Item)) As String

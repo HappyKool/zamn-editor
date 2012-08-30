@@ -19,13 +19,13 @@ Public Class AddMonsterAction
 
     Public Overrides Sub Undo()
         For Each m As Monster In Monsters
-            level.Monsters.Remove(m)
+            level.objects.Remove(m)
         Next
     End Sub
 
     Public Overrides Sub Redo()
         For Each m As Monster In Monsters
-            level.Monsters.Add(m)
+            level.objects.Add(m)
         Next
     End Sub
 
@@ -47,13 +47,13 @@ Public Class RemoveMonsterAction
 
     Public Overrides Sub Undo()
         For Each m As Monster In Monsters
-            level.Monsters.Add(m)
+            level.objects.Add(m)
         Next
     End Sub
 
     Public Overrides Sub Redo()
         For Each m As Monster In Monsters
-            level.Monsters.Remove(m)
+            level.objects.Remove(m)
         Next
     End Sub
 
@@ -146,14 +146,12 @@ Public Class ChangeMonsterTypeAction
     Public Overrides Sub Undo()
         For l As Integer = 0 To Monsters.Count - 1
             Monsters(l).ptr = prevptr(l)
-            Monsters(l).UpdateIdx()
         Next
     End Sub
 
     Public Overrides Sub Redo()
         For Each m As Monster In Monsters
             m.ptr = newptr
-            m.UpdateIdx()
         Next
     End Sub
 

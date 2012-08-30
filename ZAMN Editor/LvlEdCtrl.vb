@@ -110,37 +110,37 @@
                 e.Graphics.DrawImage(lvl.tileset.images(lvl.Tiles(l, m)), l * 64, m * 64)
             Next
         Next
-        For Each v As Victim In lvl.victims
+        For Each v As Victim In lvl.objects.Victims
             Dim img As Bitmap = lvl.GFX.VictimImages(v.index)
-            e.Graphics.DrawImage(img, v.x, v.y)
+            e.Graphics.DrawImage(img, v.X, v.Y)
             If v.ptr > 2 Then
-                e.Graphics.DrawString(v.num.ToString, Me.Font, Brushes.Black, v.x + img.Width \ 2 - 3, v.y + img.Height + 5)
-                e.Graphics.DrawString(v.num.ToString, Me.Font, Brushes.White, v.x + img.Width \ 2 - 4, v.y + img.Height + 4)
+                e.Graphics.DrawString(v.num.ToString, Me.Font, Brushes.Black, v.X + img.Width \ 2 - 3, v.Y + img.Height + 5)
+                e.Graphics.DrawString(v.num.ToString, Me.Font, Brushes.White, v.X + img.Width \ 2 - 4, v.Y + img.Height + 4)
             End If
         Next
-        For Each m As NRMonster In lvl.NRMonsters
-            e.Graphics.DrawImage(lvl.GFX.VictimImages(m.index), m.x, m.y)
+        For Each m As NRMonster In lvl.objects.NRMonsters
+            e.Graphics.DrawImage(lvl.GFX.VictimImages(m.index), m.X, m.Y)
             If m.index = 0 Then
-                e.Graphics.DrawRectangle(Pens.Yellow, m.GetRect(lvl.GFX))
+                e.Graphics.DrawRectangle(Pens.Yellow, m.Rect(lvl.GFX))
             End If
         Next
-        For Each m As Monster In lvl.Monsters
-            e.Graphics.DrawImage(lvl.GFX.VictimImages(m.index), m.x, m.y)
+        For Each m As Monster In lvl.objects.Monsters
+            e.Graphics.DrawImage(lvl.GFX.VictimImages(m.index), m.X, m.Y)
             If m.index = 0 Then
-                e.Graphics.DrawRectangle(Pens.Blue, m.GetRect(lvl.GFX))
+                e.Graphics.DrawRectangle(Pens.Blue, m.Rect(lvl.GFX))
             End If
         Next
-        For Each m As BossMonster In lvl.bossMonsters
-            Dim rect As Rectangle = m.GetRect
+        For Each m As BossMonster In lvl.objects.BossMonsters
+            Dim rect As Rectangle = m.Rect(Nothing)
             e.Graphics.FillRectangle(Brushes.White, rect)
             e.Graphics.DrawRectangle(Pens.Black, rect)
             e.Graphics.DrawString(m.name, BossMonster.dispfont, Brushes.Black, rect.Location)
         Next
-        For Each i As Item In lvl.items
-            If i.type < lvl.GFX.ItemImages.Count Then
-                e.Graphics.DrawImage(lvl.GFX.ItemImages(i.type), i.x, i.y)
+        For Each i As Item In lvl.objects.Items
+            If i.Type < lvl.GFX.ItemImages.Count Then
+                e.Graphics.DrawImage(lvl.GFX.ItemImages(i.Type), i.X, i.Y)
             Else
-                e.Graphics.DrawImage(My.Resources.UnknownItem, i.x, i.y)
+                e.Graphics.DrawImage(My.Resources.UnknownItem, i.X, i.Y)
             End If
         Next
         If priority Then
@@ -187,20 +187,40 @@
     End Sub
 
     Private Sub LvlEdCtrl_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseWheel
-        Dim startValue As Integer = 0
         If VScrl.Enabled Then
-            scrollEnd = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange + 1, If(SmoothScroll.Enabled, scrollEnd, VScrl.Value) - 64 * Math.Sign(e.Delta)))
-            scrollVert = True
+            DoMouseWheel(True, -Math.Sign(e.Delta))
+        ElseIf HScrl.Enabled Then
+            DoMouseWheel(False, -Math.Sign(e.Delta))
+        End If
+    End Sub
+
+    'Supposed to allow for horizontal scolling/tilting, but it doesn't work
+    Private Const WM_MOUSEHWHEEL = &H20E
+
+    Protected Overrides Sub WndProc(ByRef m As System.Windows.Forms.Message)
+        MyBase.WndProc(m)
+        Select Case m.Msg
+            Case WM_MOUSEHWHEEL
+                m.Result = New IntPtr(1)
+                DoMouseWheel(False, Math.Sign((m.WParam.ToInt32 >> 16) And &HFFFF))
+        End Select
+    End Sub
+
+    Private Sub DoMouseWheel(ByVal vertical As Boolean, ByVal direction As Integer)
+        scrollVert = vertical
+        Dim startValue As Integer
+        If vertical Then
+            scrollEnd = Math.Max(0, Math.Min(VScrl.Maximum - VScrl.LargeChange + 1, If(SmoothScroll.Enabled, scrollEnd, VScrl.Value) + 64 * direction))
             startValue = VScrl.Value
             SmoothScroll.Start()
-        ElseIf HScrl.Enabled Then
-            scrollEnd = Math.Max(0, Math.Min(HScrl.Maximum - HScrl.LargeChange + 1, If(SmoothScroll.Enabled, scrollEnd, HScrl.Value) - 64 * Math.Sign(e.Delta)))
-            scrollVert = False
+        Else
+            scrollEnd = Math.Max(0, Math.Min(HScrl.Maximum - HScrl.LargeChange + 1, If(SmoothScroll.Enabled, scrollEnd, HScrl.Value) + 64 * direction))
             startValue = HScrl.Value
             SmoothScroll.Start()
         End If
         scrollDelta = (scrollEnd - startValue) / 8
         DoMouseMove()
+        'Debug.WriteLine(direction)
     End Sub
 
     Private Sub canvas_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles canvas.MouseDown

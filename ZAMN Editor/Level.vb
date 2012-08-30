@@ -5,10 +5,7 @@
     Public Tiles As Integer(,)
     Public Width As UShort
     Public Height As UShort
-    Public items As New List(Of Item)
-    Public victims As New List(Of Victim)
-    Public NRMonsters As New List(Of NRMonster)
-    Public Monsters As New List(Of Monster)
+    Public objects As LevelObjList
     Public p1Start As Point
     Public p2Start As Point
     Public music As UShort
@@ -19,7 +16,6 @@
     Public page2 As TitlePage
     Public bonuses As New List(Of Integer)
     Public spritePal As Integer
-    Public bossMonsters As New List(Of BossMonster)
     Public GFX As LevelGFX
 
     Public Sub New(ByVal s As IO.Stream, ByVal name As String, ByVal num As Integer, Optional ByVal import As Boolean = False, Optional ByVal romStream As IO.Stream = Nothing)
@@ -57,7 +53,7 @@
             Do
                 Dim v As Integer = s.ReadByte + s.ReadByte * &H100
                 If v = 0 Then Exit Do
-                items.Add(New Item(v - 8, s.ReadByte + s.ReadByte * &H100 - 8, s.ReadByte \ 2))
+                objects.Add(New Item(v - 8, s.ReadByte + s.ReadByte * &H100 - 8, s.ReadByte \ 2))
             Loop
         End If
         If import Then
@@ -73,10 +69,10 @@
                                       s.ReadByte + s.ReadByte * &H100, Shrd.ReadFileAddr(s))
                 vic.x -= Ptr.SpriteOffsets(vic.index * 2)
                 vic.y -= Ptr.SpriteOffsets(vic.index * 2 + 1)
-                victims.Add(vic)
+                objects.Add(vic)
             Next
-            victims.Add(New Victim(p1Start.X - 8, p1Start.Y - 39, 0, 0, 1))
-            victims.Add(New Victim(p2Start.X - 16, p2Start.Y - 42, 0, 0, 2))
+            objects.Add(New Victim(p1Start.X - 8, p1Start.Y - 39, 0, 0, 1))
+            objects.Add(New Victim(p2Start.X - 16, p2Start.Y - 42, 0, 0, 2))
             Do
                 Dim x As Integer = s.ReadByte + s.ReadByte * &H100
                 If x = 0 Then Exit Do
@@ -84,7 +80,7 @@
                                          s.ReadByte + s.ReadByte * &H100, Shrd.ReadFileAddr(s))
                 mon.x -= Ptr.SpriteOffsets(mon.index * 2)
                 mon.y -= Ptr.SpriteOffsets(mon.index * 2 + 1)
-                NRMonsters.Add(mon)
+                objects.Add(mon)
             Loop
         End If
         If import Then
@@ -103,7 +99,7 @@
                                        s.ReadByte, Shrd.ReadFileAddr(s))
                 mon.x -= Ptr.SpriteOffsets(mon.index * 2)
                 mon.y -= Ptr.SpriteOffsets(mon.index * 2 + 1)
-                Monsters.Add(mon)
+                objects.Add(mon)
             Loop
         End If
         If import Then
@@ -146,7 +142,7 @@
                 Shrd.GoToPointer(s)
                 Select Case ptr
                     Case ZAMNEditor.Ptr.SpBossMonsters(0)
-                        bossMonsters.Add(New BossMonster(ptr, s, 8))
+                        objects.Add(New BossMonster(ptr, s, 8))
                     Case ZAMNEditor.Ptr.SpBossMonsters(1)
                         Dim value As Integer, count As Integer, passed As Boolean = False
                         Dim newData As New List(Of Byte)
@@ -159,11 +155,11 @@
                             newData.Add(value \ &H100)
                             If passed And count = 0 Then Exit Do
                         Loop
-                        bossMonsters.Add(New BossMonster(ptr, newData.ToArray()))
+                        objects.Add(New BossMonster(ptr, newData.ToArray()))
                 End Select
                 s.Seek(curaddr + 4, IO.SeekOrigin.Begin)
             Else
-                bossMonsters.Add(New BossMonster(ptr, s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100))
+                objects.Add(New BossMonster(ptr, s.ReadByte + s.ReadByte * &H100, s.ReadByte + s.ReadByte * &H100))
             End If
         Loop
         If import Then
@@ -186,8 +182,8 @@
     End Sub
 
     Public Function GetWriteData() As LevelWriteData
-        p1Start = New Point(victims(10).x + 8, victims(10).y + 39)
-        p2Start = New Point(victims(11).x + 16, victims(11).y + 42)
+        p1Start = New Point(objects.Victims(10).X + 8, objects.Victims(10).Y + 39)
+        p2Start = New Point(objects.Victims(11).X + 16, objects.Victims(11).Y + 42)
         Dim file As New List(Of Byte)
         Dim addrOffsets(5) As Integer
         Dim bossPtrs As New List(Of Integer)
@@ -208,12 +204,12 @@
                                   music Mod &H100, music \ &H100, _
                                   unknown2 Mod &H100, unknown2 \ &H100, _
                                   0, 0, 0, 0, 0, 0})
-        For Each m As BossMonster In bossMonsters
+        For Each m As BossMonster In objects.BossMonsters
             file.AddRange(Shrd.ConvertAddr(m.ptr))
-            file.AddRange(New Byte() {m.x Mod &H100, m.x \ &H100, m.y Mod &H100, m.y \ &H100})
+            file.AddRange(New Byte() {m.X Mod &H100, m.X \ &H100, m.Y Mod &H100, m.Y \ &H100})
         Next
         file.AddRange(New Byte() {0, 0, 0, 0})
-        For Each m As BossMonster In bossMonsters
+        For Each m As BossMonster In objects.BossMonsters
             If Ptr.SpBossMonsters.Contains(m.ptr) Then
                 bossPtrs.Add(file.Count)
                 file.AddRange(m.exData)
@@ -222,28 +218,28 @@
         Dim x As UShort, y As UShort
         'Monster data
         addrOffsets(0) = file.Count
-        For Each m As Monster In Monsters
-            x = m.x + Ptr.SpriteOffsets(m.index * 2)
-            y = m.y + Ptr.SpriteOffsets(m.index * 2 + 1)
+        For Each m As Monster In objects.Monsters
+            x = m.X + Ptr.SpriteOffsets(m.index * 2)
+            y = m.Y + Ptr.SpriteOffsets(m.index * 2 + 1)
             file.AddRange(New Byte() {m.radius, x Mod &H100, x \ &H100, y Mod &H100, y \ &H100, m.delay})
             file.AddRange(Shrd.ConvertAddr(m.ptr))
         Next
         file.AddRange(New Byte() {0, 0})
         'Victim data
         addrOffsets(1) = file.Count
-        For Each v As Victim In victims
+        For Each v As Victim In objects.Victims
             If v.ptr > 2 Then
-                x = v.x + Ptr.SpriteOffsets(v.index * 2)
-                y = v.y + Ptr.SpriteOffsets(v.index * 2 + 1)
+                x = v.X + Ptr.SpriteOffsets(v.index * 2)
+                y = v.Y + Ptr.SpriteOffsets(v.index * 2 + 1)
                 file.AddRange(New Byte() {x Mod &H100, x \ &H100, y Mod &H100, y \ &H100, v.unused Mod &H100, v.unused \ &H100, _
                                           IIf(v.num = 10, 16, v.num), 0})
                 file.AddRange(Shrd.ConvertAddr(v.ptr))
             End If
         Next
         'NRMonster data
-        For Each m As NRMonster In NRMonsters
-            x = m.x + Ptr.SpriteOffsets(m.index * 2)
-            y = m.y + Ptr.SpriteOffsets(m.index * 2 + 1)
+        For Each m As NRMonster In objects.NRMonsters
+            x = m.X + Ptr.SpriteOffsets(m.index * 2)
+            y = m.Y + Ptr.SpriteOffsets(m.index * 2 + 1)
             file.AddRange(New Byte() {x Mod &H100, x \ &H100, y Mod &H100, y \ &H100, m.unused1 Mod &H100, m.unused1 \ &H100, _
                                       m.unused2 Mod &H100, m.unused2 \ &H100})
             file.AddRange(Shrd.ConvertAddr(m.ptr))
@@ -251,10 +247,10 @@
         file.AddRange(New Byte() {0, 0})
         'Item data
         addrOffsets(2) = file.Count
-        For Each i As Item In items
-            x = i.x + 8
-            y = i.y + 8
-            file.AddRange(New Byte() {x Mod &H100, x \ &H100, y Mod &H100, y \ &H100, i.type * 2})
+        For Each i As Item In objects.Items
+            x = i.X + 8
+            y = i.Y + 8
+            file.AddRange(New Byte() {x Mod &H100, x \ &H100, y Mod &H100, y \ &H100, i.Type * 2})
         Next
         file.AddRange(New Byte() {0, 0})
         'Level titles

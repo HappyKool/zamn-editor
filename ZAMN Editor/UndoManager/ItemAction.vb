@@ -19,13 +19,13 @@ Public Class AddItemAction
 
     Public Overrides Sub Undo()
         For Each i As Item In items
-            level.items.Remove(i)
+            level.objects.Remove(i)
         Next
     End Sub
 
     Public Overrides Sub Redo()
         For Each i As Item In items
-            level.items.Add(i)
+            level.objects.Add(i)
         Next
     End Sub
 
@@ -47,13 +47,13 @@ Public Class RemoveItemAction
 
     Public Overrides Sub Undo()
         For Each i As Item In items
-            level.items.Add(i)
+            level.objects.Add(i)
         Next
     End Sub
 
     Public Overrides Sub Redo()
         For Each i As Item In items
-            level.items.Remove(i)
+            level.objects.Remove(i)
         Next
     End Sub
 

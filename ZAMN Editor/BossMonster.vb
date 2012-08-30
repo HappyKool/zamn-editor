@@ -1,9 +1,17 @@
 ﻿Public Class BossMonster
-    Public x As Integer
-    Public y As Integer
-    Public ptr As Integer
-    Public name As String
+    Inherits LevelObj
 
+    Public _ptr As Integer
+    Public Property ptr As Integer
+        Get
+            Return _ptr
+        End Get
+        Set(value As Integer)
+            _ptr = value
+            UpdateName()
+        End Set
+    End Property
+    Public name As String
     Public exData As Byte()
 
     Public Shared dispfont As New Font("Microsoft Sans Serif", 8.25, FontStyle.Regular, GraphicsUnit.Point)
@@ -13,14 +21,14 @@
     End Sub
 
     Public Sub New(ByVal ptr As Integer, ByVal x As Integer, ByVal y As Integer)
-        Me.ptr = ptr
-        Me.x = x
-        Me.y = y
+        _ptr = ptr
+        Me.X = x
+        Me.Y = y
         UpdateName()
     End Sub
 
     Public Sub New(ByVal ptr As Integer, ByVal s As IO.Stream, ByVal dataLen As Integer)
-        Me.ptr = ptr
+        _ptr = ptr
         ReDim exData(dataLen - 1)
         For l As Integer = 0 To dataLen - 1
             exData(l) = s.ReadByte
@@ -28,27 +36,44 @@
     End Sub
 
     Public Sub New(ByVal ptr As Integer, ByVal exData As Byte())
-        Me.ptr = ptr
+        _ptr = ptr
         Me.exData = exData
     End Sub
 
     Public Sub New(ByVal m As BossMonster)
-        Me.ptr = m.ptr
-        Me.x = m.x
-        Me.y = m.y
+        _ptr = m.ptr
+        Me.X = m.X
+        Me.Y = m.Y
         Me.name = m.name
     End Sub
 
-    Public Function GetRect() As Rectangle
-        Return New Rectangle(New Point(x, y), TextRenderer.MeasureText(name, dispfont))
+    Public Overrides Function Clone() As LevelObj
+        Return New BossMonster(Me)
     End Function
 
-    Public Sub UpdateName()
-        Dim indx As Integer = Array.IndexOf(ZAMNEditor.Ptr.BossMonsters, ptr)
+    Public Overrides Property Type As Integer
+        Get
+            Return _ptr
+        End Get
+        Set(value As Integer)
+            _ptr = value
+        End Set
+    End Property
+
+    Public Overrides Function Width(ByVal gfx As LevelGFX) As Integer
+        Return TextRenderer.MeasureText(name, dispfont).Width
+    End Function
+
+    Public Overrides Function Height(ByVal gfx As LevelGFX) As Integer
+        Return TextRenderer.MeasureText(name, dispfont).Height
+    End Function
+
+    Private Sub UpdateName()
+        Dim indx As Integer = Array.IndexOf(ZAMNEditor.Ptr.BossMonsters, _ptr)
         If indx > -1 Then
             name = ZAMNEditor.Ptr.BossMonsterNames(indx)
         Else
-            name = "Unknown: 0x" & Hex(ptr)
+            name = "Unknown: 0x" & Hex(_ptr)
         End If
     End Sub
 
@@ -66,5 +91,9 @@
         Else
             Return -1
         End If
+    End Function
+
+    Public Overrides Function Selectable() As Boolean
+        Return Not ZAMNEditor.Ptr.SpBossMonsters.Contains(ptr)
     End Function
 End Class

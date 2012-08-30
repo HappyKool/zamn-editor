@@ -1,48 +1,70 @@
 ﻿Public Class Victim
-    Public x As Integer
-    Public y As Integer
-    Public num As UShort
-    Public unused As UShort
-    Public ptr As Integer
-    Public index As Integer
+    Inherits LevelObj
+
+    Public num As Integer
+    Public unused As Integer
+    Public _ptr As Integer
+    Public Property ptr As Integer
+        Get
+            Return _ptr
+        End Get
+        Set(value As Integer)
+            _ptr = value
+            UpdateIdx()
+        End Set
+    End Property
+    Public _index As Integer
+    Public Property index As Integer
+        Get
+            Return _index
+        End Get
+        Set(value As Integer)
+            _index = value
+            UpdatePtr()
+        End Set
+    End Property
 
     Public Sub New()
 
     End Sub
 
     Public Sub New(ByVal x As Integer, ByVal y As Integer, ByVal unused As Integer, ByVal num As Integer, ByVal ptr As Integer)
-        Me.x = x
-        Me.y = y
+        Me.X = x
+        Me.Y = y
         Me.unused = unused
         Me.num = num
         If num = 16 Then
             Me.num = 10
         End If
-        Me.ptr = ptr
+        _ptr = ptr
         UpdateIdx()
     End Sub
 
     Public Sub New(ByVal v As Victim)
-        Me.x = v.x
-        Me.y = v.y
+        Me.X = v.X
+        Me.Y = v.Y
         Me.unused = v.unused
-        Me.ptr = v.ptr
+        _ptr = v.ptr
         Me.num = v.num
         UpdateIdx()
     End Sub
 
-    Public Function GetRect(ByVal gfx As LevelGFX) As Rectangle
-        Return Shrd.RealSize(New Rectangle(New Point(Me.x, Me.y), gfx.VictimImages(index).Size))
+    Public Overrides Function Width(gfx As LevelGFX) As Integer
+        Return gfx.VictimImages(_index).Width
     End Function
 
-    Public Sub UpdatePtr()
-        If index > 0 Then
-            ptr = ZAMNEditor.Ptr.SpritePtrs(index)
+    Public Overrides Function Height(gfx As LevelGFX) As Integer
+        Return gfx.VictimImages(_index).Height
+    End Function
+
+    Private Sub UpdatePtr()
+        If _index > 0 Then
+            _ptr = ZAMNEditor.Ptr.SpritePtrs(_index)
         End If
     End Sub
 
-    Public Sub UpdateIdx()
-        Me.index = Array.IndexOf(ZAMNEditor.Ptr.SpritePtrs, ptr)
-        If Me.index = -1 Then Me.index = 0
+    Private Sub UpdateIdx()
+        _index = Array.IndexOf(ZAMNEditor.Ptr.SpritePtrs, _ptr)
+        If _index = -1 Then _index = 0
     End Sub
 End Class

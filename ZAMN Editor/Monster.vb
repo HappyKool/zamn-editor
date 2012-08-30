@@ -1,10 +1,28 @@
 ﻿Public Class Monster
-    Public x As Integer
-    Public y As Integer
+    Inherits LevelObj
+
     Public radius As Byte
     Public delay As Byte
-    Public ptr As Integer
-    Public index As Integer
+    Private _ptr As Integer
+    Public Property ptr As Integer
+        Get
+            Return _ptr
+        End Get
+        Set(value As Integer)
+            _ptr = value
+            UpdateIdx()
+        End Set
+    End Property
+    Private _index As Integer
+    Public Property index As Integer
+        Get
+            Return _index
+        End Get
+        Set(value As Integer)
+            _index = value
+            UpdatePtr()
+        End Set
+    End Property
 
     Public Sub New()
 
@@ -15,7 +33,7 @@
         Me.x = x
         Me.y = y
         Me.delay = delay
-        Me.ptr = ptr
+        _ptr = ptr
         UpdateIdx()
     End Sub
 
@@ -24,22 +42,32 @@
         Me.x = m.x
         Me.y = m.y
         Me.delay = m.delay
-        Me.ptr = m.ptr
+        _ptr = m.ptr
         UpdateIdx()
     End Sub
 
-    Public Function GetRect(ByVal gfx As LevelGFX) As Rectangle
-        Return Shrd.RealSize(New Rectangle(New Point(Me.x, Me.y), gfx.VictimImages(index).Size))
+    Public Overrides Function Clone() As LevelObj
+        Return New Monster(Me)
     End Function
 
-    Public Sub UpdateIdx()
-        Me.index = Array.IndexOf(ZAMNEditor.Ptr.SpritePtrs, ptr)
-        If Me.index = -1 Then Me.index = 0
+    Public Overrides Function Width(ByVal gfx As LevelGFX) As Integer
+        Return gfx.VictimImages(_index).Width
+    End Function
+
+    Public Overrides Function Height(ByVal gfx As LevelGFX) As Integer
+        Return gfx.VictimImages(_index).Height
+    End Function
+
+    Private Sub UpdateIdx()
+        _index = Array.IndexOf(ZAMNEditor.Ptr.SpritePtrs, _ptr)
+        If _index = -1 Then _index = 0
     End Sub
 
-    Public Sub UpdatePtr()
-        If index > 0 Then
-            ptr = ZAMNEditor.Ptr.SpritePtrs(index)
+    Private Sub UpdatePtr()
+        If _index > 0 Then
+            _ptr = ZAMNEditor.Ptr.SpritePtrs(_index)
+        Else
+            _ptr = 0
         End If
     End Sub
 End Class

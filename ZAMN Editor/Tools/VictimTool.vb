@@ -31,11 +31,11 @@
     End Function
 
     Public Overrides Function RectOfT(ByVal obj As Victim) As System.Drawing.Rectangle
-        Return obj.GetRect(ed.EdControl.lvl.GFX)
+        Return obj.Rect(ed.EdControl.lvl.GFX)
     End Function
 
     Public Overrides Sub RefreshList()
-        levelList = ed.EdControl.lvl.victims
+        levelList = ed.EdControl.lvl.objects.Victims
     End Sub
 
     Public Overrides Function ToText(ByVal Objs As System.Collections.Generic.List(Of Victim)) As String

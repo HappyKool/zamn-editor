@@ -90,7 +90,6 @@ Public Class ChangeVictimTypeAction
     Public Overrides Sub Undo()
         For l As Integer = 0 To victims.Count - 1
             victims(l).ptr = prevPtr(l)
-            victims(l).UpdateIdx()
         Next
     End Sub
 
@@ -98,7 +97,6 @@ Public Class ChangeVictimTypeAction
         For Each v As Victim In victims
             If v.ptr > 2 Then
                 v.ptr = newPtr
-                v.UpdateIdx()
             End If
         Next
     End Sub

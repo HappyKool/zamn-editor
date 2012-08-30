@@ -15,7 +15,9 @@ Public Class ROM
     Private Shared offsetPos As Integer() = {&H1C, &H1E, &H20, &H36, &H38, &H3A}
 
     Public Sub New(ByVal path As String)
+#If Not Debug Then
         Try
+#End If
             Me.path = path
             Dim s As New FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read)
             If Shrd.HasHeader(s) Then
@@ -78,11 +80,13 @@ Public Class ROM
             'End If
             'hacked = True
 
-            s.Close()
+        s.Close()
+#If Not Debug Then
         Catch ex As Exception
             failed = True
             MsgBox("Error: " & ex.Message, MsgBoxStyle.Critical)
         End Try
+#End If
     End Sub
 
     Public Function GetLevelTitle(ByVal s As Stream, ByVal ptr As Integer)

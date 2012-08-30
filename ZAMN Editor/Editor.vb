@@ -69,9 +69,7 @@
             Return
         End If
 #If DEBUG Then
-        If path = "D:\Debug.sfc" Then
-            LevelDebugTools.Visible = True
-        End If
+        LevelDebugTools.Visible = True
 #End If
         r = New ROM(path)
         If r.failed Then Return
