@@ -74,7 +74,7 @@ Public Class Tileset
             End If
             writeByte = writeByte \ 2
         Loop
-        'ReDim Preserve result(writeIndex - 1)
+        'ReDim Preserve result(writeIndex)
         Return result
     End Function
 
@@ -85,9 +85,119 @@ Public Class Tileset
         Return False
     End Function
 
-    Private Shared Sub WriteNext(ByRef result As Byte(), ByRef writeindex As Integer, ByVal value As Integer)
-        result(writeindex) = CByte(value)
+    Private Shared Sub WriteNext(ByRef result As Byte(), ByRef writeindex As Integer, ByVal value As Byte)
+        result(writeindex) = value
         writeindex += 1
+    End Sub
+
+    Public Shared Function Compress(ByVal data As Byte()) As Byte()
+        Dim result As New List(Of Byte)(data.Length)
+        Dim dict(&HFFF) As Byte
+        Dim dictIndex As Integer = &HFEE
+        Dim dataIndex As Integer = 0
+        Dim formatByte As Byte
+        Dim formatBitCt As Integer = 0
+        Dim formatByteIndex As Integer = 2
+
+        Dim findDictPos As Integer, findDictLen As Integer
+        Dim findRepSize As Integer, findRepLen As Integer
+
+        result.Add(0) 'The final size will be put here
+        result.Add(0)
+        result.Add(0) 'And one more to hold the first format byte
+        Do Until dataIndex = data.Length
+            formatByte >>= 1
+            formatBitCt += 1
+            FindInDict(dict, data, dataIndex, findDictPos, findDictLen)
+            FindRepeat(data, dataIndex, findRepSize, findRepLen)
+            If findRepLen - findRepSize > findDictLen And findRepLen >= 3 Then 'Most efficient to insert a data repeat
+                For i As Integer = 0 To findRepSize - 1
+                    result.Add(data(dataIndex + i))
+                    formatByte = formatByte Or &H80
+                    If formatBitCt = 8 Then 'This has to be put here too sadly
+                        result(formatByteIndex) = formatByte
+                        formatByte = 0
+                        formatBitCt = 0
+                        formatByteIndex = result.Count
+                        result.Add(0)
+                    End If
+                    formatByte >>= 1
+                    formatBitCt += 1
+                Next
+                result.Add(dictIndex And &HFF)
+                result.Add(((dictIndex And &HF00) >> 4) + (findRepLen - 3))
+                For i As Integer = 0 To findRepLen + findRepSize - 1
+                    dict((dictIndex + i) And &HFFF) = data(dataIndex + (i Mod findRepSize))
+                Next
+                dictIndex = (dictIndex + findRepLen + findRepSize) And &HFFF
+                dataIndex += findRepLen + findRepSize
+            ElseIf findDictPos > -1 Then 'Insert a load from the dictionary
+                For i As Integer = 0 To findDictLen - 1
+                    dict(dictIndex) = dict((findDictPos + i) And &HFFF)
+                    dictIndex = (dictIndex + 1) And &HFFF
+                Next
+                dataIndex += findDictLen
+                result.Add(findDictPos And &HFF)
+                result.Add(((findDictPos And &HF00) >> 4) + (findDictLen - 3))
+            Else 'Just insert the byte by itself
+                result.Add(data(dataIndex))
+                dict(dictIndex) = data(dataIndex)
+                dictIndex = (dictIndex + 1) And &HFFF
+                dataIndex += 1
+                formatByte = formatByte Or &H80
+            End If
+            If formatBitCt = 8 Or dataIndex = data.Length Then
+                formatByte >>= (8 - formatBitCt) 'If the file has ended, but there is still part of a format byte left
+                result(formatByteIndex) = formatByte
+                formatByte = 0
+                formatBitCt = 0
+                formatByteIndex = result.Count
+                result.Add(0)
+            End If
+        Loop
+
+        Dim len As Integer = result.Count - 2
+        result(0) = len And &HFF
+        result(1) = (len And &HFF00) >> 8
+        Return result.ToArray()
+    End Function
+
+    Private Shared Sub FindInDict(ByVal dict As Byte(), ByVal data As Byte(), ByVal index As Integer, ByRef outPos As Integer, ByRef outLen As Integer)
+        Dim maxMatchCt As Integer = 0
+        Dim maxMatchPos As Integer = -1
+        For idict As Integer = 0 To dict.Length - 1
+            If dict(idict) = data(index) Then
+                Dim i2 As Integer = 0
+                For i2 = 0 To 17
+                    If index + i2 >= data.Length Then Exit For
+                    If dict((idict + i2) And &HFFF) <> data(index + i2) Then Exit For
+                Next
+                If i2 > maxMatchCt And i2 > 2 Then
+                    maxMatchCt = i2
+                    maxMatchPos = idict
+                End If
+            End If
+        Next
+        outPos = maxMatchPos
+        outLen = maxMatchCt
+    End Sub
+
+    Private Shared Sub FindRepeat(ByVal data As Byte(), ByVal index As Integer, ByRef dataSize As Integer, ByRef totalSize As Integer)
+        Dim maxSize As Integer = 1
+        Dim maxDataSize As Integer = 0
+        For dsize As Integer = 1 To 8
+            Dim tsize As Integer
+            For tsize = dsize To dsize + 17
+                If index + tsize >= data.Length Then Exit For
+                If data(index + tsize) <> data(index + (tsize Mod dsize)) Then Exit For
+            Next
+            If tsize - dsize > maxDataSize Then
+                maxDataSize = tsize - dsize
+                maxSize = dsize
+            End If
+        Next
+        dataSize = maxSize
+        totalSize = maxDataSize
     End Sub
 
     Public Sub Reload(ByVal s As IO.Stream)
