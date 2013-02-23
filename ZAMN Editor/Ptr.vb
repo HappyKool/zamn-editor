@@ -13,13 +13,13 @@
     Public Shared SpBossMonsters As Integer() = {&H12B95, &H157CF} 'Palette fade, Tile animation
     Public Shared SuggestTilesets As Integer() = {&HD8000, &HE36EF} ', &HD4000, &HE0000, &HDBCB5}
     Public Shared SpritePtrs As Integer() = {-1, &H19FE2, &H19776, &H19C6D, &H19E15, &H19D00, &H19699, &H1993D, &H19843, &H19A89, &H19EBE, &H19BAD, _
-                                       &H16F36, &H983A, &HA455, &H1725D, &HD2F1, &HD2F9, &H1B55E, &H1B7F6, _
-                                       &H87F8, &H88CA, &H8C17, &H8E89, &H8F1F, &H99DF, &H9A3E, &HABF5, &HB2B0, &HB664, &HC1FB, _
-                                       &HC321, &HC3B6, &HC87B, &HCCCF, &HD704, &HE481, &HE51A, &H1190F, &H1B277, 1, 2}
+                                             &H16F36, &H983A, &HA455, &H1725D, &HD2F1, &HD2F9, &H1B55E, &H1B7F6, _
+                                             &H87F8, &H88CA, &H8C17, &H8E89, &H8F1F, &H99DF, &H9A3E, &HABF5, &HB2B0, &HB664, &HC1FB, _
+                                             &HC321, &HC3B6, &HC87B, &HCCCF, &HD704, &HE481, &HE51A, &H1190F, &H1B277, 1, 2}
     Public Shared SpriteOffsets As Integer() = {0, 0, 24, 47, 17, 29, 13, 38, 17, 38, 29, 40, 31, 63, 16, 47, 16, 29, 14, 32, 16, 37, 28, 44, _
-                                          15, 48, 14, 46, 24, 63, 9, 31, 21, 31, 21, 31, 18, 42, 16, 48, _
-                                          20, 47, 20, 47, 16, 55, 16, 35, 16, 35, 15, 44, 15, 44, 14, 65, 16, 31, 8, 15, 19, 21, _
-                                          26, 26, 19, 21, 17, 34, 24, 30, 9, 22, 8, 16, 16, 32, 12, 16, 8, 12}
+                                                15, 48, 14, 46, 24, 63, 9, 31, 21, 31, 21, 31, 18, 42, 16, 48, _
+                                                20, 47, 20, 47, 16, 55, 16, 35, 16, 35, 15, 44, 15, 44, 14, 65, 16, 31, 8, 15, 19, 21, _
+                                                26, 26, 19, 21, 17, 34, 24, 30, 9, 22, 8, 16, 16, 32, 12, 16, 8, 12}
     'PLACEHOLDER, Tourist, Baby, Teacher, Explorer, Pool, Barbeque, Army, Trampoline, Dog, Cheerleader, Dr. Bug
     'Dracula, Chainsaw, Frankenstein, Fire, Plant, Plant 2, Dr. Tongue, Credit Level enemy head
     'Zombie, Fast Zombie, Mummy, Clone, Fast Clone, Martian, Martian, Werewolf, Chuckie, Fire guy, Hole Ant,

@@ -130,4 +130,5 @@ Public Enum SideContentType
     NRMonsters
     Monsters
     BossMonsters
+    Sprites
 End Enum

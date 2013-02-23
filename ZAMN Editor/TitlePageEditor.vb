@@ -111,6 +111,8 @@
 
     Private Sub btnDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDelete.Click
         curCtrl.Delete()
+        curWord = Nothing
+        AnyWordSelected()
     End Sub
 
     Private Sub btnAdd1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAdd1.Click

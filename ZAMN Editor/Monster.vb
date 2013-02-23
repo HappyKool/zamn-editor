@@ -70,4 +70,8 @@
             _ptr = 0
         End If
     End Sub
+
+    Public Overrides Function ToString() As String
+        Return "Monster"
+    End Function
 End Class

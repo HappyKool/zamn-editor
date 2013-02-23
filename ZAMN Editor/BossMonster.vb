@@ -96,4 +96,8 @@
     Public Overrides Function Selectable() As Boolean
         Return Not ZAMNEditor.Ptr.SpBossMonsters.Contains(ptr)
     End Function
+
+    Public Overrides Function ToString() As String
+        Return "Boss Monster: " + name
+    End Function
 End Class

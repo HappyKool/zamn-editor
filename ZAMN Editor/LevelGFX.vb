@@ -4,6 +4,10 @@
     Public VictimImages As New List(Of Bitmap)
 
     Public Sub New(ByVal s As IO.Stream, ByVal pal As Integer)
+        Reload(s, pal)
+    End Sub
+
+    Public Sub Reload(ByVal s As IO.Stream, ByVal pal As Integer)
         s.Seek(Ptr.ItemGFX, IO.SeekOrigin.Begin)
         Dim gfx(3455) As Byte
         s.Read(gfx, 0, 3456)

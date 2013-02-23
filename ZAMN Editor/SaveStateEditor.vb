@@ -46,6 +46,7 @@
         Me.Controls.Add(btnOK)
         Me.Controls.Add(btnCancel)
         Me.Controls.Add(btnSave)
+        Me.Controls.Add(lblNote)
         Return Me.ShowDialog()
     End Function
 

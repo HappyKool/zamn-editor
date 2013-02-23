@@ -7,6 +7,7 @@
     Public NRMPicker As NRMBrowser
     Public MonsterPicker As MonsterBrowser
     Public BMonsterPicker As New BMonsterBrowser
+    Public SpritePicker As SpriteBrowser
 
     Public Grid As Boolean
     Public priority As Boolean
@@ -44,6 +45,7 @@
         NRMPicker = New NRMBrowser(lvl.GFX)
         MonsterPicker = New MonsterBrowser(lvl.GFX)
         TilePicker = New TilesetBrowser(lvl.tileset)
+        SpritePicker = New SpriteBrowser(lvl.GFX)
         selection = New Selection(lvl.Width, lvl.Height)
         UpdateScrollBars()
     End Sub

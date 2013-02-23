@@ -22,16 +22,17 @@
     Public borderPen As New Pen(Color.Black)
     Public darkBrush As New SolidBrush(Color.FromArgb(92, 0, 0, 0))
 
-    Public DefaultText As String
-    Public ShiftText As String
-    Public CtrlText As String
-    Public AltText As String
-    Public MoveText As String
+    Public DefaultText As String = "asdf"
+    Public ShiftText As String = "asdf"
+    Public CtrlText As String = "asdf"
+    Public AltText As String = "asdf"
+    Public MoveText As String = "asdf"
 
     Public Sub New(ByVal ed As Editor)
         MyBase.New(ed)
         Me.Status = DefaultText
         borderPen.DashPattern = New Single() {4, 4}
+        SidePanel = SideContentType.Sprites
     End Sub
 
     Public Overrides Sub Refresh()
@@ -85,15 +86,16 @@
             removing = (Control.ModifierKeys = Keys.Alt)
         End If
         selecting = Not addobj
-        If Control.ModifierKeys = Keys.Control And removable Then 'Add a new obj
+        If Control.ModifierKeys = Keys.Control Then 'And removable Then 'Add a new obj
             If selectedObjs.Count = 0 Then
-                Dim o As LevelObj = NewOfT(e.X, e.Y)
-                If o IsNot Nothing Then
-                    selectedObjs.Clear()
-                    selectedObjs.Add(o)
-                    selectedObj = o
-                    created = True
-                End If
+                'TODO: Add code for creating a new object
+                'Dim o As LevelObj = NewOfT(e.X, e.Y)
+                'If o IsNot Nothing Then
+                '    selectedObjs.Clear()
+                '    selectedObjs.Add(o)
+                '    selectedObj = o
+                '    created = True
+                'End If
             Else 'Clone the current obj
                 Dim newObjs As New List(Of LevelObj)
                 For Each o As LevelObj In selectedObjs
@@ -148,9 +150,9 @@
                 Dim XDelta As Integer = Math.Max(-minX, e.X - (selectedObj.X + dragXOff))
                 Dim YDelta As Integer = Math.Max(-minY, e.Y - (selectedObj.Y + dragYOff))
                 If created Then
-                    ed.EdControl.UndoMgr.Perform(GetMoveAction(selectedObjs, XDelta, YDelta, stp))
+                    ed.EdControl.UndoMgr.Perform(New MoveSpriteAction(selectedObjs, XDelta, YDelta, stp))
                 Else
-                    ed.EdControl.UndoMgr.Do(GetMoveAction(selectedObjs, XDelta, YDelta, stp))
+                    ed.EdControl.UndoMgr.Do(New MoveSpriteAction(selectedObjs, XDelta, YDelta, stp))
                 End If
                 Me.Status = String.Format(MoveText, selectedObj.X - XStart, selectedObj.Y - YStart)
                 UpdateStatus()
@@ -173,7 +175,7 @@
             End If
         Next
         If created Then
-            ed.EdControl.UndoMgr.Do(GetAddAction(selectedObjs), False)
+            ed.EdControl.UndoMgr.Do(New AddSpriteAction(selectedObjs), False)
             created = False
         End If
         curSelObjs.Clear()
@@ -186,22 +188,22 @@
 
     Public Overrides Sub KeyDown(ByVal e As System.Windows.Forms.KeyEventArgs)
         If e.KeyCode = Keys.Delete And selectedObjs.Count > 0 Then
-            ed.EdControl.UndoMgr.Do(GetRemoveAction(selectedObjs))
+            ed.EdControl.UndoMgr.Do(New RemoveSpriteAction(selectedObjs))
             selectedObjs.Clear()
             Repaint()
         End If
         If selectedObjs.Count > 0 Then
             If e.KeyCode = Keys.Up Then
-                ed.EdControl.UndoMgr.Do(GetMoveAction(selectedObjs, 0, -1, 1))
+                ed.EdControl.UndoMgr.Do(New MoveSpriteAction(selectedObjs, 0, -1, 1))
                 UpdateProperties()
             ElseIf e.KeyCode = Keys.Right Then
-                ed.EdControl.UndoMgr.Do(GetMoveAction(selectedObjs, 1, 0, 1))
+                ed.EdControl.UndoMgr.Do(New MoveSpriteAction(selectedObjs, 1, 0, 1))
                 UpdateProperties()
             ElseIf e.KeyCode = Keys.Down Then
-                ed.EdControl.UndoMgr.Do(GetMoveAction(selectedObjs, 0, 1, 1))
+                ed.EdControl.UndoMgr.Do(New MoveSpriteAction(selectedObjs, 0, 1, 1))
                 UpdateProperties()
             ElseIf e.KeyCode = Keys.Left Then
-                ed.EdControl.UndoMgr.Do(GetMoveAction(selectedObjs, -1, 0, 1))
+                ed.EdControl.UndoMgr.Do(New MoveSpriteAction(selectedObjs, -1, 0, 1))
                 UpdateProperties()
             End If
         End If
@@ -226,45 +228,46 @@
         UpdateStatus()
     End Sub
 
-    Public Overrides Sub BMonsterChanged()
-        If selectedObjs.Count > 0 And SidePanel = SideContentType.BossMonsters Then
-            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.BossMonsters(BMonsterPicker.SelectedIndex)))
-            UpdateProperties()
-            Repaint()
-        End If
-    End Sub
+    'TODO: All the stuff for changing object type
+    'Public Overrides Sub BMonsterChanged()
+    '    If selectedObjs.Count > 0 And SidePanel = SideContentType.BossMonsters Then
+    '        ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.BossMonsters(BMonsterPicker.SelectedIndex)))
+    '        UpdateProperties()
+    '        Repaint()
+    '    End If
+    'End Sub
 
-    Public Overrides Sub ItemChanged()
-        If selectedObjs.Count > 0 And SidePanel = SideContentType.Items Then
-            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, ItemPicker.SelectedIndex))
-            UpdateProperties()
-            Repaint()
-        End If
-    End Sub
+    'Public Overrides Sub ItemChanged()
+    '    If selectedObjs.Count > 0 And SidePanel = SideContentType.Items Then
+    '        ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, ItemPicker.SelectedIndex))
+    '        UpdateProperties()
+    '        Repaint()
+    '    End If
+    'End Sub
 
-    Public Overrides Sub MonsterChanged()
-        If selectedObjs.Count > 0 And SidePanel = SideContentType.Monsters Then
-            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.SpritePtrs(MonsterPicker.SelectedIndex)))
-            UpdateProperties()
-            Repaint()
-        End If
-    End Sub
+    'Public Overrides Sub MonsterChanged()
+    '    If selectedObjs.Count > 0 And SidePanel = SideContentType.Monsters Then
+    '        ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.SpritePtrs(MonsterPicker.SelectedIndex)))
+    '        UpdateProperties()
+    '        Repaint()
+    '    End If
+    'End Sub
 
-    Public Overrides Sub NRMChanged()
-        If selectedObjs.Count > 0 And SidePanel = SideContentType.NRMonsters Then
-            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.SpritePtrs(NRMPicker.SelectedIndex)))
-            UpdateProperties()
-            Repaint()
-        End If
-    End Sub
+    'Public Overrides Sub NRMChanged()
+    '    If selectedObjs.Count > 0 And SidePanel = SideContentType.NRMonsters Then
+    '        ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.SpritePtrs(NRMPicker.SelectedIndex)))
+    '        UpdateProperties()
+    '        Repaint()
+    '    End If
+    'End Sub
 
-    Public Overrides Sub VictimChanged()
-        If selectedObjs.Count > 0 And SidePanel = SideContentType.Victims Then
-            ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.SpritePtrs(VictimPicker.SelectedIndex)))
-            UpdateProperties()
-            Repaint()
-        End If
-    End Sub
+    'Public Overrides Sub VictimChanged()
+    '    If selectedObjs.Count > 0 And SidePanel = SideContentType.Victims Then
+    '        ed.EdControl.UndoMgr.Do(GetChangeAction(selectedObjs, Ptr.SpritePtrs(VictimPicker.SelectedIndex)))
+    '        UpdateProperties()
+    '        Repaint()
+    '    End If
+    'End Sub
 
     Public Overrides Sub Paint(ByVal g As System.Drawing.Graphics)
         If selecting Then
@@ -355,15 +358,6 @@
         End If
     End Sub
 
-    Public MustOverride Function ToText(ByVal Objs As List(Of LevelObj)) As String
-    Public MustOverride Function FromText(ByVal txt As String) As List(Of LevelObj)
-    Public MustOverride Function NewOfT(ByVal x As Integer, ByVal y As Integer) As LevelObj
-    Public MustOverride Function GetMoveAction(ByVal objs As List(Of LevelObj), ByVal dx As Integer, ByVal dy As Integer, ByVal stp As Integer) As Action
-    Public MustOverride Function GetChangeAction(ByVal objs As List(Of LevelObj), ByVal newType As Integer) As Action
-    Public Overridable Function GetAddAction(ByVal objs As List(Of LevelObj)) As Action
-        Return Nothing
-    End Function
-    Public Overridable Function GetRemoveAction(ByVal objs As List(Of LevelObj)) As Action
-        Return Nothing
-    End Function
+    'Public MustOverride Function ToText(ByVal Objs As List(Of LevelObj)) As String
+    'Public MustOverride Function FromText(ByVal txt As String) As List(Of LevelObj)
 End Class

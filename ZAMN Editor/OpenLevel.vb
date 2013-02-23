@@ -79,4 +79,8 @@
             selectedNums.Add(curNums(i))
         Next
     End Sub
+
+    Private Sub levels_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles levels.MouseDoubleClick
+        OK.PerformClick()
+    End Sub
 End Class

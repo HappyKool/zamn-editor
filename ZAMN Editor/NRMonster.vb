@@ -70,4 +70,8 @@
         _index = Array.IndexOf(ZAMNEditor.Ptr.SpritePtrs, _ptr)
         If _index = -1 Then _index = 0
     End Sub
+
+    Public Overrides Function ToString() As String
+        Return "Non-respawning Monster"
+    End Function
 End Class

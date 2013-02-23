@@ -20,7 +20,8 @@
             End If
         End If
         EditingTools = New Tool() {New PaintbrushTool(Me), New TileSuggestTool(Me), New RectangleSelectTool(Me), New PencilSelectTool(Me), _
-                                   New TileSelectTool(Me), New ItemTool(Me), New VictimTool(Me), New NRMonsterTool(Me), New MonsterTool(Me), New BossMonsterTool(Me)}
+                                   New TileSelectTool(Me), New ItemTool(Me), New VictimTool(Me), New NRMonsterTool(Me), New MonsterTool(Me), New BossMonsterTool(Me),
+                                   New SpriteTool(Me)}
         LevelItems = New ToolStripItem() {FileSave, SaveTool, EditPaste, PasteTool, EditSelectAll, EditSelectNone, ViewGrid, _
                                           ViewPriority, LevelExport, LevelImport, LevelCopy, LevelPaste, LevelEditTitle, LevelSettingsM}
         TilePaste = New PasteTilesTool(Me)
@@ -356,6 +357,9 @@
             Case SideContentType.BossMonsters
                 t.SetBrowser(EdControl.BMonsterPicker)
                 EdControl.SetSidePanel(EdControl.BMonsterPicker)
+            Case SideContentType.Sprites
+                t.SetBrowser(EdControl.SpritePicker)
+                EdControl.SetSidePanel(EdControl.SpritePicker)
         End Select
         If CurTool IsNot Nothing Then
             CurTool.active = False

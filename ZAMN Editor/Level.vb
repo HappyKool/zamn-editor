@@ -5,7 +5,7 @@
     Public Tiles As Integer(,)
     Public Width As UShort
     Public Height As UShort
-    Public objects As LevelObjList
+    Public objects As LevelObjList = New LevelObjList
     Public p1Start As Point
     Public p2Start As Point
     Public music As UShort

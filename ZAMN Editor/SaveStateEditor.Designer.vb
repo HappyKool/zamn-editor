@@ -25,6 +25,7 @@ Partial Class SaveStateEditor
         Me.btnOK = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
+        Me.lblNote = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'btnOK
@@ -54,16 +55,27 @@ Partial Class SaveStateEditor
         Me.btnSave.Text = "Save as default"
         Me.btnSave.UseVisualStyleBackColor = True
         '
+        'lblNote
+        '
+        Me.lblNote.Location = New System.Drawing.Point(12, 349)
+        Me.lblNote.Name = "lblNote"
+        Me.lblNote.Size = New System.Drawing.Size(201, 62)
+        Me.lblNote.TabIndex = 3
+        Me.lblNote.Text = "Note: This will overwrite save state slot 1 and you must load from stot 1 when th" & _
+            "e emulator starts. It currently works with bsnes v084 32bit."
+        '
         'SaveStateEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(225, 358)
+        Me.ClientSize = New System.Drawing.Size(225, 410)
+        Me.Controls.Add(Me.lblNote)
         Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnOK)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "SaveStateEditor"
+        Me.ShowIcon = False
         Me.Text = "Save State Settings"
         Me.ResumeLayout(False)
 
@@ -71,4 +83,5 @@ Partial Class SaveStateEditor
     Friend WithEvents btnOK As System.Windows.Forms.Button
     Friend WithEvents btnCancel As System.Windows.Forms.Button
     Friend WithEvents btnSave As System.Windows.Forms.Button
+    Friend WithEvents lblNote As System.Windows.Forms.Label
 End Class

@@ -67,4 +67,13 @@
         _index = Array.IndexOf(ZAMNEditor.Ptr.SpritePtrs, _ptr)
         If _index = -1 Then _index = 0
     End Sub
+
+    'Doesn't do anything because victims can't be cloned
+    Public Overrides Function Clone() As LevelObj
+        Return Nothing
+    End Function
+
+    Public Overrides Function ToString() As String
+        Return "Victim"
+    End Function
 End Class

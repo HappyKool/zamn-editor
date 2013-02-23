@@ -28,4 +28,8 @@
     Public Overrides Function Clone() As LevelObj
         Return New Item(Me)
     End Function
+
+    Public Overrides Function ToString() As String
+        Return "Item"
+    End Function
 End Class

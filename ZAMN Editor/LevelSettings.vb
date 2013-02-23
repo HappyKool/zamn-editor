@@ -2,12 +2,10 @@
 
     Public lvl As Level
     Public ed As Editor
-    Public reloadTileset As Boolean
 
     Public Overloads Function ShowDialog(ByVal ed As Editor) As DialogResult
         Me.lvl = ed.EdControl.lvl
         Me.ed = ed
-        reloadTileset = False
         'Tiles
         addrTiles.Value = lvl.tileset.address
         cboTiles.SelectedIndex = Array.IndexOf(Ptr.Tilesets, lvl.tileset.address)
@@ -142,10 +140,10 @@
         radTilesAuto.CheckedChanged, radUnk2Auto.CheckedChanged, radUnk3Auto.CheckedChanged, radUnkAuto.CheckedChanged, radSPalAutoF.CheckedChanged
         Dim rad As Control = sender
         For Each ctrl As Control In rad.Parent.Controls
-            If ctrl.GetType.Equals(GetType(AddressUpDown)) Or ctrl.GetType.Equals(GetType(NumericUpDown)) Then
+            If TypeOf ctrl Is AddressUpDown Or TypeOf ctrl Is NumericUpDown Then
                 ctrl.Enabled = False
             End If
-            If ctrl.GetType.Equals(GetType(ComboBox)) Then
+            If TypeOf ctrl Is ComboBox Then
                 ctrl.Enabled = True
             End If
         Next
@@ -170,10 +168,10 @@
         radTilesMan.CheckedChanged, radUnk2Man.CheckedChanged, radUnk3Man.CheckedChanged, radUnkMan.CheckedChanged, radSPalManF.CheckedChanged
         Dim rad As Control = sender
         For Each ctrl As Control In rad.Parent.Controls
-            If ctrl.GetType.Equals(GetType(ComboBox)) Then
+            If TypeOf ctrl Is ComboBox Then
                 ctrl.Enabled = False
             End If
-            If ctrl.GetType.Equals(GetType(AddressUpDown)) Or ctrl.GetType.Equals(GetType(NumericUpDown)) Then
+            If TypeOf ctrl Is AddressUpDown Or TypeOf ctrl Is NumericUpDown Then
                 ctrl.Enabled = True
             End If
         Next
@@ -214,15 +212,19 @@
         grpPltFade.Enabled = chkPltFade.Checked
     End Sub
 
-    Private Sub tileset_ValueChanged(ByVal sender As Object, ByVal e As EventArgs) Handles addrCol.ValueChanged, addrGFX.ValueChanged, addrPal.ValueChanged, addrTiles.ValueChanged
-        reloadTileset = True
-    End Sub
-
     Private Sub btnCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCancel.Click
         Me.Close()
     End Sub
 
     Private Sub btnApply_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnApply.Click
+        Dim reloadTileset As Boolean = False
+        Dim reloadSprites As Boolean = False
+        If lvl.tileset.address <> addrTiles.Value Or lvl.tileset.paletteAddr <> addrPal.Value Or lvl.tileset.gfxAddr <> addrGFX.Value Or lvl.tileset.collisionAddr <> addrCol.Value Then
+            reloadTileset = True
+        End If
+        If lvl.spritePal <> addrSPal.Value Then
+            reloadSprites = True
+        End If
         lvl.tileset.address = addrTiles.Value
         lvl.tileset.paletteAddr = addrPal.Value
         lvl.tileset.gfxAddr = addrGFX.Value
@@ -259,8 +261,14 @@
         End If
         If reloadTileset Then
             Dim s As New IO.FileStream(ed.r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read)
-            ed.EdControl.lvl.tileset.Reload(s)
+            lvl.tileset.Reload(s)
             ed.EdControl.TilePicker.LoadTileset(ed.EdControl.lvl.tileset)
+            s.Close()
+            ed.EdControl.Invalidate(True)
+        End If
+        If reloadSprites Then
+            Dim s As New IO.FileStream(ed.r.path, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read)
+            lvl.GFX.Reload(s, lvl.spritePal)
             s.Close()
             ed.EdControl.Invalidate(True)
         End If
